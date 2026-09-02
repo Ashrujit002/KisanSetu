@@ -1,0 +1,1364 @@
+{
+  "users": [
+    {
+      "id": "admin-demo",
+      "role": "ADMIN",
+      "name": "Platform Administrator",
+      "email": "admin@demo.local",
+      "password": "demo123"
+    },
+    {
+      "id": "buyer-demo",
+      "role": "BUYER",
+      "name": "Barasat Procurement Team",
+      "email": "buyer@demo.local",
+      "password": "demo123",
+      "centreId": "CTR-001"
+    },
+    {
+      "id": "farmer-demo",
+      "role": "FARMER",
+      "name": "Ramesh Das",
+      "email": "farmer@demo.local",
+      "password": "demo123",
+      "farmerId": "FRM-2026-00124",
+      "phone": "98765 41020",
+      "village": "Barasat",
+      "district": "North 24 Parganas",
+      "state": "West Bengal",
+      "verification": "VERIFIED",
+      "cultivatedArea": "2.6 acres",
+      "preferredLanguage": "English",
+      "crop": "Paddy"
+    },
+    {
+      "id": "farmer-02",
+      "role": "FARMER",
+      "name": "Suman Roy",
+      "email": "farmer2@demo.local",
+      "password": "demo123",
+      "farmerId": "FRM-2026-00125",
+      "phone": "98765 41021",
+      "village": "Madhyamgram",
+      "district": "North 24 Parganas",
+      "state": "West Bengal",
+      "verification": "VERIFIED",
+      "cultivatedArea": "1.8 acres",
+      "preferredLanguage": "English",
+      "crop": "Paddy"
+    },
+    {
+      "id": "farmer-03",
+      "role": "FARMER",
+      "name": "Amit Ghosh",
+      "email": "farmer3@demo.local",
+      "password": "demo123",
+      "farmerId": "FRM-2026-00126",
+      "phone": "98765 41022",
+      "village": "Habra",
+      "district": "North 24 Parganas",
+      "state": "West Bengal",
+      "verification": "VERIFIED",
+      "cultivatedArea": "3.2 acres",
+      "preferredLanguage": "English",
+      "crop": "Wheat"
+    },
+    {
+      "id": "farmer-04",
+      "role": "FARMER",
+      "name": "Rahul Mondal",
+      "email": "farmer4@demo.local",
+      "password": "demo123",
+      "farmerId": "FRM-2026-00127",
+      "phone": "98765 41023",
+      "village": "Bongaon",
+      "district": "North 24 Parganas",
+      "state": "West Bengal",
+      "verification": "VERIFIED",
+      "cultivatedArea": "2.1 acres",
+      "preferredLanguage": "English",
+      "crop": "Maize"
+    },
+    {
+      "id": "farmer-05",
+      "role": "FARMER",
+      "name": "Priya Devi",
+      "email": "farmer5@demo.local",
+      "password": "demo123",
+      "farmerId": "FRM-2026-00128",
+      "phone": "98765 41024",
+      "village": "Basirhat",
+      "district": "North 24 Parganas",
+      "state": "West Bengal",
+      "verification": "VERIFIED",
+      "cultivatedArea": "1.4 acres",
+      "preferredLanguage": "English",
+      "crop": "Potato"
+    },
+    {
+      "id": "farmer-06",
+      "role": "FARMER",
+      "name": "Anil Kumar",
+      "email": "farmer6@demo.local",
+      "password": "demo123",
+      "farmerId": "FRM-2026-00129",
+      "phone": "98765 41025",
+      "village": "Barasat",
+      "district": "North 24 Parganas",
+      "state": "West Bengal",
+      "verification": "PENDING",
+      "cultivatedArea": "3.8 acres",
+      "preferredLanguage": "English",
+      "crop": "Mustard"
+    },
+    {
+      "id": "farmer-07",
+      "role": "FARMER",
+      "name": "Mita Saha",
+      "email": "farmer7@demo.local",
+      "password": "demo123",
+      "farmerId": "FRM-2026-00130",
+      "phone": "98765 41026",
+      "village": "Habra",
+      "district": "North 24 Parganas",
+      "state": "West Bengal",
+      "verification": "VERIFIED",
+      "cultivatedArea": "2 acres",
+      "preferredLanguage": "English",
+      "crop": "Paddy"
+    },
+    {
+      "id": "farmer-08",
+      "role": "FARMER",
+      "name": "Bikash Pal",
+      "email": "farmer8@demo.local",
+      "password": "demo123",
+      "farmerId": "FRM-2026-00131",
+      "phone": "98765 41027",
+      "village": "Bongaon",
+      "district": "North 24 Parganas",
+      "state": "West Bengal",
+      "verification": "VERIFIED",
+      "cultivatedArea": "1.5 acres",
+      "preferredLanguage": "English",
+      "crop": "Pulses"
+    },
+    {
+      "id": "buyer-02",
+      "role": "BUYER",
+      "name": "Krishi Seva Cooperative (Demo)",
+      "email": "buyer-02@demo.local",
+      "password": "demo123",
+      "centreId": "CTR-002"
+    },
+    {
+      "id": "buyer-03",
+      "role": "BUYER",
+      "name": "North Bengal Produce Board (Demo)",
+      "email": "buyer-03@demo.local",
+      "password": "demo123",
+      "centreId": "CTR-003"
+    },
+    {
+      "id": "buyer-04",
+      "role": "BUYER",
+      "name": "Bongaon Farmers Society (Demo)",
+      "email": "buyer-04@demo.local",
+      "password": "demo123",
+      "centreId": "CTR-004"
+    },
+    {
+      "id": "buyer-05",
+      "role": "BUYER",
+      "name": "Sundarban Agri Network (Demo)",
+      "email": "buyer-05@demo.local",
+      "password": "demo123",
+      "centreId": "CTR-005"
+    },
+    {
+      "id": "buyer-pending",
+      "role": "BUYER",
+      "name": "Ashoknagar Agro Trust (Demo)",
+      "email": "buyer-pending@demo.local",
+      "password": "demo123",
+      "centreId": "CTR-006"
+    },
+    {
+      "id": "farmer-96D9A4",
+      "role": "FARMER",
+      "name": "Ashrujit Basu",
+      "email": "gopal.basu02@gmail.com",
+      "password": "123456",
+      "verification": "PENDING",
+      "farmerId": "FRM-2026-00132",
+      "phone": "06291033082",
+      "district": "North 24 Parganas",
+      "state": "West Bengal",
+      "village": "New Barrackpur"
+    }
+  ],
+  "centres": [
+    {
+      "id": "CTR-001",
+      "buyerId": "buyer-demo",
+      "name": "Barasat Grain Procurement Centre",
+      "short": "Barasat Centre",
+      "district": "North 24 Parganas",
+      "locality": "Barasat, West Bengal",
+      "address": "Station Road, Barasat",
+      "capacity": 120,
+      "booked": 90,
+      "queue": 24,
+      "distance": 4.2,
+      "crops": [
+        "Paddy",
+        "Wheat",
+        "Maize"
+      ],
+      "verified": "VERIFIED",
+      "hours": "09:00 AM – 05:00 PM",
+      "processingTime": 7,
+      "lat": 22.724,
+      "lng": 88.48,
+      "organization": "Bengal Agri Collective (Demo)"
+    },
+    {
+      "id": "CTR-002",
+      "buyerId": "buyer-02",
+      "name": "Madhyamgram Agricultural Centre",
+      "short": "Madhyamgram Centre",
+      "district": "North 24 Parganas",
+      "locality": "Madhyamgram, West Bengal",
+      "address": "Jessore Road, Madhyamgram",
+      "capacity": 90,
+      "booked": 53,
+      "queue": 8,
+      "distance": 7.8,
+      "crops": [
+        "Paddy",
+        "Potato",
+        "Mustard"
+      ],
+      "verified": "VERIFIED",
+      "hours": "08:30 AM – 04:30 PM",
+      "processingTime": 7,
+      "lat": 22.696,
+      "lng": 88.447,
+      "organization": "Krishi Seva Cooperative (Demo)"
+    },
+    {
+      "id": "CTR-003",
+      "buyerId": "buyer-03",
+      "name": "Habra Paddy Procurement Centre",
+      "short": "Habra Centre",
+      "district": "North 24 Parganas",
+      "locality": "Habra, West Bengal",
+      "address": "Mandi Road, Habra",
+      "capacity": 110,
+      "booked": 105,
+      "queue": 23,
+      "distance": 18.5,
+      "crops": [
+        "Paddy",
+        "Wheat",
+        "Pulses"
+      ],
+      "verified": "VERIFIED",
+      "hours": "09:00 AM – 05:00 PM",
+      "processingTime": 8,
+      "lat": 22.83,
+      "lng": 88.63,
+      "organization": "North Bengal Produce Board (Demo)"
+    },
+    {
+      "id": "CTR-004",
+      "buyerId": "buyer-04",
+      "name": "Bongaon Farmer Procurement Centre",
+      "short": "Bongaon Centre",
+      "district": "North 24 Parganas",
+      "locality": "Bongaon, West Bengal",
+      "address": "College Road, Bongaon",
+      "capacity": 80,
+      "booked": 46,
+      "queue": 9,
+      "distance": 28.1,
+      "crops": [
+        "Maize",
+        "Potato",
+        "Mustard"
+      ],
+      "verified": "VERIFIED",
+      "hours": "09:00 AM – 04:00 PM",
+      "processingTime": 7,
+      "lat": 23.04,
+      "lng": 88.82,
+      "organization": "Bongaon Farmers Society (Demo)"
+    },
+    {
+      "id": "CTR-005",
+      "buyerId": "buyer-05",
+      "name": "Basirhat Agricultural Procurement Centre",
+      "short": "Basirhat Centre",
+      "district": "North 24 Parganas",
+      "locality": "Basirhat, West Bengal",
+      "address": "Market Lane, Basirhat",
+      "capacity": 100,
+      "booked": 68,
+      "queue": 12,
+      "distance": 35.7,
+      "crops": [
+        "Paddy",
+        "Pulses",
+        "Potato"
+      ],
+      "verified": "VERIFIED",
+      "hours": "08:00 AM – 04:00 PM",
+      "processingTime": 7,
+      "lat": 22.66,
+      "lng": 88.87,
+      "organization": "Sundarban Agri Network (Demo)"
+    },
+    {
+      "id": "CTR-006",
+      "buyerId": "buyer-pending",
+      "name": "Ashoknagar Grain Centre",
+      "short": "Ashoknagar Centre",
+      "district": "North 24 Parganas",
+      "locality": "Ashoknagar, West Bengal",
+      "address": "Block Road, Ashoknagar",
+      "capacity": 70,
+      "booked": 0,
+      "queue": 0,
+      "distance": 22.1,
+      "crops": [
+        "Paddy",
+        "Maize"
+      ],
+      "verified": "PENDING",
+      "hours": "09:00 AM – 04:00 PM",
+      "processingTime": 7,
+      "lat": 22.84,
+      "lng": 88.63,
+      "organization": "Ashoknagar Agro Trust (Demo)"
+    }
+  ],
+  "slots": [
+    {
+      "id": "SL-CTR-001-1",
+      "centreId": "CTR-001",
+      "time": "09:00 – 10:00",
+      "total": 12,
+      "booked": 12,
+      "date": "2026-09-05"
+    },
+    {
+      "id": "SL-CTR-001-2",
+      "centreId": "CTR-001",
+      "time": "10:00 – 11:00",
+      "total": 12,
+      "booked": 7,
+      "date": "2026-09-05"
+    },
+    {
+      "id": "SL-CTR-001-3",
+      "centreId": "CTR-001",
+      "time": "11:00 – 12:00",
+      "total": 12,
+      "booked": 11,
+      "date": "2026-09-05"
+    },
+    {
+      "id": "SL-CTR-001-4",
+      "centreId": "CTR-001",
+      "time": "12:00 – 01:00",
+      "total": 12,
+      "booked": 4,
+      "date": "2026-09-05"
+    },
+    {
+      "id": "SL-CTR-001-5",
+      "centreId": "CTR-001",
+      "time": "02:00 – 03:00",
+      "total": 12,
+      "booked": 2,
+      "date": "2026-09-05"
+    },
+    {
+      "id": "SL-CTR-002-1",
+      "centreId": "CTR-002",
+      "time": "09:00 – 10:00",
+      "total": 10,
+      "booked": 3,
+      "date": "2026-09-05"
+    },
+    {
+      "id": "SL-CTR-002-2",
+      "centreId": "CTR-002",
+      "time": "10:00 – 11:00",
+      "total": 10,
+      "booked": 1,
+      "date": "2026-09-05"
+    },
+    {
+      "id": "SL-CTR-002-3",
+      "centreId": "CTR-002",
+      "time": "11:00 – 12:00",
+      "total": 10,
+      "booked": 1,
+      "date": "2026-09-05"
+    },
+    {
+      "id": "SL-CTR-002-4",
+      "centreId": "CTR-002",
+      "time": "12:00 – 01:00",
+      "total": 10,
+      "booked": 1,
+      "date": "2026-09-05"
+    },
+    {
+      "id": "SL-CTR-002-5",
+      "centreId": "CTR-002",
+      "time": "02:00 – 03:00",
+      "total": 10,
+      "booked": 1,
+      "date": "2026-09-05"
+    },
+    {
+      "id": "SL-CTR-003-1",
+      "centreId": "CTR-003",
+      "time": "09:00 – 10:00",
+      "total": 11,
+      "booked": 2,
+      "date": "2026-09-05"
+    },
+    {
+      "id": "SL-CTR-003-2",
+      "centreId": "CTR-003",
+      "time": "10:00 – 11:00",
+      "total": 11,
+      "booked": 2,
+      "date": "2026-09-05"
+    },
+    {
+      "id": "SL-CTR-003-3",
+      "centreId": "CTR-003",
+      "time": "11:00 – 12:00",
+      "total": 11,
+      "booked": 2,
+      "date": "2026-09-05"
+    },
+    {
+      "id": "SL-CTR-003-4",
+      "centreId": "CTR-003",
+      "time": "12:00 – 01:00",
+      "total": 11,
+      "booked": 2,
+      "date": "2026-09-05"
+    },
+    {
+      "id": "SL-CTR-003-5",
+      "centreId": "CTR-003",
+      "time": "02:00 – 03:00",
+      "total": 11,
+      "booked": 2,
+      "date": "2026-09-05"
+    },
+    {
+      "id": "SL-CTR-004-1",
+      "centreId": "CTR-004",
+      "time": "09:00 – 10:00",
+      "total": 10,
+      "booked": 1,
+      "date": "2026-09-05"
+    },
+    {
+      "id": "SL-CTR-004-2",
+      "centreId": "CTR-004",
+      "time": "10:00 – 11:00",
+      "total": 10,
+      "booked": 1,
+      "date": "2026-09-05"
+    },
+    {
+      "id": "SL-CTR-004-3",
+      "centreId": "CTR-004",
+      "time": "11:00 – 12:00",
+      "total": 10,
+      "booked": 1,
+      "date": "2026-09-05"
+    },
+    {
+      "id": "SL-CTR-004-4",
+      "centreId": "CTR-004",
+      "time": "12:00 – 01:00",
+      "total": 10,
+      "booked": 1,
+      "date": "2026-09-05"
+    },
+    {
+      "id": "SL-CTR-004-5",
+      "centreId": "CTR-004",
+      "time": "02:00 – 03:00",
+      "total": 10,
+      "booked": 1,
+      "date": "2026-09-05"
+    },
+    {
+      "id": "SL-CTR-005-1",
+      "centreId": "CTR-005",
+      "time": "09:00 – 10:00",
+      "total": 10,
+      "booked": 1,
+      "date": "2026-09-05"
+    },
+    {
+      "id": "SL-CTR-005-2",
+      "centreId": "CTR-005",
+      "time": "10:00 – 11:00",
+      "total": 10,
+      "booked": 1,
+      "date": "2026-09-05"
+    },
+    {
+      "id": "SL-CTR-005-3",
+      "centreId": "CTR-005",
+      "time": "11:00 – 12:00",
+      "total": 10,
+      "booked": 1,
+      "date": "2026-09-05"
+    },
+    {
+      "id": "SL-CTR-005-4",
+      "centreId": "CTR-005",
+      "time": "12:00 – 01:00",
+      "total": 10,
+      "booked": 1,
+      "date": "2026-09-05"
+    },
+    {
+      "id": "SL-CTR-005-5",
+      "centreId": "CTR-005",
+      "time": "02:00 – 03:00",
+      "total": 10,
+      "booked": 1,
+      "date": "2026-09-05"
+    },
+    {
+      "id": "SL-CTR-006-1",
+      "centreId": "CTR-006",
+      "time": "09:00 – 10:00",
+      "total": 10,
+      "booked": 1,
+      "date": "2026-09-05"
+    },
+    {
+      "id": "SL-CTR-006-2",
+      "centreId": "CTR-006",
+      "time": "10:00 – 11:00",
+      "total": 10,
+      "booked": 1,
+      "date": "2026-09-05"
+    },
+    {
+      "id": "SL-CTR-006-3",
+      "centreId": "CTR-006",
+      "time": "11:00 – 12:00",
+      "total": 10,
+      "booked": 1,
+      "date": "2026-09-05"
+    },
+    {
+      "id": "SL-CTR-006-4",
+      "centreId": "CTR-006",
+      "time": "12:00 – 01:00",
+      "total": 10,
+      "booked": 1,
+      "date": "2026-09-05"
+    },
+    {
+      "id": "SL-CTR-006-5",
+      "centreId": "CTR-006",
+      "time": "02:00 – 03:00",
+      "total": 10,
+      "booked": 1,
+      "date": "2026-09-05"
+    }
+  ],
+  "bookings": [
+    {
+      "id": "BK-2026-00472",
+      "token": "A-047",
+      "farmerId": "farmer-demo",
+      "centreId": "CTR-001",
+      "slotId": "SL-CTR-001-2",
+      "crop": "Paddy",
+      "variety": "Swarna",
+      "quantity": 800,
+      "unit": "kg",
+      "date": "2026-09-05",
+      "time": "10:00 – 11:00",
+      "status": "COMPLETED",
+      "createdAt": "2026-09-01T06:00:00.000Z",
+      "procurement": {
+        "status": "COMPLETED",
+        "declaredQuantity": 800,
+        "measuredQuantity": 792,
+        "quality": "FAQ",
+        "moisture": "13.5%",
+        "accepted": true
+      },
+      "payment": {
+        "status": "COMPLETED",
+        "rate": 23.69,
+        "amount": 18762.48,
+        "transactionId": "TXN-DEMO-20260905-047"
+      }
+    },
+    {
+      "id": "BK-2026-00468",
+      "token": "A-043",
+      "farmerId": "farmer-02",
+      "centreId": "CTR-001",
+      "slotId": "SL-CTR-001-1",
+      "crop": "Paddy",
+      "quantity": 640,
+      "unit": "kg",
+      "date": "2026-09-05",
+      "time": "09:00 – 10:00",
+      "status": "COMPLETED",
+      "createdAt": "2026-09-01T05:05:00.000Z",
+      "procurement": {
+        "status": "COMPLETED",
+        "measuredQuantity": 640,
+        "quality": "FAQ",
+        "accepted": true
+      },
+      "payment": {
+        "status": "COMPLETED",
+        "rate": 23.69,
+        "amount": 15161.6,
+        "transactionId": "TXN-DEMO-20260905-0043"
+      }
+    },
+    {
+      "id": "BK-2026-00469",
+      "token": "A-044",
+      "farmerId": "farmer-03",
+      "centreId": "CTR-001",
+      "slotId": "SL-CTR-001-1",
+      "crop": "Wheat",
+      "quantity": 500,
+      "unit": "kg",
+      "date": "2026-09-05",
+      "time": "09:00 – 10:00",
+      "status": "COMPLETED",
+      "createdAt": "2026-09-01T05:15:00.000Z",
+      "procurement": {
+        "status": "VERIFYING",
+        "measuredQuantity": null,
+        "quality": null,
+        "accepted": null
+      },
+      "payment": {
+        "status": "PENDING",
+        "rate": 24.25,
+        "amount": null,
+        "transactionId": null
+      }
+    },
+    {
+      "id": "BK-2026-00470",
+      "token": "A-045",
+      "farmerId": "farmer-04",
+      "centreId": "CTR-001",
+      "slotId": "SL-CTR-001-2",
+      "crop": "Maize",
+      "quantity": 450,
+      "unit": "kg",
+      "date": "2026-09-05",
+      "time": "10:00 – 11:00",
+      "status": "COMPLETED",
+      "createdAt": "2026-09-01T05:35:00.000Z",
+      "procurement": null,
+      "payment": null
+    },
+    {
+      "id": "BK-2026-00471",
+      "token": "A-046",
+      "farmerId": "farmer-05",
+      "centreId": "CTR-001",
+      "slotId": "SL-CTR-001-2",
+      "crop": "Potato",
+      "quantity": 900,
+      "unit": "kg",
+      "date": "2026-09-05",
+      "time": "10:00 – 11:00",
+      "status": "COMPLETED",
+      "createdAt": "2026-09-01T05:45:00.000Z",
+      "procurement": {
+        "status": "COMPLETED",
+        "declaredQuantity": 900,
+        "measuredQuantity": 792,
+        "quality": "FAQ",
+        "moisture": "13.5%",
+        "accepted": true
+      },
+      "payment": {
+        "status": "COMPLETED",
+        "rate": 15.8,
+        "amount": 12513.6,
+        "transactionId": "TXN-DEMO-20260905-046"
+      }
+    },
+    {
+      "id": "BK-2026-00477",
+      "token": "A-048",
+      "farmerId": "farmer-demo",
+      "centreId": "CTR-002",
+      "slotId": "SL-CTR-002-1",
+      "crop": "Paddy",
+      "variety": "Swarna",
+      "quantity": 800,
+      "unit": "kg",
+      "date": "2026-09-05",
+      "time": "09:00 – 10:00",
+      "status": "BOOKED",
+      "createdAt": "2026-09-01T18:18:18.876Z",
+      "procurement": null,
+      "payment": null
+    },
+    {
+      "id": "BK-2026-00478",
+      "token": "A-049",
+      "farmerId": "farmer-demo",
+      "centreId": "CTR-002",
+      "slotId": "SL-CTR-002-1",
+      "crop": "Paddy",
+      "variety": "Swarna",
+      "quantity": 800,
+      "unit": "kg",
+      "date": "2026-09-05",
+      "time": "09:00 – 10:00",
+      "status": "BOOKED",
+      "createdAt": "2026-09-01T18:19:03.788Z",
+      "procurement": null,
+      "payment": null
+    },
+    {
+      "id": "BK-2026-00479",
+      "token": "A-053",
+      "farmerId": "farmer-96D9A4",
+      "centreId": "CTR-001",
+      "slotId": "SL-CTR-001-1",
+      "crop": "Potato",
+      "variety": "Swarna",
+      "quantity": 800,
+      "unit": "kg",
+      "date": "2026-09-05",
+      "time": "09:00 – 10:00",
+      "status": "COMPLETED",
+      "createdAt": "2026-09-01T18:25:03.417Z",
+      "procurement": {
+        "status": "COMPLETED",
+        "declaredQuantity": 800,
+        "measuredQuantity": 792,
+        "quality": "FAQ",
+        "moisture": "13.5%",
+        "accepted": true
+      },
+      "payment": {
+        "status": "COMPLETED",
+        "rate": 15.8,
+        "amount": 12513.6,
+        "transactionId": "TXN-DEMO-20260905-053"
+      }
+    },
+    {
+      "id": "BK-2026-00480",
+      "token": "A-054",
+      "farmerId": "farmer-demo",
+      "centreId": "CTR-001",
+      "slotId": "SL-CTR-001-1",
+      "crop": "Paddy",
+      "variety": "Swarna",
+      "quantity": 800,
+      "unit": "kg",
+      "date": "2026-09-05",
+      "time": "09:00 – 10:00",
+      "status": "COMPLETED",
+      "createdAt": "2026-09-01T18:40:10.714Z",
+      "procurement": {
+        "status": "COMPLETED",
+        "declaredQuantity": 800,
+        "measuredQuantity": 792,
+        "quality": "FAQ",
+        "moisture": "13.5%",
+        "accepted": true
+      },
+      "payment": {
+        "status": "COMPLETED",
+        "rate": 23.69,
+        "amount": 18762.48,
+        "transactionId": "TXN-DEMO-20260905-054"
+      }
+    },
+    {
+      "id": "BK-2026-00481",
+      "token": "A-055",
+      "farmerId": "farmer-96D9A4",
+      "centreId": "CTR-001",
+      "slotId": "SL-CTR-001-2",
+      "crop": "Potato",
+      "variety": "Swarna",
+      "quantity": 200,
+      "unit": "kg",
+      "date": "2026-09-05",
+      "time": "10:00 – 11:00",
+      "status": "COMPLETED",
+      "createdAt": "2026-09-01T18:48:57.543Z",
+      "procurement": {
+        "status": "COMPLETED",
+        "declaredQuantity": 200,
+        "measuredQuantity": 792,
+        "quality": "FAQ",
+        "moisture": "13.5%",
+        "accepted": true
+      },
+      "payment": {
+        "status": "COMPLETED",
+        "rate": 15.8,
+        "amount": 12513.6,
+        "transactionId": "TXN-DEMO-20260905-055"
+      }
+    },
+    {
+      "id": "BK-2026-00482",
+      "token": "A-056",
+      "farmerId": "farmer-96D9A4",
+      "centreId": "CTR-001",
+      "slotId": "SL-CTR-001-1",
+      "crop": "Potato",
+      "variety": "Swarna",
+      "quantity": 800,
+      "unit": "kg",
+      "date": "2026-09-05",
+      "time": "09:00 – 10:00",
+      "status": "COMPLETED",
+      "createdAt": "2026-09-02T05:59:54.732Z",
+      "procurement": {
+        "status": "COMPLETED",
+        "declaredQuantity": 800,
+        "measuredQuantity": 792,
+        "quality": "FAQ",
+        "moisture": "13.5%",
+        "accepted": true
+      },
+      "payment": {
+        "status": "COMPLETED",
+        "rate": 15.8,
+        "amount": 12513.6,
+        "transactionId": "TXN-DEMO-20260905-056"
+      }
+    },
+    {
+      "id": "BK-2026-00483",
+      "token": "A-057",
+      "farmerId": "farmer-96D9A4",
+      "centreId": "CTR-001",
+      "slotId": "SL-CTR-001-3",
+      "crop": "Potato",
+      "variety": "Swarna",
+      "quantity": 800,
+      "unit": "kg",
+      "date": "2026-09-05",
+      "time": "11:00 – 12:00",
+      "status": "COMPLETED",
+      "createdAt": "2026-09-02T08:21:39.838Z",
+      "procurement": {
+        "status": "COMPLETED",
+        "declaredQuantity": 800,
+        "measuredQuantity": 792,
+        "quality": "FAQ",
+        "moisture": "13.5%",
+        "accepted": true
+      },
+      "payment": {
+        "status": "COMPLETED",
+        "rate": 15.8,
+        "amount": 12513.6,
+        "transactionId": "TXN-DEMO-20260905-057"
+      }
+    },
+    {
+      "id": "BK-2026-00484",
+      "token": "A-058",
+      "farmerId": "farmer-96D9A4",
+      "centreId": "CTR-001",
+      "slotId": "SL-CTR-001-1",
+      "crop": "Paddy",
+      "variety": "Swarna",
+      "quantity": 800,
+      "unit": "kg",
+      "date": "2026-09-05",
+      "time": "09:00 – 10:00",
+      "status": "COMPLETED",
+      "createdAt": "2026-09-02T17:30:59.087Z",
+      "procurement": {
+        "status": "COMPLETED",
+        "declaredQuantity": 800,
+        "measuredQuantity": 792,
+        "quality": "Grade B",
+        "moisture": "13.5%",
+        "accepted": true
+      },
+      "payment": {
+        "status": "PROCESSING",
+        "rate": 23.69,
+        "amount": 18762.48,
+        "transactionId": null
+      }
+    }
+  ],
+  "notifications": [
+    {
+      "id": "NT-455519",
+      "userId": "farmer-96D9A4",
+      "type": "PROCUREMENT",
+      "title": "Procurement completed",
+      "message": "Paddy has been accepted. Payment processing has started.",
+      "read": false,
+      "time": "Just now"
+    },
+    {
+      "id": "NT-80102D",
+      "userId": "farmer-96D9A4",
+      "type": "QUEUE",
+      "title": "Your token has been called",
+      "message": "Please proceed to the procurement counter. Token A-058 is now processing.",
+      "read": false,
+      "time": "Just now"
+    },
+    {
+      "id": "NT-82E5BA",
+      "userId": "farmer-96D9A4",
+      "type": "QUEUE",
+      "title": "Check-in successful",
+      "message": "You are checked in with token A-058.",
+      "read": false,
+      "time": "Just now"
+    },
+    {
+      "id": "NT-F91F65",
+      "userId": "farmer-96D9A4",
+      "type": "BOOKING",
+      "title": "Booking confirmed",
+      "message": "Your token is A-058 at Barasat Centre.",
+      "read": false,
+      "time": "Just now"
+    },
+    {
+      "id": "NT-922D15",
+      "userId": "farmer-96D9A4",
+      "type": "PAYMENT",
+      "title": "Payment processed successfully",
+      "message": "₹12,513.6 has been marked as completed in DEMO MODE.",
+      "read": false,
+      "time": "Just now"
+    },
+    {
+      "id": "NT-31D213",
+      "userId": "farmer-96D9A4",
+      "type": "PROCUREMENT",
+      "title": "Procurement completed",
+      "message": "Potato has been accepted. Payment processing has started.",
+      "read": false,
+      "time": "Just now"
+    },
+    {
+      "id": "NT-5713C4",
+      "userId": "farmer-96D9A4",
+      "type": "QUEUE",
+      "title": "Your token has been called",
+      "message": "Please proceed to the procurement counter. Token A-057 is now processing.",
+      "read": false,
+      "time": "Just now"
+    },
+    {
+      "id": "NT-A0A8D0",
+      "userId": "farmer-96D9A4",
+      "type": "QUEUE",
+      "title": "Check-in successful",
+      "message": "You are checked in with token A-057.",
+      "read": false,
+      "time": "Just now"
+    },
+    {
+      "id": "NT-791B7B",
+      "userId": "farmer-96D9A4",
+      "type": "BOOKING",
+      "title": "Booking confirmed",
+      "message": "Your token is A-057 at Barasat Centre.",
+      "read": false,
+      "time": "Just now"
+    },
+    {
+      "id": "NT-A182CD",
+      "userId": "farmer-96D9A4",
+      "type": "PAYMENT",
+      "title": "Payment processed successfully",
+      "message": "₹12,513.6 has been marked as completed in DEMO MODE.",
+      "read": false,
+      "time": "Just now"
+    },
+    {
+      "id": "NT-47BD64",
+      "userId": "farmer-96D9A4",
+      "type": "PAYMENT",
+      "title": "Payment processed successfully",
+      "message": "₹12,513.6 has been marked as completed in DEMO MODE.",
+      "read": false,
+      "time": "Just now"
+    },
+    {
+      "id": "NT-BC8661",
+      "userId": "farmer-demo",
+      "type": "PAYMENT",
+      "title": "Payment processed successfully",
+      "message": "₹18,762.48 has been marked as completed in DEMO MODE.",
+      "read": false,
+      "time": "Just now"
+    },
+    {
+      "id": "NT-8F1750",
+      "userId": "farmer-96D9A4",
+      "type": "PAYMENT",
+      "title": "Payment processed successfully",
+      "message": "₹12,513.6 has been marked as completed in DEMO MODE.",
+      "read": false,
+      "time": "Just now"
+    },
+    {
+      "id": "NT-617260",
+      "userId": "farmer-05",
+      "type": "PAYMENT",
+      "title": "Payment processed successfully",
+      "message": "₹12,513.6 has been marked as completed in DEMO MODE.",
+      "read": false,
+      "time": "Just now"
+    },
+    {
+      "id": "NT-21BA02",
+      "userId": "farmer-demo",
+      "type": "PAYMENT",
+      "title": "Payment processed successfully",
+      "message": "₹18,762.48 has been marked as completed in DEMO MODE.",
+      "read": false,
+      "time": "Just now"
+    },
+    {
+      "id": "NT-E501F6",
+      "userId": "farmer-96D9A4",
+      "type": "PROCUREMENT",
+      "title": "Procurement completed",
+      "message": "Potato has been accepted. Payment processing has started.",
+      "read": false,
+      "time": "Just now"
+    },
+    {
+      "id": "NT-78EC07",
+      "userId": "farmer-96D9A4",
+      "type": "QUEUE",
+      "title": "Your token has been called",
+      "message": "Please proceed to the procurement counter. Token A-056 is now processing.",
+      "read": false,
+      "time": "Just now"
+    },
+    {
+      "id": "NT-75192F",
+      "userId": "farmer-96D9A4",
+      "type": "QUEUE",
+      "title": "Check-in successful",
+      "message": "You are checked in with token A-056.",
+      "read": false,
+      "time": "Just now"
+    },
+    {
+      "id": "NT-416690",
+      "userId": "farmer-96D9A4",
+      "type": "BOOKING",
+      "title": "Booking confirmed",
+      "message": "Your token is A-056 at Barasat Centre.",
+      "read": false,
+      "time": "Just now"
+    },
+    {
+      "id": "NT-542A51",
+      "userId": "farmer-96D9A4",
+      "type": "PROCUREMENT",
+      "title": "Procurement completed",
+      "message": "Potato has been accepted. Payment processing has started.",
+      "read": false,
+      "time": "Just now"
+    },
+    {
+      "id": "NT-A70948",
+      "userId": "farmer-96D9A4",
+      "type": "QUEUE",
+      "title": "Your token has been called",
+      "message": "Please proceed to the procurement counter. Token A-055 is now processing.",
+      "read": false,
+      "time": "Just now"
+    },
+    {
+      "id": "NT-1D2DDD",
+      "userId": "farmer-96D9A4",
+      "type": "QUEUE",
+      "title": "Check-in successful",
+      "message": "You are checked in with token A-055.",
+      "read": false,
+      "time": "Just now"
+    },
+    {
+      "id": "NT-F06E69",
+      "userId": "farmer-demo",
+      "type": "PROCUREMENT",
+      "title": "Procurement completed",
+      "message": "Paddy has been accepted. Payment processing has started.",
+      "read": false,
+      "time": "Just now"
+    },
+    {
+      "id": "NT-66BCF9",
+      "userId": "farmer-demo",
+      "type": "QUEUE",
+      "title": "Your token has been called",
+      "message": "Please proceed to the procurement counter. Token A-054 is now processing.",
+      "read": false,
+      "time": "Just now"
+    },
+    {
+      "id": "NT-DEC52A",
+      "userId": "farmer-demo",
+      "type": "QUEUE",
+      "title": "Check-in successful",
+      "message": "You are checked in with token A-054.",
+      "read": false,
+      "time": "Just now"
+    },
+    {
+      "id": "NT-05D58C",
+      "userId": "farmer-96D9A4",
+      "type": "BOOKING",
+      "title": "Booking confirmed",
+      "message": "Your token is A-055 at Barasat Centre.",
+      "read": false,
+      "time": "Just now"
+    },
+    {
+      "id": "NT-2128F7",
+      "userId": "farmer-96D9A4",
+      "type": "PROCUREMENT",
+      "title": "Procurement completed",
+      "message": "Potato has been accepted. Payment processing has started.",
+      "read": false,
+      "time": "Just now"
+    },
+    {
+      "id": "NT-B00050",
+      "userId": "farmer-96D9A4",
+      "type": "QUEUE",
+      "title": "Your token has been called",
+      "message": "Please proceed to the procurement counter. Token A-053 is now processing.",
+      "read": false,
+      "time": "Just now"
+    },
+    {
+      "id": "NT-04F476",
+      "userId": "farmer-96D9A4",
+      "type": "QUEUE",
+      "title": "Check-in successful",
+      "message": "You are checked in with token A-053.",
+      "read": false,
+      "time": "Just now"
+    },
+    {
+      "id": "NT-80F04D",
+      "userId": "farmer-05",
+      "type": "PROCUREMENT",
+      "title": "Procurement completed",
+      "message": "Potato has been accepted. Payment processing has started.",
+      "read": false,
+      "time": "Just now"
+    },
+    {
+      "id": "NT-B24B0C",
+      "userId": "farmer-05",
+      "type": "QUEUE",
+      "title": "Your token has been called",
+      "message": "Please proceed to the procurement counter. Token A-046 is now processing.",
+      "read": false,
+      "time": "Just now"
+    },
+    {
+      "id": "NT-DBFD0A",
+      "userId": "farmer-04",
+      "type": "QUEUE",
+      "title": "Your token has been called",
+      "message": "Please proceed to the procurement counter. Token A-045 is now processing.",
+      "read": false,
+      "time": "Just now"
+    },
+    {
+      "id": "NT-45DD9B",
+      "userId": "farmer-demo",
+      "type": "PROCUREMENT",
+      "title": "Procurement completed",
+      "message": "Paddy has been accepted. Payment processing has started.",
+      "read": false,
+      "time": "Just now"
+    },
+    {
+      "id": "NT-3EA166",
+      "userId": "farmer-demo",
+      "type": "QUEUE",
+      "title": "Your token has been called",
+      "message": "Please proceed to the procurement counter. Token A-047 is now processing.",
+      "read": false,
+      "time": "Just now"
+    },
+    {
+      "id": "NT-E7204C",
+      "userId": "farmer-demo",
+      "type": "BOOKING",
+      "title": "Booking confirmed",
+      "message": "Your token is A-054 at Barasat Centre.",
+      "read": false,
+      "time": "Just now"
+    },
+    {
+      "id": "NT-0E2E44",
+      "userId": "farmer-96D9A4",
+      "type": "BOOKING",
+      "title": "Booking confirmed",
+      "message": "Your token is A-053 at Barasat Centre.",
+      "read": false,
+      "time": "Just now"
+    },
+    {
+      "id": "NT-E89DEF",
+      "userId": "farmer-demo",
+      "type": "BOOKING",
+      "title": "Booking confirmed",
+      "message": "Your token is A-049 at Madhyamgram Centre.",
+      "read": false,
+      "time": "Just now"
+    },
+    {
+      "id": "NT-825B32",
+      "userId": "farmer-demo",
+      "type": "BOOKING",
+      "title": "Booking confirmed",
+      "message": "Your token is A-048 at Madhyamgram Centre.",
+      "read": false,
+      "time": "Just now"
+    },
+    {
+      "id": "NT-001",
+      "userId": "farmer-demo",
+      "type": "BOOKING",
+      "title": "Booking confirmed",
+      "message": "Your token is A-047 for Barasat Grain Procurement Centre.",
+      "read": false,
+      "time": "Today, 8:42 AM"
+    },
+    {
+      "id": "NT-002",
+      "userId": "farmer-demo",
+      "type": "QUEUE",
+      "title": "Your turn is approaching",
+      "message": "Only 3 farmers are ahead of you.",
+      "read": false,
+      "time": "Today, 9:18 AM"
+    },
+    {
+      "id": "NT-003",
+      "userId": "farmer-demo",
+      "type": "PROCUREMENT",
+      "title": "Crop verification completed",
+      "message": "Paddy quality has been recorded as FAQ (demo).",
+      "read": true,
+      "time": "Today, 9:26 AM"
+    }
+  ],
+  "verificationRequests": [
+    {
+      "id": "VR-001",
+      "centreId": "CTR-006",
+      "submitted": "01 Sep 2026",
+      "status": "PENDING",
+      "stage": "Authority Verification",
+      "contact": "Arun Sen",
+      "phone": "98765 41199",
+      "certificate": "DEMO-REG-AK-2026-042",
+      "document": "demo_registration_certificate.pdf",
+      "history": [
+        "Registration Submitted",
+        "Document Verification",
+        "Location Verification",
+        "Authority Verification"
+      ]
+    },
+    {
+      "id": "VR-002",
+      "centreId": null,
+      "submitted": "31 Aug 2026",
+      "status": "PENDING",
+      "stage": "Document Verification",
+      "contact": "Sanjay Ghosh",
+      "phone": "98765 41200",
+      "certificate": "DEMO-REG-003",
+      "document": "demo_agency_record.pdf",
+      "history": [
+        "Registration Submitted",
+        "Document Verification"
+      ]
+    },
+    {
+      "id": "VR-003",
+      "centreId": null,
+      "submitted": "30 Aug 2026",
+      "status": "PENDING",
+      "stage": "Location Verification",
+      "contact": "Maya Paul",
+      "phone": "98765 41201",
+      "certificate": "DEMO-REG-004",
+      "document": "demo_centre_proof.pdf",
+      "history": [
+        "Registration Submitted",
+        "Document Verification",
+        "Location Verification"
+      ]
+    },
+    {
+      "id": "VR-004",
+      "centreId": null,
+      "submitted": "29 Aug 2026",
+      "status": "PENDING",
+      "stage": "Admin Review",
+      "contact": "Rita Singh",
+      "phone": "98765 41202",
+      "certificate": "DEMO-REG-005",
+      "document": "demo_authorization.pdf",
+      "history": [
+        "Registration Submitted",
+        "Document Verification",
+        "Location Verification",
+        "Authority Verification"
+      ]
+    }
+  ],
+  "settings": {
+    "averageProcessingTime": 7,
+    "demoMode": true
+  }
+}
