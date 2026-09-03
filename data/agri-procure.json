@@ -195,6 +195,19 @@
       "district": "North 24 Parganas",
       "state": "West Bengal",
       "village": "New Barrackpur"
+    },
+    {
+      "id": "buyer-A25869",
+      "role": "BUYER",
+      "name": "Ashrujit org",
+      "email": "demo@demo.com",
+      "password": "123456",
+      "verification": "PENDING",
+      "phone": "6291033082",
+      "district": "North 24 Parganas",
+      "state": "West Bengal",
+      "village": "",
+      "centreId": "CTR-007"
     }
   ],
   "centres": [
@@ -340,6 +353,28 @@
       "lat": 22.84,
       "lng": 88.63,
       "organization": "Ashoknagar Agro Trust (Demo)"
+    },
+    {
+      "id": "CTR-007",
+      "buyerId": "buyer-A25869",
+      "name": "New Barrackpur",
+      "short": "New Barrackpur",
+      "district": "North 24 Parganas",
+      "locality": "North 24 Parganas, West Bengal",
+      "address": "Station Road",
+      "capacity": 100,
+      "booked": 0,
+      "queue": 0,
+      "distance": 5.0,
+      "crops": [
+        "Paddy"
+      ],
+      "verified": "PENDING",
+      "hours": "09:00 AM – 04:00 PM",
+      "processingTime": 7,
+      "lat": 22.72,
+      "lng": 88.48,
+      "organization": "Ashrujit org"
     }
   ],
   "slots": [
@@ -595,23 +630,23 @@
       "variety": "Swarna",
       "quantity": 800,
       "unit": "kg",
-      "date": "2026-09-05",
+      "date": "2026-09-03",
       "time": "10:00 – 11:00",
       "status": "COMPLETED",
       "createdAt": "2026-09-01T06:00:00.000Z",
       "procurement": {
         "status": "COMPLETED",
         "declaredQuantity": 800,
-        "measuredQuantity": 792,
+        "measuredQuantity": 800,
         "quality": "FAQ",
-        "moisture": "13.5%",
+        "moisture": "13.2%",
         "accepted": true
       },
       "payment": {
         "status": "COMPLETED",
         "rate": 23.69,
-        "amount": 18762.48,
-        "transactionId": "TXN-DEMO-20260905-047"
+        "amount": 18952.0,
+        "transactionId": "TXN-DEMO-20260903-047"
       }
     },
     {
@@ -623,21 +658,23 @@
       "crop": "Paddy",
       "quantity": 640,
       "unit": "kg",
-      "date": "2026-09-05",
+      "date": "2026-09-03",
       "time": "09:00 – 10:00",
       "status": "COMPLETED",
       "createdAt": "2026-09-01T05:05:00.000Z",
       "procurement": {
         "status": "COMPLETED",
-        "measuredQuantity": 640,
+        "declaredQuantity": 640,
+        "measuredQuantity": 800,
         "quality": "FAQ",
+        "moisture": "13.2%",
         "accepted": true
       },
       "payment": {
         "status": "COMPLETED",
         "rate": 23.69,
-        "amount": 15161.6,
-        "transactionId": "TXN-DEMO-20260905-0043"
+        "amount": 18952.0,
+        "transactionId": "TXN-DEMO-20260903-043"
       }
     },
     {
@@ -649,21 +686,23 @@
       "crop": "Wheat",
       "quantity": 500,
       "unit": "kg",
-      "date": "2026-09-05",
+      "date": "2026-09-03",
       "time": "09:00 – 10:00",
       "status": "COMPLETED",
       "createdAt": "2026-09-01T05:15:00.000Z",
       "procurement": {
-        "status": "VERIFYING",
-        "measuredQuantity": null,
-        "quality": null,
-        "accepted": null
+        "status": "COMPLETED",
+        "declaredQuantity": 500,
+        "measuredQuantity": 800,
+        "quality": "FAQ",
+        "moisture": "13.2%",
+        "accepted": true
       },
       "payment": {
-        "status": "PENDING",
+        "status": "COMPLETED",
         "rate": 24.25,
-        "amount": null,
-        "transactionId": null
+        "amount": 19400.0,
+        "transactionId": "TXN-DEMO-20260903-044"
       }
     },
     {
@@ -720,9 +759,9 @@
       "variety": "Swarna",
       "quantity": 800,
       "unit": "kg",
-      "date": "2026-09-05",
+      "date": "2026-09-03",
       "time": "09:00 – 10:00",
-      "status": "BOOKED",
+      "status": "WAITING",
       "createdAt": "2026-09-01T18:18:18.876Z",
       "procurement": null,
       "payment": null
@@ -912,14 +951,278 @@
         "accepted": true
       },
       "payment": {
-        "status": "PROCESSING",
+        "status": "COMPLETED",
         "rate": 23.69,
         "amount": 18762.48,
+        "transactionId": "TXN-DEMO-20260905-058"
+      }
+    },
+    {
+      "id": "AGRI-260904-B649",
+      "token": "A-001",
+      "farmerId": "farmer-demo",
+      "centreId": "CTR-001",
+      "slotId": "SL-CTR-001-20260904-1",
+      "crop": "Paddy",
+      "variety": "Standard",
+      "quantity": 500,
+      "unit": "kg",
+      "date": "2026-09-04",
+      "time": "09:00 – 10:00",
+      "status": "COMPLETED",
+      "createdAt": "2026-09-03T08:57:48.607Z",
+      "procurement": {
+        "status": "COMPLETED",
+        "declaredQuantity": 500,
+        "measuredQuantity": 800,
+        "quality": "FAQ",
+        "moisture": "13.2%",
+        "accepted": true
+      },
+      "payment": {
+        "status": "PROCESSING",
+        "rate": 23.69,
+        "amount": 18952.0,
         "transactionId": null
       }
+    },
+    {
+      "id": "BK-20260904-968EF775",
+      "token": "A-002",
+      "farmerId": "farmer-96D9A4",
+      "centreId": "CTR-001",
+      "slotId": "SL-CTR-001-20260904-1",
+      "crop": "Paddy",
+      "variety": "Swarna",
+      "quantity": 800,
+      "unit": "kg",
+      "date": "2026-09-04",
+      "time": "09:00 – 10:00",
+      "status": "COMPLETED",
+      "createdAt": "2026-09-03T09:01:12.807Z",
+      "procurement": {
+        "status": "COMPLETED",
+        "declaredQuantity": 800,
+        "measuredQuantity": 800,
+        "quality": "FAQ",
+        "moisture": "13.2%",
+        "accepted": true
+      },
+      "payment": {
+        "status": "PROCESSING",
+        "rate": 23.69,
+        "amount": 18952.0,
+        "transactionId": null
+      }
+    },
+    {
+      "id": "AGRI-260903-7E45",
+      "token": "A-049",
+      "farmerId": "farmer-96D9A4",
+      "centreId": "CTR-002",
+      "slotId": "SL-CTR-002-20260903-5",
+      "crop": "Paddy",
+      "variety": "Swarna",
+      "quantity": 800,
+      "unit": "kg",
+      "date": "2026-09-03",
+      "time": "02:00 – 03:00",
+      "status": "BOOKED",
+      "createdAt": "2026-09-03T09:11:26.823Z",
+      "procurement": null,
+      "payment": null
     }
   ],
   "notifications": [
+    {
+      "id": "NT-7DC5D3",
+      "userId": "farmer-03",
+      "type": "PAYMENT",
+      "title": "Payment processed successfully",
+      "message": "₹19,400 has been transferred and marked completed.",
+      "read": false,
+      "time": "Just now",
+      "createdAt": "2026-09-03T09:18:20.407Z"
+    },
+    {
+      "id": "NT-ADEBBC",
+      "userId": "farmer-02",
+      "type": "PAYMENT",
+      "title": "Payment processed successfully",
+      "message": "₹18,952 has been transferred and marked completed.",
+      "read": false,
+      "time": "Just now",
+      "createdAt": "2026-09-03T09:18:19.302Z"
+    },
+    {
+      "id": "NT-966D4D",
+      "userId": "farmer-demo",
+      "type": "PAYMENT",
+      "title": "Payment processed successfully",
+      "message": "₹18,952 has been transferred and marked completed.",
+      "read": false,
+      "time": "Just now",
+      "createdAt": "2026-09-03T09:18:18.157Z"
+    },
+    {
+      "id": "NT-670E3C",
+      "userId": "farmer-96D9A4",
+      "type": "PROCUREMENT",
+      "title": "Procurement completed",
+      "message": "Paddy (800 kg) has been accepted. Payment processing of ₹18,952.00 has started.",
+      "read": false,
+      "time": "Just now",
+      "createdAt": "2026-09-03T09:17:55.952Z"
+    },
+    {
+      "id": "NT-C5377F",
+      "userId": "farmer-96D9A4",
+      "type": "CALL",
+      "title": "📣 Your Token Has Been Called!",
+      "message": "The procurement counter at Barasat Centre has called your token A-002 (Booking: BK-20260904-968EF775). Please proceed to the counter immediately!",
+      "read": false,
+      "time": "Just now",
+      "createdAt": "2026-09-03T09:17:53.956Z"
+    },
+    {
+      "id": "NT-94BEAA",
+      "userId": "farmer-96D9A4",
+      "type": "QUEUE",
+      "title": "Check-in successful",
+      "message": "You are checked in with token A-002 (Booking ID: BK-20260904-968EF775).",
+      "read": false,
+      "time": "Just now",
+      "createdAt": "2026-09-03T09:17:52.836Z"
+    },
+    {
+      "id": "NT-ADB66B",
+      "userId": "farmer-demo",
+      "type": "PROCUREMENT",
+      "title": "Procurement completed",
+      "message": "Paddy (800 kg) has been accepted. Payment processing of ₹18,952.00 has started.",
+      "read": false,
+      "time": "Just now",
+      "createdAt": "2026-09-03T09:17:51.482Z"
+    },
+    {
+      "id": "NT-DEFC31",
+      "userId": "farmer-demo",
+      "type": "CALL",
+      "title": "📣 Your Token Has Been Called!",
+      "message": "The procurement counter at Barasat Centre has called your token A-001 (Booking: AGRI-260904-B649). Please proceed to the counter immediately!",
+      "read": false,
+      "time": "Just now",
+      "createdAt": "2026-09-03T09:17:49.214Z"
+    },
+    {
+      "id": "NT-70DAC5",
+      "userId": "farmer-demo",
+      "type": "QUEUE",
+      "title": "Check-in successful",
+      "message": "You are checked in with token A-001 (Booking ID: AGRI-260904-B649).",
+      "read": false,
+      "time": "Just now",
+      "createdAt": "2026-09-03T09:17:47.902Z"
+    },
+    {
+      "id": "NT-7BADA3",
+      "userId": "farmer-03",
+      "type": "PROCUREMENT",
+      "title": "Procurement completed",
+      "message": "Wheat (800 kg) has been accepted. Payment processing of ₹19,400.00 has started.",
+      "read": false,
+      "time": "Just now",
+      "createdAt": "2026-09-03T09:17:46.654Z"
+    },
+    {
+      "id": "NT-064A5E",
+      "userId": "farmer-03",
+      "type": "CALL",
+      "title": "📣 Your Token Has Been Called!",
+      "message": "The procurement counter at Barasat Centre has called your token A-044 (Booking: BK-2026-00469). Please proceed to the counter immediately!",
+      "read": false,
+      "time": "Just now",
+      "createdAt": "2026-09-03T09:17:43.910Z"
+    },
+    {
+      "id": "NT-D230C6",
+      "userId": "farmer-02",
+      "type": "PROCUREMENT",
+      "title": "Procurement completed",
+      "message": "Paddy (800 kg) has been accepted. Payment processing of ₹18,952.00 has started.",
+      "read": false,
+      "time": "Just now",
+      "createdAt": "2026-09-03T09:17:41.355Z"
+    },
+    {
+      "id": "NT-F00901",
+      "userId": "farmer-02",
+      "type": "CALL",
+      "title": "📣 Your Token Has Been Called!",
+      "message": "The procurement counter at Barasat Centre has called your token A-043 (Booking: BK-2026-00468). Please proceed to the counter immediately!",
+      "read": false,
+      "time": "Just now",
+      "createdAt": "2026-09-03T09:17:38.884Z"
+    },
+    {
+      "id": "NT-B10393",
+      "userId": "farmer-demo",
+      "type": "PROCUREMENT",
+      "title": "Procurement completed",
+      "message": "Paddy (800 kg) has been accepted. Payment processing of ₹18,952.00 has started.",
+      "read": false,
+      "time": "Just now",
+      "createdAt": "2026-09-03T09:17:25.646Z"
+    },
+    {
+      "id": "NT-4BBD46",
+      "userId": "farmer-96D9A4",
+      "type": "BOOKING",
+      "title": "Booking confirmed",
+      "message": "Booking AGRI-260903-7E45 is confirmed! Your token is A-049 at Madhyamgram Centre on 2026-09-03.",
+      "read": false,
+      "time": "Just now",
+      "createdAt": "2026-09-03T09:11:26.823Z"
+    },
+    {
+      "id": "NT-20F3D9",
+      "userId": "farmer-96D9A4",
+      "type": "BOOKING",
+      "title": "Booking confirmed",
+      "message": "Booking BK-20260904-968EF775 is confirmed. Your token is A-002 at Barasat Centre on 2026-09-04.",
+      "read": false,
+      "time": "Just now",
+      "createdAt": "2026-09-03T09:01:12.807Z"
+    },
+    {
+      "id": "NT-4505B1",
+      "userId": "farmer-demo",
+      "type": "CALL",
+      "title": "📣 Your Token Has Been Called!",
+      "message": "The procurement counter at Barasat Centre has called your token A-047 (Booking: BK-2026-00472). Please proceed to the counter immediately!",
+      "read": false,
+      "time": "Just now",
+      "createdAt": "2026-09-03T08:57:48.630Z"
+    },
+    {
+      "id": "NT-8EEBC4",
+      "userId": "farmer-demo",
+      "type": "BOOKING",
+      "title": "Booking confirmed",
+      "message": "Booking AGRI-260904-B649 is confirmed! Your token is A-001 at Barasat Centre on 2026-09-04.",
+      "read": false,
+      "time": "Just now",
+      "createdAt": "2026-09-03T08:57:48.607Z"
+    },
+    {
+      "id": "NT-105B75",
+      "userId": "farmer-96D9A4",
+      "type": "PAYMENT",
+      "title": "Payment processed successfully",
+      "message": "₹18,762.48 has been marked as completed in DEMO MODE.",
+      "read": false,
+      "time": "Just now"
+    },
     {
       "id": "NT-455519",
       "userId": "farmer-96D9A4",
@@ -1291,6 +1594,20 @@
     }
   ],
   "verificationRequests": [
+    {
+      "id": "VR-4512E7",
+      "centreId": "CTR-007",
+      "submitted": "03 Sep 2026",
+      "status": "PENDING",
+      "stage": "Registration Submitted",
+      "contact": "Ashrujit org",
+      "phone": "6291033082",
+      "certificate": "DEMO-REG-2026",
+      "document": "demo_registration.pdf",
+      "history": [
+        "Registration Submitted"
+      ]
+    },
     {
       "id": "VR-001",
       "centreId": "CTR-006",
