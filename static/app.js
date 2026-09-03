@@ -1302,7 +1302,7 @@ async function farmerDashboard() {
   return `
     <section class="welcome-banner animate-fade">
       <div>
-        <div class="eyebrow" style="margin-bottom:7px">${t("Good morning")}, ${esc(data.user.name.split(" ")[0])} 👋</div>
+        <div class="eyebrow" style="margin-bottom:7px">${t("Hello")}, ${esc(data.user.name.split(" ")[0])} 👋</div>
         <h2>${t("Your produce journey, in one place.")}</h2>
         <p>${verifiedBadge(data.user.verification || "VERIFIED")} &nbsp; ${esc(data.user.farmerId || "FRM-DEMO")}</p>
       </div>
