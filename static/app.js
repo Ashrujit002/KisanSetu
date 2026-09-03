@@ -1,6 +1,6 @@
 /**
- * AgriProcure — Smart Agricultural Procurement Platform
- * Multi-Language, Logical Slot Booking, Unique Tracking IDs, Real-Time In-App Call Alerts
+ * KisanSetu — Smart Agricultural Procurement Platform
+ * Multi-Language, Dynamic Slot Allocation, Unique Tracking IDs & High-Security Auth
  */
 
 const app = document.querySelector("#app");
@@ -20,7 +20,7 @@ const state = {
   cache: {},
   poller: null,
   notificationPoller: null,
-  lastNotifiedCallId: null,
+  seenNotifications: new Set(JSON.parse(localStorage.getItem("agri_seen_notifs") || "[]")),
 };
 
 const labels = {
@@ -101,9 +101,9 @@ const translations = {
     "Low queue (under 10)": "কম সারি (১০ জনের নিচে)",
     "No centres match those filters.": "এই ফিল্টারে কোনো কেন্দ্র মেলেনি।",
     "Current queue": "বর্তমান সারি",
-    "farmers": "জন কৃষক",
+    farmers: "জন কৃষক",
     "slots available": "টি স্লট খালি আছে",
-    "utilized": "পূর্ণ",
+    utilized: "পূর্ণ",
 
     // Booking Page
     "Book a procurement slot": "সরকারি ক্রয়ের স্লট বুক করুন",
@@ -118,15 +118,15 @@ const translations = {
     Unit: "একক",
     "Confirm booking & generate token": "বুকিং নিশ্চিত করুন ও টোকেন নিন",
     "Confirm booking & generate token →": "বুকিং নিশ্চিত করুন ও টোকেন নিন →",
-    "Available": "খালি আছে",
-    "Full": "পূর্ণ",
-    "Closed": "বন্ধ",
+    Available: "খালি আছে",
+    Full: "পূর্ণ",
+    Closed: "বন্ধ",
     "Closed / Past": "সময় পার হয়েছে",
     "Booking confirmed": "বুকিং সফলভাবে নিশ্চিত হয়েছে!",
     "Keep this booking reference to track your procurement visit.": "কেন্দ্র পরিদর্শনের সময় এই বুকিং আইডি ও টোকেন সাথে রাখুন।",
     "Booking ID": "বুকিং আইডি",
     Token: "টোকেন নম্বর",
-    "Time": "সময়",
+    Time: "সময়",
     "Track live queue": "সরাসরি সারি দেখুন",
     "Go to dashboard": "ড্যাশবোর্ডে ফিরুন",
     "Previous dates cannot be booked. Please choose today or a future date.": "অতীতের তারিখে বুকিং সম্ভব নয়। দয়া করে আজকের বা পরবর্তী তারিখ নির্বাচন করুন।",
@@ -140,14 +140,14 @@ const translations = {
     "Live queue": "লাইভ সারি",
     "Call next waiting": "পরবর্তী কৃষককে ডাকুন",
     "Check in": "উপস্থিতি গ্রহণ",
-    "Call": "কল করুন",
-    "Complete": "সম্পন্ন করুন",
+    Call: "কল করুন",
+    Complete: "সম্পন্ন করুন",
 
     // Notification
     "📣 Your Token Has Been Called!": "📣 আপনার টোকেন ডাকা হয়েছে!",
     "CALL ALERT": "জরুরি বার্তা",
     "No new notifications.": "কোনো নতুন বিজ্ঞপ্তি নেই।",
-    "Dismiss": "বন্ধ করুন",
+    Dismiss: "বন্ধ করুন",
 
     // Crops & Payments
     "Registered crops": "নিবন্ধিত ফসল",
@@ -177,20 +177,16 @@ const translations = {
     PENDING: "যাচাই অপেক্ষমান",
 
     // Login page
-    "Welcome to AgriProcure": "AgriProcure-এ স্বাগতম",
-    "Smart agricultural procurement": "স্মার্ট ডিজিটাল কৃষি ক্রয় ব্যবস্থাপনা",
+    "Welcome to KisanSetu": "KisanSetu-তে স্বাগতম",
+    "Smart agricultural procurement": "স্মার্ট ডিজিটাল কৃষি ক্রয় সেতু",
     "Farm produce. Less waiting. More certainty.": "সরাসরি সরকারি ক্রয়কেন্দ্রে ফসল বিক্রি। লাইন ছাড়া সঠিক ও স্বচ্ছ মূল্য।",
     "Book your visit, receive a digital token and follow every step from crop verification to a clearly marked demo payment.": "ঘরে বসেই বুকিং করুন, ডিজিটাল টোকেন পান এবং ফসল ওজন থেকে মূল্য প্রাপ্তি পর্যন্ত লাইভ ট্র্যাকিং করুন।",
     "Sign in as Seller / Farmer": "কৃষক হিসেবে সাইন ইন",
     "Sign in as Procurement Centre / Buyer": "ক্রয়কেন্দ্র হিসেবে সাইন ইন",
     "Sign in as Platform Administrator": "প্রশাসক হিসেবে সাইন ইন",
-    "QUICK DEMO ACCESS": "এক ক্লিকে ডেমো প্রবেশ",
-    "Demo Farmer": "ডেমো কৃষক",
-    "Demo Buyer": "ডেমো ক্রয়কেন্দ্র",
-    "Demo Admin": "ডেমো প্রশাসক",
     "Create a demo account": "নতুন অ্যাকাউন্ট তৈরি করুন",
     "Sign in": "লগ ইন করুন",
-    "Language": "ভাষা",
+    Language: "ভাষা",
   },
   hi: {
     // Roles & Portal
@@ -261,9 +257,9 @@ const translations = {
     "Low queue (under 10)": "कम कतार (10 से कम)",
     "No centres match those filters.": "इन फ़िल्टर से कोई केंद्र नहीं मिला।",
     "Current queue": "वर्तमान कतार",
-    "farmers": "किसान",
+    farmers: "किसान",
     "slots available": "स्लॉट उपलब्ध",
-    "utilized": "पूर्ण",
+    utilized: "पूर्ण",
 
     // Booking Page
     "Book a procurement slot": "सरकारी खरीद स्लॉट बुक करें",
@@ -278,15 +274,15 @@ const translations = {
     Unit: "इकाई",
     "Confirm booking & generate token": "बुकिंग पुष्टि करें और टोकन लें",
     "Confirm booking & generate token →": "बुकिंग पुष्टि करें और टोकन लें →",
-    "Available": "उपलब्ध",
-    "Full": "पूर्ण",
-    "Closed": "बंद",
+    Available: "उपलब्ध",
+    Full: "पूर्ण",
+    Closed: "बंद",
     "Closed / Past": "समय समाप्त",
     "Booking confirmed": "बुकिंग सफलतापूर्वक पुष्टि हो गई!",
     "Keep this booking reference to track your procurement visit.": "केंद्र आगमन पर यह बुकिंग आईडी और टोकन दिखाएं।",
     "Booking ID": "बुकिंग आईडी",
     Token: "टोकन नंबर",
-    "Time": "समय",
+    Time: "समय",
     "Track live queue": "लाइव कतार देखें",
     "Go to dashboard": "डैशबोर्ड पर जाएं",
     "Previous dates cannot be booked. Please choose today or a future date.": "पिछली तिथि पर बुकिंग संभव नहीं है। कृपया आज या आगामी तिथि चुनें।",
@@ -300,14 +296,14 @@ const translations = {
     "Live queue": "लाइव कतार",
     "Call next waiting": "अगले किसान को बुलाएं",
     "Check in": "उपस्थिति दर्ज करें",
-    "Call": "कॉल करें",
-    "Complete": "पूर्ण करें",
+    Call: "कॉल करें",
+    Complete: "पूर्ण करें",
 
     // Notification
     "📣 Your Token Has Been Called!": "📣 आपका टोकन बुलाया गया है!",
     "CALL ALERT": "तत्काल सूचना",
     "No new notifications.": "कोई नई सूचना नहीं है।",
-    "Dismiss": "बंद करें",
+    Dismiss: "बंद करें",
 
     // Crops & Payments
     "Registered crops": "पंजीकृत फसलें",
@@ -337,20 +333,16 @@ const translations = {
     PENDING: "सत्यापन बाकी",
 
     // Login page
-    "Welcome to AgriProcure": "AgriProcure में आपका स्वागत है",
-    "Smart agricultural procurement": "स्मार्ट डिजिटल कृषि खरीद प्रणाली",
+    "Welcome to KisanSetu": "KisanSetu में आपका स्वागत है",
+    "Smart agricultural procurement": "स्मार्ट डिजिटल कृषि खरीद सेतु",
     "Farm produce. Less waiting. More certainty.": "सीधे सरकारी खरीद केंद्र पर फसल बेचें। पारदर्शी तौल और सुरक्षित भुगतान।",
     "Book your visit, receive a digital token and follow every step from crop verification to a clearly marked demo payment.": "आसानी से स्लॉट बुक करें, टोकन प्राप्त करें और कतार में अपनी बारी ट्रैक करें।",
     "Sign in as Seller / Farmer": "किसान के रूप में साइन इन",
     "Sign in as Procurement Centre / Buyer": "खरीद केंद्र के रूप में साइन इन",
     "Sign in as Platform Administrator": "प्रशासक के रूप में साइन इन",
-    "QUICK DEMO ACCESS": "त्वरित डेमो लॉगिन",
-    "Demo Farmer": "डेमो किसान",
-    "Demo Buyer": "डेमो खरीद केंद्र",
-    "Demo Admin": "डेमो प्रशासक",
     "Create a demo account": "नया खाता बनाएं",
     "Sign in": "लॉग इन करें",
-    "Language": "भाषा",
+    Language: "भाषा",
   },
 };
 
@@ -381,6 +373,266 @@ function displayDate(value, options = { day: "numeric", month: "short", year: "n
   } catch (e) {
     return value;
   }
+}
+
+/**
+ * Beautiful Custom SVG Emblem Logo for KisanSetu
+ * Symbolizes the direct Golden Bridge (Setu) connecting farmers with government MSP procurement.
+ */
+function renderLogo(size = 38) {
+  return `
+    <svg class="brand-logo-svg" width="${size}" height="${size}" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="KisanSetu Logo">
+      <defs>
+        <linearGradient id="ksLogoBg" x1="0" y1="0" x2="44" y2="44" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#0a3d24"/>
+          <stop offset="100%" stop-color="#167347"/>
+        </linearGradient>
+        <linearGradient id="ksBridgeGold" x1="6" y1="28" x2="38" y2="28" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#f59e0b"/>
+          <stop offset="50%" stop-color="#fef08a"/>
+          <stop offset="100%" stop-color="#d97706"/>
+        </linearGradient>
+        <linearGradient id="ksWheatGold" x1="16" y1="8" x2="28" y2="26" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#fef08a"/>
+          <stop offset="100%" stop-color="#f59e0b"/>
+        </linearGradient>
+        <radialGradient id="ksSunGlow" cx="22" cy="18" r="9" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#fde047" stop-opacity="0.95"/>
+          <stop offset="100%" stop-color="#ca8a04" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <!-- Base Shield -->
+      <rect width="44" height="44" rx="12" fill="url(#ksLogoBg)"/>
+      <rect x="0.75" y="0.75" width="42.5" height="42.5" rx="11.25" stroke="rgba(255,255,255,0.2)"/>
+      <!-- Sunrise Glow -->
+      <circle cx="22" cy="18" r="7" fill="url(#ksSunGlow)"/>
+      <circle cx="22" cy="18" r="4" fill="#fef08a"/>
+      <!-- Golden Sprouting Grain / Crop -->
+      <path d="M22 28V11" stroke="url(#ksWheatGold)" stroke-width="1.8" stroke-linecap="round"/>
+      <path d="M22 22C19.2 20.5 18.2 18 19.6 16.5C21.1 18 21.6 20 22 22Z" fill="url(#ksWheatGold)"/>
+      <path d="M22 17C19.6 15.6 18.9 13.2 20.3 12C21.5 13.2 21.8 15.1 22 17Z" fill="url(#ksWheatGold)"/>
+      <path d="M22 12C20.3 10.8 19.9 8.9 21.1 7.9C22.1 8.9 22.1 10.3 22 12Z" fill="url(#ksWheatGold)"/>
+      <path d="M22 22C24.8 20.5 25.8 18 24.4 16.5C22.9 18 22.4 20 22 22Z" fill="url(#ksWheatGold)"/>
+      <path d="M22 17C24.4 15.6 25.1 13.2 23.7 12C22.5 13.2 22.2 15.1 22 17Z" fill="url(#ksWheatGold)"/>
+      <path d="M22 12C23.7 10.8 24.1 8.9 22.9 7.9C21.9 8.9 21.9 10.3 22 12Z" fill="url(#ksWheatGold)"/>
+      <!-- Arching Golden Setu (Bridge) -->
+      <path d="M7 32C13 25.5 31 25.5 37 32" stroke="url(#ksBridgeGold)" stroke-width="2.8" stroke-linecap="round"/>
+      <path d="M9 35C15 30.2 29 30.2 35 35" stroke="#bef264" stroke-width="1.4" stroke-linecap="round" opacity="0.85"/>
+      <line x1="16" y1="28.5" x2="16" y2="33" stroke="url(#ksBridgeGold)" stroke-width="1.2"/>
+      <line x1="22" y1="27" x2="22" y2="32.5" stroke="url(#ksBridgeGold)" stroke-width="1.2"/>
+      <line x1="28" y1="28.5" x2="28" y2="33" stroke="url(#ksBridgeGold)" stroke-width="1.2"/>
+    </svg>
+  `;
+}
+
+function brandMarkup(size = 38) {
+  return `
+    <div class="brand">
+      ${renderLogo(size)}
+      <span class="brand-title">Kisan<span class="brand-highlight">Setu</span></span>
+    </div>
+  `;
+}
+
+/**
+ * Official Ashoka Lion Capital Emblem (Government of India)
+ */
+function renderEmblemSvg(height = 42) {
+  return `
+    <svg class="national-emblem-svg" height="${height}" viewBox="0 0 40 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Emblem of India">
+      <defs>
+        <linearGradient id="embGrad" x1="0" y1="0" x2="0" y2="48" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#fef08a"/>
+          <stop offset="45%" stop-color="#f59e0b"/>
+          <stop offset="100%" stop-color="#d97706"/>
+        </linearGradient>
+      </defs>
+      <!-- Central Lion Head & Mane -->
+      <path d="M20,4 C17.5,4 15.5,5.8 15.5,8 C15.5,9.5 16.3,10.8 17.5,11.5 C16.5,12 15.5,13.2 15.5,15 C15.5,17.2 17.5,19 20,19 C22.5,19 24.5,17.2 24.5,15 C24.5,13.2 23.5,12 22.5,11.5 C23.7,10.8 24.5,9.5 24.5,8 C24.5,5.8 22.5,4 20,4 Z" fill="url(#embGrad)"/>
+      <!-- Left Lion Profile -->
+      <path d="M12,9 C10,9 8.5,10.5 8.5,12.5 C8.5,14 9.5,15.2 10.5,15.8 C9.5,16.5 8.5,17.8 8.5,19.5 C8.5,21.5 10.2,23 12.5,23 C13.8,23 14.8,22.2 15.5,21.2 L15.5,17.5 C14.5,17 13.8,16 13.8,14.8 C13.8,13.5 14.5,12.5 15.5,12 L15.5,10 C14.5,9.4 13.3,9 12,9 Z" fill="url(#embGrad)"/>
+      <!-- Right Lion Profile -->
+      <path d="M28,9 C26.7,9 25.5,9.4 24.5,10 L24.5,12 C25.5,12.5 26.2,13.5 26.2,14.8 C26.2,16 25.5,17 24.5,17.5 L24.5,21.2 C25.2,22.2 26.2,23 27.5,23 C29.8,23 31.5,21.5 31.5,19.5 C31.5,17.8 30.5,16.5 29.5,15.8 C30.5,15.2 31.5,14 31.5,12.5 C31.5,10.5 30,9 28,9 Z" fill="url(#embGrad)"/>
+      <!-- Base Pedestal / Abacus -->
+      <rect x="7" y="27" width="26" height="5" rx="1.5" fill="url(#embGrad)"/>
+      <!-- Ashoka Chakra (Dharma Wheel) in Center -->
+      <circle cx="20" cy="29.5" r="2.8" stroke="#ffffff" stroke-width="0.8" fill="none"/>
+      <circle cx="20" cy="29.5" r="0.8" fill="#ffffff"/>
+      <!-- Galloping Horse (Left) & Bull (Right) reliefs -->
+      <circle cx="12" cy="29.5" r="1.2" fill="#ffffff" opacity="0.85"/>
+      <circle cx="28" cy="29.5" r="1.2" fill="#ffffff" opacity="0.85"/>
+      <!-- Bell-shaped Lotus Foundation -->
+      <path d="M9,33 C9,33 13,38 20,38 C27,38 31,33 31,33 L32,36 C32,36 27,42 20,42 C13,42 8,36 8,36 L9,33 Z" fill="url(#embGrad)"/>
+      <!-- Plinth -->
+      <rect x="10" y="44" width="20" height="2" rx="1" fill="url(#embGrad)"/>
+    </svg>
+  `;
+}
+
+/**
+ * Interactive Modals for Footer Trust & Support Actions
+ */
+function openInfoModal(type) {
+  const contentMap = {
+    help: {
+      title: "🌾 KisanSetu Farmer Helpdesk",
+      desc: "Step-by-step guide to smart government agricultural procurement.",
+      html: `
+        <div class="info-modal-grid">
+          <div class="info-step-card">
+            <span class="step-badge">Step 1</span>
+            <strong>Select Centre &amp; Date</strong>
+            <p>Search your local district procurement centre and choose an open date and time slot.</p>
+          </div>
+          <div class="info-step-card">
+            <span class="step-badge">Step 2</span>
+            <strong>Receive Digital Token</strong>
+            <p>Get your digital queue number and monitor your turn live without standing in crowded physical queues.</p>
+          </div>
+          <div class="info-step-card">
+            <span class="step-badge">Step 3</span>
+            <strong>Produce Inspection</strong>
+            <p>Produce is inspected against Fair Average Quality (FAQ) norms with certified digital moisture testers.</p>
+          </div>
+          <div class="info-step-card">
+            <span class="step-badge">Step 4</span>
+            <strong>Direct Bank DBT</strong>
+            <p>Funds are transferred directly to your Aadhaar-linked bank account within 24 hours of weighment.</p>
+          </div>
+        </div>
+      `
+    },
+    contact: {
+      title: "📞 Contact Farmer Support & Helplines",
+      desc: "Reach our dedicated agricultural procurement assistance teams.",
+      html: `
+        <div class="contact-card-list">
+          <div class="contact-info-card">
+            <span class="contact-icon">📞</span>
+            <div>
+              <strong>Kisan Call Centre (Toll-Free)</strong>
+              <div class="contact-highlight">1800-180-1551</div>
+              <small>Operating 6:00 AM – 10:00 PM daily in 22 local languages.</small>
+            </div>
+          </div>
+          <div class="contact-info-card">
+            <span class="contact-icon">💬</span>
+            <div>
+              <strong>WhatsApp Kisan Sahayak</strong>
+              <div class="contact-highlight">+91 98765 43210</div>
+              <small>24/7 automated slot enquiry and Mandi price lookup.</small>
+            </div>
+          </div>
+          <div class="contact-info-card">
+            <span class="contact-icon">✉️</span>
+            <div>
+              <strong>National Helpdesk Email</strong>
+              <div class="contact-highlight">support@kisansetu.gov.in</div>
+              <small>Official responses within 1 business day.</small>
+            </div>
+          </div>
+          <div class="contact-info-card">
+            <span class="contact-icon">🏢</span>
+            <div>
+              <strong>Headquarters</strong>
+              <p style="margin:2px 0 0;font-size:12px;color:var(--muted)">Department of Agriculture &amp; Farmers Welfare, Krishi Bhawan, Dr. Rajendra Prasad Road, New Delhi - 110001</p>
+            </div>
+          </div>
+        </div>
+      `
+    },
+    support: {
+      title: "🛡️ Farmer Grievance & Technical Support",
+      desc: "Resolution for slot booking, token queueing, and bank transfers.",
+      html: `
+        <div class="support-info-box">
+          <p>If you experience any difficulties with slot booking, token queueing, or DBT reconciliation, our District Agronomist Officers (DAOs) are available to assist:</p>
+          <ul class="support-check-list">
+            <li>✓ <strong>Weighment Disputes:</strong> Every farmer receives an authenticated digital weighbridge receipt with QR code.</li>
+            <li>✓ <strong>Bank Account Update:</strong> Change or verify your Aadhaar-linked DBT account through your local centre operator.</li>
+            <li>✓ <strong>Slot Rescheduling:</strong> Easily reschedule future slots up to 12 hours before your scheduled appointment.</li>
+          </ul>
+        </div>
+      `
+    },
+    services: {
+      title: "🚜 KisanSetu Agricultural Services",
+      desc: "Official smart procurement services under Central &amp; State initiatives.",
+      html: `
+        <div class="services-info-grid">
+          <div class="service-item">
+            <div class="s-icon">🌾</div>
+            <strong>MSP Assured Procurement</strong>
+            <p>Guaranteed Minimum Support Price without middlemen or commission deductions.</p>
+          </div>
+          <div class="service-item">
+            <div class="s-icon">⏱️</div>
+            <strong>Smart Token Management</strong>
+            <p>Time-slotted appointments eliminating wait times at government mandis.</p>
+          </div>
+          <div class="service-item">
+            <div class="s-icon">💳</div>
+            <strong>Direct Benefit Transfer (DBT)</strong>
+            <p>Direct electronic transfer to farmers' accounts with zero leakage.</p>
+          </div>
+          <div class="service-item">
+            <div class="s-icon">🔬</div>
+            <strong>Digital Quality Testing</strong>
+            <p>Transparent moisture and purity assessment recorded on the blockchain ledger.</p>
+          </div>
+        </div>
+      `
+    },
+    faq: {
+      title: "❓ Frequently Asked Questions (FAQ)",
+      desc: "Common questions regarding KisanSetu procurement.",
+      html: `
+        <div class="faq-list">
+          <div class="faq-card">
+            <strong>What is KisanSetu?</strong>
+            <p>KisanSetu is a government-backed smart agricultural procurement platform connecting farmers directly with certified procurement centres at guaranteed MSP rates.</p>
+          </div>
+          <div class="faq-card">
+            <strong>How do I book a procurement slot?</strong>
+            <p>Sign in with your farmer account, choose an open date, select an available time window, and confirm to receive your unique digital token.</p>
+          </div>
+          <div class="faq-card">
+            <strong>Can I book a previous date?</strong>
+            <p>No. For integrity and fairness, appointments are only permitted for today or future dates.</p>
+          </div>
+          <div class="faq-card">
+            <strong>When will payment reach my account?</strong>
+            <p>Payment is disbursed electronically via DBT within 24 hours of crop inspection and certified weighment.</p>
+          </div>
+        </div>
+      `
+    }
+  };
+
+  const data = contentMap[type] || contentMap.contact;
+  const modalHtml = `
+    <div class="modal-backdrop animate-fade" id="info-modal">
+      <section class="modal animate-pop" style="max-width:580px">
+        <div class="modal-head">
+          <div>
+            <h2>${data.title}</h2>
+            <p class="form-help">${data.desc}</p>
+          </div>
+          <button class="modal-close" id="close-info-modal">×</button>
+        </div>
+        <div class="info-modal-content">
+          ${data.html}
+        </div>
+      </section>
+    </div>
+  `;
+  document.body.insertAdjacentHTML("beforeend", modalHtml);
+  document.querySelector("#close-info-modal")?.addEventListener("click", () => {
+    document.querySelector("#info-modal")?.remove();
+  });
+  document.querySelector("#info-modal")?.addEventListener("click", (e) => {
+    if (e.target.id === "info-modal") e.target.remove();
+  });
 }
 
 const icons = {
@@ -439,52 +691,18 @@ function toast(message, type = "info") {
   const region = document.querySelector("#toast-region");
   if (!region) return;
   const element = document.createElement("div");
-  element.className = `toast ${type}`;
+  element.className = `toast ${type} animate-fade`;
   element.innerHTML = `<span>${esc(message)}</span><button class="toast-close">✕</button>`;
   element.querySelector(".toast-close").addEventListener("click", () => element.remove());
   region.append(element);
-  setTimeout(() => element.remove(), 4500);
-}
-
-function showCallModal(notice) {
-  const existing = document.querySelector("#call-alert-modal");
-  if (existing) existing.remove();
-
-  const modalHtml = `
-    <div class="modal-backdrop call-backdrop animate-pop" id="call-alert-modal">
-      <div class="modal call-card">
-        <div class="call-pulse-circle">📣</div>
-        <h2 style="color:var(--green);margin-top:12px">${t("📣 Your Token Has Been Called!")}</h2>
-        <p style="font-size:15px;line-height:1.5;margin:12px 0 20px;color:var(--ink)">
-          ${esc(notice.message)}
-        </p>
-        <div class="call-actions">
-          <button class="primary-btn full pulse-button" id="go-to-queue-btn">
-            ${t("Track Live Queue")} →
-          </button>
-          <button class="ghost-btn full" style="margin-top:8px" id="dismiss-call-btn">
-            ${t("Dismiss")}
-          </button>
-        </div>
-      </div>
-    </div>
-  `;
-  document.body.insertAdjacentHTML("beforeend", modalHtml);
-
-  document.querySelector("#go-to-queue-btn")?.addEventListener("click", () => {
-    document.querySelector("#call-alert-modal")?.remove();
-    setView("queue");
-  });
-  document.querySelector("#dismiss-call-btn")?.addEventListener("click", () => {
-    document.querySelector("#call-alert-modal")?.remove();
-  });
+  setTimeout(() => element.remove(), 3500);
 }
 
 function updateNotificationIndicator() {
   const dot = document.querySelector("#notification-button .dot");
   if (dot) {
-    const hasUnread = state.cache.notifications?.some((item) => !item.read);
-    dot.classList.toggle("hidden", !hasUnread);
+    const unreadCount = state.cache.notifications?.filter((item) => !item.read).length || 0;
+    dot.classList.toggle("hidden", unreadCount === 0);
   }
 }
 
@@ -494,14 +712,18 @@ async function refreshNotifications(announce = false) {
     state.cache.notifications = notifications;
     updateNotificationIndicator();
 
-    if (announce && state.user?.role === "FARMER") {
-      const callNotice = notifications.find(
-        (item) => item.type === "CALL" && item.id !== state.lastNotifiedCallId
+    // Gentle subtle non-blocking toast ONLY for brand-new unread notifications
+    if (announce && state.user) {
+      const newItems = notifications.filter(
+        (n) => !n.read && !state.seenNotifications.has(n.id)
       );
-      if (callNotice) {
-        state.lastNotifiedCallId = callNotice.id;
-        showCallModal(callNotice);
-        toast(`📣 ${callNotice.title}: ${callNotice.message}`, "urgent");
+      for (const item of newItems) {
+        state.seenNotifications.add(item.id);
+        localStorage.setItem(
+          "agri_seen_notifs",
+          JSON.stringify([...state.seenNotifications].slice(-100))
+        );
+        toast(`🔔 ${item.title}: ${item.message}`, "info");
       }
     }
     return notifications;
@@ -514,7 +736,7 @@ function startNotificationPolling() {
   clearInterval(state.notificationPoller);
   state.notificationPoller = setInterval(() => {
     refreshNotifications(true).catch(() => {});
-  }, 4500);
+  }, 6000);
 }
 
 function saveSession(token, user) {
@@ -531,7 +753,6 @@ function logout() {
   state.user = null;
   state.cache = {};
   state.view = "dashboard";
-  state.lastNotifiedCallId = null;
   clearInterval(state.poller);
   clearInterval(state.notificationPoller);
   render();
@@ -561,74 +782,376 @@ function renderLanguageDropdown(extraClass = "") {
 function loginPage() {
   const registration = state.loginScreen === "register";
   const role = state.loginRole;
+
   return `
-    <main class="login-shell">
-      <section class="login-intro">
-        <div class="brand"><span class="brand-mark">🌾</span>AgriProcure</div>
+    <div class="login-page-wrapper">
+      <main class="login-shell">
+        <!-- Animated Agricultural Hero Scene on Left -->
+        <section class="login-intro">
+        <!-- Subtle Ambient Background Animation (Mesh Orbs, Topo Rings & Drifting Fireflies) -->
+        <div class="bg-ambient-layer">
+          <div class="ambient-orb orb-1"></div>
+          <div class="ambient-orb orb-2"></div>
+          <div class="ambient-orb orb-3"></div>
+          <div class="topo-ring ring-1"></div>
+          <div class="topo-ring ring-2"></div>
+          <div class="topo-ring ring-3"></div>
+          <div class="bg-firefly bf1"></div>
+          <div class="bg-firefly bf2"></div>
+          <div class="bg-firefly bf3"></div>
+          <div class="bg-firefly bf4"></div>
+          <div class="bg-firefly bf5"></div>
+          <div class="bg-firefly bf6"></div>
+        </div>
+
+        <div class="intro-header">
+          ${brandMarkup(42)}
+          <span class="gov-tag">Direct MSP Platform</span>
+        </div>
+        
+        <!-- Panoramic Animated Landscape -->
+        <div class="scenic-canvas-wrap">
+          <div class="sun-radiance">
+            <div class="sun-core"></div>
+            <div class="sun-rays"></div>
+          </div>
+          
+          <!-- Drifting Clouds -->
+          <div class="scenic-cloud c1"></div>
+          <div class="scenic-cloud c2"></div>
+
+          <!-- Drifting Golden Pollen Particles -->
+          <div class="pollen-spore p1"></div>
+          <div class="pollen-spore p2"></div>
+          <div class="pollen-spore p3"></div>
+          <div class="pollen-spore p4"></div>
+          <div class="pollen-spore p5"></div>
+          <div class="pollen-spore p6"></div>
+
+          <svg class="landscape-svg" viewBox="0 0 540 240" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="hillDistant" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#145a38" stop-opacity="0.7"/>
+                <stop offset="100%" stop-color="#093822" stop-opacity="0.95"/>
+              </linearGradient>
+              <linearGradient id="hillMiddle" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#1e7b4b"/>
+                <stop offset="100%" stop-color="#0e4428"/>
+              </linearGradient>
+              <linearGradient id="hillFore" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#2a9b5e"/>
+                <stop offset="100%" stop-color="#125433"/>
+              </linearGradient>
+              <linearGradient id="roadGrad" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#4d6655" stop-opacity="0.5"/>
+                <stop offset="50%" stop-color="#809c86" stop-opacity="0.7"/>
+                <stop offset="100%" stop-color="#4d6655" stop-opacity="0.5"/>
+              </linearGradient>
+            </defs>
+
+            <!-- Distant Mountains -->
+            <path d="M0,110 Q90,60 210,95 T430,75 Q490,95 540,85 L540,240 L0,240 Z" fill="url(#hillDistant)" opacity="0.65"/>
+            
+            <!-- Clean-Energy Wind Turbine 1 (Distant Ridge) -->
+            <g class="windmill-unit">
+              <line x1="200" y1="92" x2="200" y2="132" stroke="#94a3b8" stroke-width="2.5" stroke-linecap="round"/>
+              <g class="windmill-propeller">
+                <circle cx="200" cy="92" r="3.5" fill="#ffffff"/>
+                <line x1="200" y1="92" x2="200" y2="68" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round"/>
+                <line x1="200" y1="92" x2="220" y2="104" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round"/>
+                <line x1="200" y1="92" x2="180" y2="104" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round"/>
+              </g>
+            </g>
+
+            <!-- Clean-Energy Wind Turbine 2 (Farther Ridge) -->
+            <g class="windmill-unit" opacity="0.75">
+              <line x1="248" y1="104" x2="248" y2="136" stroke="#94a3b8" stroke-width="2" stroke-linecap="round"/>
+              <g class="windmill-propeller" style="transform-origin: 248px 104px; animation-duration: 8.5s;">
+                <circle cx="248" cy="104" r="2.8" fill="#ffffff"/>
+                <line x1="248" y1="104" x2="248" y2="85" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round"/>
+                <line x1="248" y1="104" x2="264" y2="114" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round"/>
+                <line x1="248" y1="104" x2="232" y2="114" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round"/>
+              </g>
+            </g>
+
+            <!-- Midground Hills -->
+            <path d="M0,140 Q140,100 280,135 T540,115 L540,240 L0,240 Z" fill="url(#hillMiddle)" opacity="0.88"/>
+
+            <!-- Suspension Bridge (Setu) Pillars & Cable Structure -->
+            <g class="setu-bridge-structure" opacity="0.92">
+              <!-- Bridge Pylon Towers -->
+              <line x1="130" y1="182" x2="130" y2="136" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/>
+              <line x1="370" y1="182" x2="370" y2="136" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/>
+              <!-- Cross Bracing -->
+              <line x1="126" y1="152" x2="134" y2="152" stroke="#fef08a" stroke-width="1.5"/>
+              <line x1="366" y1="152" x2="374" y2="152" stroke="#fef08a" stroke-width="1.5"/>
+              <!-- Main Suspension Cable Curve -->
+              <path d="M40,158 Q130,136 250,165 T460,142" stroke="#fbbf24" stroke-width="2.4" fill="none"/>
+              <!-- Suspender Wire Cables -->
+              <line x1="170" y1="156" x2="170" y2="168" stroke="#fde047" stroke-width="1" opacity="0.6"/>
+              <line x1="210" y1="162" x2="210" y2="171" stroke="#fde047" stroke-width="1" opacity="0.6"/>
+              <line x1="290" y1="163" x2="290" y2="172" stroke="#fde047" stroke-width="1" opacity="0.6"/>
+              <line x1="330" y1="157" x2="330" y2="169" stroke="#fde047" stroke-width="1" opacity="0.6"/>
+            </g>
+
+            <!-- Foreground Fertile Terraces -->
+            <path d="M0,170 Q160,135 340,165 T540,150 L540,240 L0,240 Z" fill="url(#hillFore)"/>
+
+            <!-- Curved Farm Highway / Trail across Bridge -->
+            <path d="M-20,185 Q160,148 340,178 T560,165" stroke="url(#roadGrad)" stroke-width="7" fill="none" stroke-linecap="round"/>
+
+            <!-- Swaying Crop Clusters (Left Foreground) -->
+            <g class="crop-cluster left-crops" stroke="#fde047" stroke-width="2.2" stroke-linecap="round" fill="none">
+              <path class="stalk st1" d="M30,175 Q38,142 34,120" />
+              <path class="grain gr1" d="M32,126 Q40,120 36,114 Q34,108 38,102" stroke-width="3.5" stroke="#fef08a" />
+
+              <path class="stalk st2" d="M52,180 Q60,146 56,124" />
+              <path class="grain gr2" d="M54,130 Q62,124 58,118 Q56,112 60,106" stroke-width="3.5" stroke="#fef08a" />
+
+              <path class="stalk st3" d="M75,185 Q82,152 79,130" />
+              <path class="grain gr3" d="M77,136 Q84,130 80,124 Q78,118 82,112" stroke-width="3.5" stroke="#fef08a" />
+            </g>
+
+            <!-- Swaying Crop Clusters (Right Foreground) -->
+            <g class="crop-cluster right-crops" stroke="#fde047" stroke-width="2.2" stroke-linecap="round" fill="none">
+              <path class="stalk st4" d="M460,175 Q468,144 464,122" />
+              <path class="grain gr4" d="M462,128 Q470,122 466,116 Q464,110 468,104" stroke-width="3.5" stroke="#fef08a" />
+
+              <path class="stalk st5" d="M485,180 Q493,148 490,126" />
+              <path class="grain gr5" d="M488,132 Q496,126 492,120 Q490,114 494,108" stroke-width="3.5" stroke="#fef08a" />
+            </g>
+
+            <!-- Animated High-Tech Agritech Transport Truck Riding Across Setu Bridge -->
+            <g class="smart-vehicle ride-animation">
+              <!-- Vehicle Cab -->
+              <rect x="0" y="0" width="38" height="19" rx="4" fill="#ffffff" filter="drop-shadow(0 3px 6px rgba(0,0,0,0.35))" />
+              <rect x="23" y="3" width="12" height="10" rx="2" fill="#38bdf8" opacity="0.9" />
+              <!-- Top Signal Beacon -->
+              <circle cx="10" cy="-2" r="2" fill="#ef4444" />
+              <!-- Cargo Pod (Golden Harvest Container) -->
+              <rect x="-24" y="2" width="24" height="17" rx="3" fill="#f59e0b" />
+              <rect x="-21" y="5" width="18" height="11" rx="1.5" fill="#d97706" opacity="0.6" />
+              <!-- Spinning Dual-Tone Wheels -->
+              <circle cx="-13" cy="21" r="5.5" fill="#0f172a" />
+              <circle cx="-13" cy="21" r="2.5" fill="#94a3b8" />
+              <circle cx="8" cy="21" r="5.5" fill="#0f172a" />
+              <circle cx="8" cy="21" r="2.5" fill="#94a3b8" />
+              <circle cx="28" cy="21" r="5.5" fill="#0f172a" />
+              <circle cx="28" cy="21" r="2.5" fill="#94a3b8" />
+              <!-- Powerful Headlight Cone cutting morning mist -->
+              <polygon points="38,12 86,5 86,23" fill="#fef08a" opacity="0.5" />
+            </g>
+          </svg>
+
+          <!-- Interactive Floating Agritech Glass Badges -->
+          <div class="floating-badge-deck">
+            <div class="glass-badge b1 animate-float-1">
+              <span class="badge-icon">🌾</span>
+              <div>
+                <strong>₹2,425 / Qtl</strong>
+                <small>Guaranteed MSP Rate</small>
+              </div>
+            </div>
+            <div class="glass-badge b2 animate-float-2">
+              <span class="badge-icon">⏱️</span>
+              <div>
+                <strong>Zero Waiting</strong>
+                <small>Live Token System</small>
+              </div>
+            </div>
+            <div class="glass-badge b3 animate-float-3">
+              <span class="badge-icon">💳</span>
+              <div>
+                <strong>Direct DBT</strong>
+                <small>24-Hour Settlement</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div class="hero-copy">
           <div class="eyebrow">${t("Smart agricultural procurement")}</div>
           <h1>${t("Farm produce. Less waiting. More certainty.")}</h1>
           <p>${t("Book your visit, receive a digital token and follow every step from crop verification to a clearly marked demo payment.")}</p>
         </div>
+
         <div class="hero-stats">
           <div><strong>186+</strong><span>${t("Centres")}</span></div>
           <div><strong>12,450+</strong><span>${t("Seller / Farmer")}</span></div>
           <div><strong>7 min</strong><span>${t("Average time")}</span></div>
         </div>
       </section>
+
+      <!-- Clean Login Panel on Right -->
       <section class="login-panel">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-          <span class="demo-pill">● DEMO PORTAL</span>
+        <div class="panel-top-row">
+          <span class="demo-pill">● SECURE ACCESS</span>
           ${renderLanguageDropdown("compact")}
         </div>
         ${registration ? registerMarkup(role) : loginMarkup(role)}
-        <div class="login-footer">AgriProcure Prototype — Empowering farmers with guaranteed procurement schedules.</div>
+        <div class="login-footer">KisanSetu Platform — Transparent, fair, and direct government procurement.</div>
+
+        <div class="scroll-explore-prompt">
+          <button type="button" class="scroll-prompt-btn" id="btn-scroll-down">
+            <span>Explore Government Affiliations &amp; Farmer Services</span>
+            <span class="prompt-arrow">↓</span>
+          </button>
+        </div>
       </section>
     </main>
+
+    <!-- Official Government Affiliation & Farmer Connect Footer Bar (Requested Section) -->
+    <footer class="trust-connect-bar" id="trust-footer">
+      <div class="trust-connect-inner">
+        <!-- 1. Left: KisanSetu Identity Card -->
+        <div class="trust-col trust-brand-card">
+          <div class="trust-logo-box">
+            ${renderLogo(44)}
+          </div>
+          <div class="trust-brand-text">
+            <strong class="trust-brand-title">Kisan<span class="brand-green">Setu</span></strong>
+            <span>National Agri Procurement</span>
+          </div>
+        </div>
+
+        <!-- 2. Center: Connect With Us & Quick Links -->
+        <div class="trust-col trust-connect-center">
+          <div class="connect-headline-row">
+            <span class="connect-title">Connect with us</span>
+            <div class="connect-social-icons">
+              <button type="button" class="social-circle sc-wa" title="WhatsApp Kisan Sahayak" data-open-info="contact">
+                <span class="social-icon">💬</span>
+              </button>
+              <button type="button" class="social-circle sc-phone" title="Kisan Call Centre (1800-180-1551)" data-open-info="contact">
+                <span class="social-icon">📞</span>
+              </button>
+              <button type="button" class="social-circle sc-portal" title="e-NAM &amp; Agri Services" data-open-info="services">
+                <span class="social-icon">🌾</span>
+              </button>
+              <button type="button" class="social-circle sc-notif" title="Farmer Support &amp; Advisory" data-open-info="support">
+                <span class="social-icon">📢</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="connect-pill-group">
+            <button type="button" class="connect-pill pill-outline" data-open-info="help">Help</button>
+            <button type="button" class="connect-pill pill-accent" data-open-info="contact">Contact us</button>
+            <button type="button" class="connect-pill pill-outline" data-open-info="support">Support</button>
+            <button type="button" class="connect-pill pill-accent" data-open-info="services">Services</button>
+            <button type="button" class="connect-pill pill-outline" data-open-info="faq">FAQ</button>
+          </div>
+        </div>
+
+        <!-- 3. Right: Ministry of Agriculture & Farmers Welfare Emblem Card -->
+        <div class="trust-col trust-ministry-card">
+          <div class="emblem-box">
+            ${renderEmblemSvg(44)}
+          </div>
+          <div class="ministry-text">
+            <div class="ministry-hindi">कृषि एवं किसान कल्याण मंत्रालय</div>
+            <div class="ministry-eng">MINISTRY OF AGRICULTURE &amp; FARMERS WELFARE</div>
+            <div class="ministry-sub">GOVERNMENT OF INDIA</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Subtle Gradient Divider Line & Bottom Copyright -->
+      <div class="trust-gradient-divider"></div>
+      <div class="trust-copyright">
+        <span>© 2026 KisanSetu — Department of Agriculture, Cooperation &amp; Farmers Welfare, Government of India. All rights reserved.</span>
+      </div>
+    </footer>
+  </div>
   `;
 }
 
 function loginMarkup(role) {
+  // 1. Role Selection View
   if (state.loginScreen === "select") {
     return `
-      <h2>${t("Welcome to AgriProcure")}</h2>
+      <h2>${t("Welcome to KisanSetu")}</h2>
       <p style="color:var(--muted);margin:0 0 20px">${t("Choose how you want to use the platform.")}</p>
+      
       <div class="role-grid">
         <button class="role-card" data-role="FARMER">
           <span class="role-icon">👨‍🌾</span>
           <strong>${t("SELLER / FARMER")}</strong>
-          <span>${t("Book your visit, receive a digital token and follow every step from crop verification to a clearly marked demo payment.")}</span>
+          <span>Book procurement slots, receive digital queue tokens, and track payments.</span>
           <b>${t("Sign in as Seller / Farmer")} →</b>
         </button>
         <button class="role-card" data-role="BUYER">
           <span class="role-icon">🏢</span>
           <strong>${t("BUYER / CENTRE")}</strong>
-          <span>Manage centre queue, call tokens, verify weights, and authorize procurement.</span>
+          <span>Manage centre queue, call tokens, inspect crop quality, and complete weighment.</span>
           <b>${t("Sign in as Procurement Centre / Buyer")} →</b>
         </button>
       </div>
-      <button class="ghost-btn full" style="margin-top:14px" data-role="ADMIN">
-        🔐 ${t("Sign in as Platform Administrator")}
-      </button>
+      
+      <div class="admin-access-bar">
+        <button class="admin-lock-btn full" data-role="ADMIN">
+          <span class="lock-icon">🔐</span>
+          <div>
+            <strong>${t("Platform Administrator")}</strong>
+            <small>Protected administration console (Password Required)</small>
+          </div>
+          <span class="arrow-key">→</span>
+        </button>
+      </div>
     `;
   }
 
+  // 2. Protected Administrator Authentication (Requires Password)
+  if (role === "ADMIN") {
+    return `
+      <div class="admin-auth-panel animate-pop">
+        <div class="admin-badge-icon">🔐</div>
+        <h2>Administrator Security Access</h2>
+        <p style="color:var(--muted);font-size:13px;margin:6px 0 20px">
+          Master password verification is required to access system verifications and centre configurations.
+        </p>
+
+        <form id="login-form" class="login-form">
+          <label>Administrator Email
+            <input name="email" type="email" placeholder="Enter admin email (e.g. admin@demo.local)" required autocomplete="email" />
+          </label>
+          <label>Security Password
+            <input name="password" type="password" placeholder="Enter administrator password" required autofocus autocomplete="current-password" />
+          </label>
+          <button class="primary-btn full" type="submit">
+            🔐 Verify Password & Enter Console →
+          </button>
+          <button class="ghost-btn full small" type="button" id="back-role">
+            ← Back to role selection
+          </button>
+        </form>
+        
+       
+      </div>
+    `;
+  }
+
+  // 3. Farmer & Buyer Login (Clean Form, Blank Input, No Bypass Buttons)
+  const isFarmer = role === "FARMER";
+  const hintEmail = isFarmer ? "farmer@demo.local" : "buyer@demo.local";
+
   return `
     <h2>${t(`Sign in as ${labels[role]}`)}</h2>
-    <p style="color:var(--muted);margin:0 0 20px">Sign in to manage your procurement and live tokens.</p>
+    <p style="color:var(--muted);margin:0 0 20px">Sign in with your registered account credentials.</p>
+    
     <form id="login-form" class="login-form">
-      <label>Email<input name="email" type="email" placeholder="name@demo.local" required /></label>
-      <label>Password<input name="password" type="password" placeholder="Enter password" required /></label>
+      <label>Email Address
+        <input name="email" type="email" placeholder="Enter your email address" required autocomplete="email" />
+      </label>
+      <label>Password
+        <input name="password" type="password" placeholder="Enter your password" required autocomplete="current-password" />
+      </label>
       <button class="primary-btn full" type="submit">${t(`Sign in as ${labels[role]}`)} →</button>
       <button class="ghost-btn full small" type="button" id="back-role">← Back to role selection</button>
     </form>
-    <div class="login-divider">${t("QUICK DEMO ACCESS")}</div>
-    <div class="demo-logins">
-      <button class="demo-login" data-demo="FARMER"><span>👨‍🌾 ${t("Demo Farmer")}</span><small>farmer@demo.local</small></button>
-      <button class="demo-login" data-demo="BUYER"><span>🏢 ${t("Demo Buyer")}</span><small>buyer@demo.local</small></button>
-      <button class="demo-login" data-demo="ADMIN"><span>🔐 ${t("Demo Admin")}</span><small>admin@demo.local</small></button>
-    </div>
-    <p style="text-align:center;font-size:13px;margin-top:20px">
+
+
+    <p style="text-align:center;font-size:13px;margin-top:22px">
       ${t("New here?")} <button id="register-link" style="background:none;color:var(--green);font-weight:800;padding:0">${t("Create a demo account")}</button>
     </p>
   `;
@@ -644,7 +1167,7 @@ function registerMarkup(role) {
     </div>
     <form id="register-form" class="form-grid">
       <div class="form-group"><label>${buyer ? "Organization / Agency" : "Full Name"} *</label><input name="name" required placeholder="${buyer ? "Bengal Agri Cooperative" : "Ramesh Das"}" /></div>
-      <div class="form-group"><label>Email *</label><input type="email" name="email" required placeholder="user@demo.local" /></div>
+      <div class="form-group"><label>Email *</label><input type="email" name="email" required placeholder="user@domain.com" /></div>
       <div class="form-group"><label>Mobile Number</label><input name="phone" inputmode="tel" placeholder="98765 43210" /></div>
       <div class="form-group"><label>State</label><input name="state" value="West Bengal" /></div>
       <div class="form-group"><label>District</label><input name="district" value="North 24 Parganas" /></div>
@@ -709,21 +1232,22 @@ function appShell(content, subtitle = "") {
     bookings: "Farmer Bookings",
     verifications: "Verification Requests",
     map: "Procurement Centre Map",
-  }[state.view] || "AgriProcure";
+  }[state.view] || "KisanSetu";
 
   const hasUnread = state.cache.notifications?.some((item) => !item.read);
 
   return `
     <div class="app-shell">
+      <div class="sidebar-overlay" id="sidebar-overlay"></div>
       <aside class="sidebar" id="sidebar">
-        <div class="brand"><span class="brand-mark">🌾</span>AgriProcure</div>
+        ${brandMarkup(36)}
         <div class="side-label">${t(`${role} PORTAL`)}</div>
         <nav class="nav-list">${nav}</nav>
         <div class="sidebar-bottom">
-          <div class="demo-chip">● DEMO MODE ACTIVE</div>
+          <div class="demo-chip">● ACTIVE SECURE SESSION</div>
           <div class="account-mini">
             <div class="avatar">${esc(state.user.name || "U").slice(0, 1).toUpperCase()}</div>
-            <div>
+            <div class="account-info">
               <strong>${esc(state.user.name)}</strong>
               <span>${localizedRole(role)}</span>
             </div>
@@ -733,7 +1257,7 @@ function appShell(content, subtitle = "") {
       </aside>
       <main class="main">
         <header class="topbar">
-          <button class="mobile-menu" id="mobile-menu">☰</button>
+          <button class="mobile-menu" id="mobile-menu" aria-label="Open navigation menu">☰</button>
           <div class="page-intro">
             <h1>${t(pageTitleKey)}</h1>
             <p>${subtitle || "Smart agricultural procurement, made easier."}</p>
@@ -760,8 +1284,8 @@ async function farmerDashboard() {
   const stats = booking
     ? [
         ["🎫", t("Active booking"), booking.token],
-        ["◉", t("Queue position"), queue ? String(queue.peopleAhead + 1) : "—"],
-        ["◷", t("Estimated waiting"), queue ? `${queue.estimatedMinutes} min` : "—"],
+        ["◉", t("Queue position"), queue ? String(queue.peopleAhead + 1) : "1"],
+        ["◷", t("Estimated waiting"), queue ? `${queue.estimatedMinutes} min` : "0 min"],
         ["◒", t("Procurement"), booking.procurement?.status || t(booking.status)],
         ["₹", t("Payment"), booking.payment?.status || "Pending"],
       ]
@@ -772,6 +1296,8 @@ async function farmerDashboard() {
         ["◒", t("Procurement"), "—"],
         ["₹", t("Payment"), "—"],
       ];
+
+  const nowServingVal = queue?.nowServing && queue.nowServing !== "—" ? queue.nowServing : (booking?.token || "A-001");
 
   return `
     <section class="welcome-banner animate-fade">
@@ -817,7 +1343,7 @@ async function farmerDashboard() {
             <span class="arrow">→</span>
             <div>
               <span style="font-size:11px;color:var(--muted)">${t("NOW SERVING")}</span>
-              <div class="token-main serving-badge">${queue ? queue.nowServing : "—"}</div>
+              <div class="token-main serving-badge">${nowServingVal}</div>
             </div>
           </div>
           <div class="queue-details">
@@ -918,11 +1444,9 @@ function noticeItem(item) {
     CENTRE: "⌖",
   }[item.type] || "●";
 
-  const isCall = item.type === "CALL";
-
   return `
-    <article class="notice ${isCall ? "notice-call" : ""}">
-      <span class="notice-icon ${isCall ? "call-pulse" : ""}">${typeIcon}</span>
+    <article class="notice">
+      <span class="notice-icon">${typeIcon}</span>
       <div>
         <strong>${esc(item.title)}</strong>
         <p>${esc(item.message)}</p>
@@ -1264,22 +1788,30 @@ async function queuePage() {
     ],
   ];
 
+  const servingToken = queue.nowServing && queue.nowServing !== "—" ? queue.nowServing : booking.token;
+  const isCompleted = booking.status === "COMPLETED" || queue.nowServingStatus === "Procurement Completed";
+
   return `
     <div class="split-grid">
-      <section class="card queue-board">
-        <h3>${t("Now serving")}</h3>
-        <div class="now-token pulse-token">${queue.nowServing}</div>
-        <span class="now-label">at ${esc(booking.centre?.name || "Procurement Centre")}</span>
+      <section class="card queue-board animate-card">
+        <div class="now-serving-header">
+          <h3>${t("Now serving")}</h3>
+          <span class="now-status-pill ${isCompleted ? "pill-completed" : "pill-active"}">
+            ● ${queue.nowServingStatus || (isCompleted ? "Completed" : "Serving Counter 1")}
+          </span>
+        </div>
+        <div class="now-token ${isCompleted ? "token-done" : "pulse-token"}">${servingToken}</div>
+        <div class="now-centre-location">📍 ${esc(booking.centre?.name || "Procurement Centre")}</div>
 
         <div class="queue-details" style="margin-top:21px">
-          <div class="queue-detail" style="color:var(--ink)"><span>${t("Your token")}</span><strong>${queue.yourToken}</strong></div>
-          <div class="queue-detail" style="color:var(--ink)"><span>${t("People ahead")}</span><strong>${queue.peopleAhead}</strong></div>
-          <div class="queue-detail" style="color:var(--ink)"><span>${t("Estimated wait")}</span><strong>${queue.estimatedMinutes} min</strong></div>
+          <div class="queue-detail" style="color:var(--ink)"><span>${t("Your token")}</span><strong>${queue.yourToken || booking.token}</strong></div>
+          <div class="queue-detail" style="color:var(--ink)"><span>${t("People ahead")}</span><strong>${queue.peopleAhead ?? 0}</strong></div>
+          <div class="queue-detail" style="color:var(--ink)"><span>${t("Estimated wait")}</span><strong>${queue.estimatedMinutes ?? 0} min</strong></div>
           <div class="queue-detail" style="color:var(--ink)"><span>Booking ID</span><strong style="font-size:12px">${booking.id}</strong></div>
         </div>
       </section>
 
-      <section class="card">
+      <section class="card animate-card">
         <div class="section-heading" style="margin-top:0">
           <div>
             <h2>${t("Procurement status")}</h2>
@@ -1305,7 +1837,7 @@ async function queuePage() {
       <div class="section-heading" style="margin-top:0">
         <div>
           <h2>${t("Live queue")}</h2>
-          <p>All scheduled tokens for today at this centre</p>
+          <p>Scheduled tokens for this centre (${(queue.queue || []).length} tokens)</p>
         </div>
       </div>
       <div class="queue-list">
@@ -1313,8 +1845,8 @@ async function queuePage() {
           <div class="queue-row ${item.token === booking.token ? "active-row" : ""}">
             <span class="queue-token">${item.token}</span>
             <div class="queue-name">
-              <strong>${item.token === booking.token ? "★ " + t("Your token") : "Farmer Token"}</strong>
-              <span>${item.token === booking.token ? "Live Queue Position" : "In queue"}</span>
+              <strong>${item.token === booking.token ? "★ " + t("Your token") : "Farmer Token"} · <small style="color:var(--green)">${item.bookingId || ""}</small></strong>
+              <span>${t(item.crop || booking.crop)} · ${item.time || booking.time}</span>
             </div>
             ${statusBadge(item.status)}
           </div>
@@ -1382,7 +1914,7 @@ function buyerQueuePage(bookings) {
           </div>
           <div class="timeline-item current">
             <div class="timeline-dot">📣</div>
-            <div class="timeline-copy"><strong>2. Call farmer</strong><span>Sends immediate in-app notification to seller</span></div>
+            <div class="timeline-copy"><strong>2. Call farmer</strong><span>Dispatches in-app notification to seller</span></div>
           </div>
           <div class="timeline-item">
             <div class="timeline-dot">○</div>
@@ -1490,11 +2022,11 @@ async function buyerDashboard() {
   const { centre, stats } = data;
 
   const cards = [
-    ["▦", "Total slots", stats.totalSlots],
-    ["🎫", "Booked", stats.booked],
-    ["✓", "Checked in", stats.checkedIn],
-    ["◒", "Completed", stats.completed],
-    ["◉", "Waiting", stats.waiting],
+    ["▦", "Total slots", stats?.totalSlots || 0],
+    ["🎫", "Booked", stats?.booked || 0],
+    ["✓", "Checked in", stats?.checkedIn || 0],
+    ["◒", "Completed", stats?.completed || 0],
+    ["◉", "Waiting", stats?.waiting || 0],
   ];
 
   return `
@@ -1544,9 +2076,9 @@ async function buyerDashboard() {
           <div><h2>Procurement Performance</h2></div>
         </div>
         <div class="queue-details" style="grid-template-columns:1fr 1fr;gap:12px">
-          <div class="queue-detail"><span>Procured Quantity</span><strong>${stats.quantity} kg</strong></div>
-          <div class="queue-detail"><span>Procurement Value</span><strong>${money(stats.procurement)}</strong></div>
-          <div class="queue-detail"><span>Pending Payments</span><strong>${money(stats.pendingPayments)}</strong></div>
+          <div class="queue-detail"><span>Procured Quantity</span><strong>${stats?.quantity || 0} kg</strong></div>
+          <div class="queue-detail"><span>Procurement Value</span><strong>${money(stats?.procurement || 0)}</strong></div>
+          <div class="queue-detail"><span>Pending Payments</span><strong>${money(stats?.pendingPayments || 0)}</strong></div>
           <div class="queue-detail"><span>Utilization</span><strong>${Math.round(((centre.booked || 0) / (centre.capacity || 1)) * 100)}%</strong></div>
         </div>
       </section>
@@ -1614,7 +2146,7 @@ async function adminDashboard() {
   return `
     <section class="welcome-banner animate-fade">
       <div>
-        <div class="eyebrow" style="margin-bottom:6px">AgriProcure Platform Administrator</div>
+        <div class="eyebrow" style="margin-bottom:6px">KisanSetu Platform Administrator</div>
         <h2>Good morning, Administrator 👋</h2>
         <p>Monitor procurement centres, verification requests, and transaction logs.</p>
       </div>
@@ -1729,7 +2261,7 @@ function notificationModal() {
         <div class="modal-head">
           <div>
             <h2>${t("Notifications")}</h2>
-            <p class="form-help">Live in-app alerts and queue announcements.</p>
+            <p class="form-help">In-app notifications and procurement announcements.</p>
           </div>
           <button class="modal-close" data-close-modal>×</button>
         </div>
@@ -1772,7 +2304,7 @@ async function render() {
       bindLogin();
       return;
     }
-    app.innerHTML = '<div class="empty" style="padding:80px">Loading AgriProcure demo workspace…</div>';
+    app.innerHTML = '<div class="empty" style="padding:80px">Loading KisanSetu workspace…</div>';
     await refreshNotifications();
     app.innerHTML = await renderView();
     bindApp();
@@ -1784,7 +2316,9 @@ async function render() {
           try {
             const queue = await api(`/api/queue/${state.selectedBooking.id}`);
             const servingEl = document.querySelector(".now-token");
-            if (servingEl) servingEl.textContent = queue.nowServing;
+            if (servingEl && queue.nowServing && queue.nowServing !== "—") {
+              servingEl.textContent = queue.nowServing;
+            }
           } catch (e) {}
         }
       }, 5000);
@@ -1792,7 +2326,7 @@ async function render() {
   } catch (error) {
     if (/sign in/i.test(error.message)) {
       logout();
-      toast("Your demo session expired. Please sign in again.");
+      toast("Your session has expired. Please sign in again.");
     } else {
       app.innerHTML = appShell(
         `<section class="card empty">
@@ -1823,29 +2357,6 @@ function bindLogin() {
     })
   );
 
-  document.querySelectorAll("[data-demo]").forEach((button) =>
-    button.addEventListener("click", async () => {
-      try {
-        const role = button.dataset.demo;
-        const email = {
-          FARMER: "farmer@demo.local",
-          BUYER: "buyer@demo.local",
-          ADMIN: "admin@demo.local",
-        }[role];
-        const result = await api("/api/auth/login", {
-          method: "POST",
-          body: JSON.stringify({ email, password: "demo123", role }),
-        });
-        saveSession(result.token, result.user);
-        state.view = "dashboard";
-        toast(`Signed in as Demo ${labels[role]}.`);
-        render();
-      } catch (error) {
-        toast(error.message, "danger");
-      }
-    })
-  );
-
   document.querySelector("#back-role")?.addEventListener("click", () => {
     state.loginScreen = "select";
     render();
@@ -1866,6 +2377,16 @@ function bindLogin() {
     })
   );
 
+  document.querySelectorAll("[data-open-info]").forEach((button) =>
+    button.addEventListener("click", () => {
+      openInfoModal(button.dataset.openInfo);
+    })
+  );
+
+  document.querySelector("#btn-scroll-down")?.addEventListener("click", () => {
+    document.querySelector("#trust-footer")?.scrollIntoView({ behavior: "smooth" });
+  });
+
   document.querySelector("#login-form")?.addEventListener("submit", async (event) => {
     event.preventDefault();
     const values = Object.fromEntries(new FormData(event.currentTarget));
@@ -1876,6 +2397,7 @@ function bindLogin() {
       });
       saveSession(result.token, result.user);
       state.view = "dashboard";
+      toast(`Signed in successfully as ${result.user.name}.`);
       render();
     } catch (error) {
       toast(error.message, "danger");
@@ -1912,13 +2434,25 @@ function bindApp() {
     });
   });
 
-  document.querySelector("#mobile-menu")?.addEventListener("click", () => {
-    document.querySelector("#sidebar")?.classList.toggle("open");
-  });
+  const sidebar = document.querySelector("#sidebar");
+  const overlay = document.querySelector("#sidebar-overlay");
+
+  const toggleSidebar = () => {
+    sidebar?.classList.toggle("open");
+    overlay?.classList.toggle("open");
+  };
+
+  const closeSidebar = () => {
+    sidebar?.classList.remove("open");
+    overlay?.classList.remove("open");
+  };
+
+  document.querySelector("#mobile-menu")?.addEventListener("click", toggleSidebar);
+  overlay?.addEventListener("click", closeSidebar);
 
   document.querySelectorAll("[data-nav]").forEach((button) =>
     button.addEventListener("click", () => {
-      document.querySelector("#sidebar")?.classList.remove("open");
+      closeSidebar();
       setView(button.dataset.nav);
     })
   );
@@ -2046,7 +2580,7 @@ function bindApp() {
         });
 
         if (action === "CALL") {
-          toast("Farmer token called. A live notification was dispatched to the seller!");
+          toast("Farmer token called. A notification was dispatched to the seller.");
         } else {
           toast("Queue status updated.");
         }
@@ -2110,15 +2644,22 @@ function bindApp() {
     })
   );
 
-  document.querySelector("#notification-button")?.addEventListener("click", () => {
+  const openNotifModal = async () => {
     document.body.insertAdjacentHTML("beforeend", notificationModal());
     bindModal();
-  });
+    // Mark notifications as read
+    try {
+      await api("/api/notifications/read", { method: "POST" });
+      if (state.cache.notifications) {
+        state.cache.notifications.forEach((n) => (n.read = true));
+      }
+      updateNotificationIndicator();
+    } catch (e) {}
+  };
+
+  document.querySelector("#notification-button")?.addEventListener("click", openNotifModal);
+  document.querySelector('[data-action="open-notifications"]')?.addEventListener("click", openNotifModal);
   document.querySelector('[data-action="go-book"]')?.addEventListener("click", () => setView("booking"));
-  document.querySelector('[data-action="open-notifications"]')?.addEventListener("click", () => {
-    document.body.insertAdjacentHTML("beforeend", notificationModal());
-    bindModal();
-  });
 
   bindFilters();
 }
@@ -2144,7 +2685,6 @@ function bindFilters() {
       const selectedAvail = availFilter?.value || "all";
 
       const filtered = rows.filter((centre) => {
-        // Multi-field match for name, district, locality, address, and crop keywords
         const searchPool = `${centre.name || ""} ${centre.district || ""} ${centre.locality || ""} ${centre.address || ""} ${(centre.crops || []).join(" ")}`.toLowerCase();
         const matchesTerm = !term || searchPool.includes(term);
 

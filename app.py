@@ -1,16 +1,12 @@
 """
-AgriProcure Flask demo server.
-
-Enhanced with:
-- Windows-compatible timezone fallback (IST, UTC+5:30)
-- Logical, dynamic slot booking system based on confirmed bookings
-- Strict past-date prevention (cannot book dates before today)
-- Unique monitorable booking IDs (e.g. AGRI-2026-0903-XXXX)
-- Seller notification when a buyer calls a token
+KisanSetu Flask procurement server.
+Provides authentication, centre discovery, slot booking, live queue,
+and procurement verification APIs.
 """
 
 import json
 import os
+import re
 import secrets
 from datetime import date, datetime, timedelta, timezone
 from functools import wraps
@@ -261,46 +257,72 @@ def queue_info(db, booking):
     centre = next((c for c in db.get("centres", []) if c["id"] == booking["centreId"]), None)
 
     active_statuses = {"CHECKED_IN", "WAITING", "CALLED", "PROCESSING"}
-    same_queue = [
+    all_bookings = [
         item for item in db.get("bookings", [])
         if item["centreId"] == booking["centreId"]
-        and item.get("date") == booking.get("date")
-        and item["status"] in active_statuses
+        and (item.get("date") == booking.get("date") or item.get("date") == today_local().isoformat())
     ]
-    same_queue.sort(key=lambda item: token_sort_key(item.get("token", "")))
+    all_bookings.sort(key=lambda item: token_sort_key(item.get("token", "")))
 
-    current = next(
-        (item for item in db.get("bookings", [])
-         if item["centreId"] == booking["centreId"]
-         and item.get("date") == booking.get("date")
-         and item["status"] == "PROCESSING"),
-        None,
-    )
+    active_queue = [item for item in all_bookings if item["status"] in active_statuses]
+    completed_queue = [item for item in all_bookings if item["status"] == "COMPLETED"]
+
+    current = next((item for item in active_queue if item["status"] == "PROCESSING"), None)
+    if not current:
+        current = next((item for item in active_queue if item["status"] == "CALLED"), None)
+
+    now_serving_token = None
+    now_serving_status = "Serving Now"
+
+    if current:
+        now_serving_token = current.get("token")
+        now_serving_status = "Called to Counter" if current["status"] == "CALLED" else "Serving Now"
+    elif active_queue:
+        now_serving_token = active_queue[0].get("token")
+        now_serving_status = "Next in Line"
+    elif booking.get("status") == "COMPLETED":
+        now_serving_token = booking.get("token")
+        now_serving_status = "Procurement Completed"
+    elif completed_queue:
+        now_serving_token = completed_queue[-1].get("token")
+        now_serving_status = "Completed"
+    else:
+        now_serving_token = booking.get("token") or "A-001"
+        now_serving_status = "Counter Open"
 
     try:
-        position = next(i for i, item in enumerate(same_queue) if item["id"] == booking["id"])
+        position = next(i for i, item in enumerate(active_queue) if item["id"] == booking["id"])
     except StopIteration:
         position = -1
 
     position = max(0, position)
-    people_ahead = 0 if booking["status"] == "COMPLETED" else position
+    people_ahead = 0 if booking.get("status") == "COMPLETED" else position
     average = (centre or {}).get("processingTime") or db.get("settings", {}).get("averageProcessingTime", 7)
 
+    display_queue = all_bookings if all_bookings else [booking]
+
     return {
-        "nowServing": current["token"] if current else (same_queue[0]["token"] if same_queue else "—"),
-        "yourToken": booking["token"],
+        "nowServing": now_serving_token,
+        "nowServingStatus": now_serving_status,
+        "yourToken": booking.get("token", "—"),
         "peopleAhead": people_ahead,
         "estimatedMinutes": people_ahead * average,
         "averageProcessingTime": average,
         "queue": [
-            {"token": item["token"], "status": item["status"], "bookingId": item["id"]}
-            for item in same_queue
+            {
+                "token": item.get("token", "—"),
+                "status": item.get("status", "BOOKED"),
+                "bookingId": item.get("id"),
+                "crop": item.get("crop", "Paddy"),
+                "time": item.get("time", "")
+            }
+            for item in display_queue
         ],
     }
 
 
 def token_sort_key(token):
-    m = __import__("re").search(r"(\d+)$", str(token))
+    m = re.search(r"(\d+)$", str(token))
     return (str(token)[:m.start()] if m else str(token), int(m.group(1)) if m else 0)
 
 
@@ -444,7 +466,7 @@ def register():
     write_db(db)
     return jsonify(
         {
-            "message": "Registration successful. Welcome to AgriProcure!",
+            "message": "Registration successful. Welcome to KisanSetu!",
             "user": safe_user(user),
         }
     ), 201
@@ -735,6 +757,17 @@ def notifications(user):
     return jsonify([n for n in db.get("notifications", []) if n["userId"] == user["id"]])
 
 
+@app.post("/api/notifications/read")
+@auth_required()
+def mark_notifications_read(user):
+    db = read_db()
+    for n in db.get("notifications", []):
+        if n.get("userId") == user["id"] or user["role"] == "ADMIN":
+            n["read"] = True
+    write_db(db)
+    return jsonify({"ok": True})
+
+
 @app.post("/api/buyer/bookings/<booking_id>/action")
 @auth_required()
 def buyer_action(user, booking_id):
@@ -955,5 +988,5 @@ def handle_exception(exc):
 
 
 if __name__ == "__main__":
-    print(f"AgriProcure Flask is running at http://localhost:{PORT}")
+    print(f"KisanSetu Flask server is running at http://localhost:{PORT}")
     app.run(host="0.0.0.0", port=PORT, debug=False)
