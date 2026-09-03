@@ -191,7 +191,7 @@
       "password": "123456",
       "verification": "PENDING",
       "farmerId": "FRM-2026-00132",
-      "phone": "06291033082",
+      "phone": "0000000000",
       "district": "North 24 Parganas",
       "state": "West Bengal",
       "village": "New Barrackpur"
@@ -203,11 +203,37 @@
       "email": "demo@demo.com",
       "password": "123456",
       "verification": "PENDING",
-      "phone": "6291033082",
+      "phone": "0000000000",
       "district": "North 24 Parganas",
       "state": "West Bengal",
       "village": "",
       "centreId": "CTR-007"
+    },
+    {
+      "id": "farmer-A1C584",
+      "role": "FARMER",
+      "name": "abcd",
+      "email": "ash@email.com",
+      "password": "123456",
+      "verification": "PENDING",
+      "farmerId": "FRM-2026-00144",
+      "phone": "0000000000",
+      "district": "North 24 Parganas",
+      "state": "West Bengal",
+      "village": "barasat"
+    },
+    {
+      "id": "farmer-CD22B3",
+      "role": "FARMER",
+      "name": "ssssssssssss",
+      "email": "abcd@gmail.com",
+      "password": "111111",
+      "verification": "PENDING",
+      "farmerId": "FRM-2026-00145",
+      "phone": "",
+      "district": "North 24 Parganas",
+      "state": "West Bengal",
+      "village": ""
     }
   ],
   "centres": [
@@ -347,7 +373,7 @@
         "Paddy",
         "Maize"
       ],
-      "verified": "PENDING",
+      "verified": "VERIFIED",
       "hours": "09:00 AM – 04:00 PM",
       "processingTime": 7,
       "lat": 22.84,
@@ -1060,9 +1086,115 @@
         "amount": 18952.0,
         "transactionId": "TXN-DEMO-20260905-001"
       }
+    },
+    {
+      "id": "AGRI-260904-2984",
+      "token": "A-001",
+      "farmerId": "farmer-96D9A4",
+      "centreId": "CTR-007",
+      "slotId": "SL-CTR-007-20260904-2",
+      "crop": "Paddy",
+      "variety": "Swarna",
+      "quantity": 800,
+      "unit": "kg",
+      "date": "2026-09-04",
+      "time": "10:00 – 11:00",
+      "status": "COMPLETED",
+      "createdAt": "2026-09-03T11:41:20.507Z",
+      "procurement": {
+        "status": "COMPLETED",
+        "declaredQuantity": 800,
+        "measuredQuantity": 800,
+        "quality": "FAQ",
+        "moisture": "13.2%",
+        "accepted": true
+      },
+      "payment": {
+        "status": "COMPLETED",
+        "rate": 23.69,
+        "amount": 18952.0,
+        "transactionId": "TXN-DEMO-20260904-001"
+      }
+    },
+    {
+      "id": "AGRI-260905-C858",
+      "token": "A-059",
+      "farmerId": "farmer-96D9A4",
+      "centreId": "CTR-001",
+      "slotId": "SL-CTR-001-20260905-1",
+      "crop": "Paddy",
+      "variety": "Swarna",
+      "quantity": 800,
+      "unit": "kg",
+      "date": "2026-09-05",
+      "time": "09:00 – 10:00",
+      "status": "BOOKED",
+      "createdAt": "2026-09-03T12:15:06.429Z",
+      "procurement": null,
+      "payment": null
     }
   ],
   "notifications": [
+    {
+      "id": "NT-BEAD52",
+      "userId": "farmer-96D9A4",
+      "type": "BOOKING",
+      "title": "Booking confirmed",
+      "message": "Booking AGRI-260905-C858 is confirmed! Your token is A-059 at Barasat Centre on 2026-09-05.",
+      "read": false,
+      "time": "Just now",
+      "createdAt": "2026-09-03T12:15:06.429Z"
+    },
+    {
+      "id": "NT-D9DCEB",
+      "userId": "farmer-96D9A4",
+      "type": "PAYMENT",
+      "title": "Payment processed successfully",
+      "message": "₹18,952 has been transferred and marked completed.",
+      "read": true,
+      "time": "Just now",
+      "createdAt": "2026-09-03T11:43:46.978Z"
+    },
+    {
+      "id": "NT-C2C800",
+      "userId": "farmer-96D9A4",
+      "type": "PROCUREMENT",
+      "title": "Procurement completed",
+      "message": "Paddy (800 kg) has been accepted. Payment processing of ₹18,952.00 has started.",
+      "read": true,
+      "time": "Just now",
+      "createdAt": "2026-09-03T11:43:12.565Z"
+    },
+    {
+      "id": "NT-D9E3D7",
+      "userId": "farmer-96D9A4",
+      "type": "CALL",
+      "title": "📣 Your Token Has Been Called!",
+      "message": "The procurement counter at New Barrackpur has called your token A-001 (Booking: AGRI-260904-2984). Please proceed to the counter immediately!",
+      "read": true,
+      "time": "Just now",
+      "createdAt": "2026-09-03T11:42:20.080Z"
+    },
+    {
+      "id": "NT-5B00CF",
+      "userId": "farmer-96D9A4",
+      "type": "QUEUE",
+      "title": "Check-in successful",
+      "message": "You are checked in with token A-001 (Booking ID: AGRI-260904-2984).",
+      "read": true,
+      "time": "Just now",
+      "createdAt": "2026-09-03T11:42:16.483Z"
+    },
+    {
+      "id": "NT-0780A0",
+      "userId": "farmer-96D9A4",
+      "type": "BOOKING",
+      "title": "Booking confirmed",
+      "message": "Booking AGRI-260904-2984 is confirmed! Your token is A-001 at New Barrackpur on 2026-09-04.",
+      "read": true,
+      "time": "Just now",
+      "createdAt": "2026-09-03T11:41:20.507Z"
+    },
     {
       "id": "NT-4F7025",
       "userId": "farmer-96D9A4",
@@ -1688,6 +1820,7 @@
         "Admin Approval — Verified",
         "Admin Approval — Verified",
         "Admin Approval — Verified",
+        "Admin Approval — Verified",
         "Admin Approval — Verified"
       ]
     },
@@ -1695,8 +1828,8 @@
       "id": "VR-001",
       "centreId": "CTR-006",
       "submitted": "01 Sep 2026",
-      "status": "PENDING",
-      "stage": "Authority Verification",
+      "status": "VERIFIED",
+      "stage": "Admin Approval",
       "contact": "Arun Sen",
       "phone": "98765 41199",
       "certificate": "DEMO-REG-AK-2026-042",
@@ -1705,22 +1838,24 @@
         "Registration Submitted",
         "Document Verification",
         "Location Verification",
-        "Authority Verification"
+        "Authority Verification",
+        "Admin Approval — Verified"
       ]
     },
     {
       "id": "VR-002",
       "centreId": null,
       "submitted": "31 Aug 2026",
-      "status": "PENDING",
-      "stage": "Document Verification",
+      "status": "VERIFIED",
+      "stage": "Admin Approval",
       "contact": "Sanjay Ghosh",
       "phone": "98765 41200",
       "certificate": "DEMO-REG-003",
       "document": "demo_agency_record.pdf",
       "history": [
         "Registration Submitted",
-        "Document Verification"
+        "Document Verification",
+        "Admin Approval — Verified"
       ]
     },
     {

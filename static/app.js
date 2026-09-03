@@ -680,7 +680,7 @@ async function api(path, options = {}) {
     ...(options.headers || {}),
   };
   const response = await fetch(path, { ...options, headers });
-  const data = await response.json().catch(() => ({}));
+  const data = await response.json().catch(() => ({})); 
   if (!response.ok) {
     throw new Error(data.error || "Request could not be completed. Please try again.");
   }
