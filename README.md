@@ -29,10 +29,10 @@
 
 | Avatar / Photo | Member Name | User ID / Student ID | Role / Specialization | Contact / Social Profiles |
 | :---: | :--- | :--- | :--- | :--- |
-| 👨‍💻 | **[Member 1 Full Name]** | `[User ID / Roll No 1]` | **Full-Stack Architect & Lead** | [![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat&logo=github)](https://github.com/) [![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=flat&logo=linkedin)](https://linkedin.com/) |
-| 👩‍💻 | **[Member 2 Full Name]** | `[User ID / Roll No 2]` | **Frontend Engineer & UI/UX** | [![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat&logo=github)](https://github.com/) [![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=flat&logo=linkedin)](https://linkedin.com/) |
-| 👨‍💻 | **[Member 3 Full Name]** | `[User ID / Roll No 3]` | **Backend Systems & API Design** | [![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat&logo=github)](https://github.com/) [![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=flat&logo=linkedin)](https://linkedin.com/) |
-| 👩‍💻 | **[Member 4 Full Name]** | `[User ID / Roll No 4]` | **QA, Testing & Research** | [![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat&logo=github)](https://github.com/) [![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=flat&logo=linkedin)](https://linkedin.com/) |
+| 👨‍💻 | **[Member 1 Full Name]** | `[User ID / Roll No 1]` | **Full-Stack Architect & Lead** | [![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat&logo=github)](https://github.com/) 
+| 👩‍💻 | **[Member 2 Full Name]** | `[User ID / Roll No 2]` | **Frontend Engineer & UI/UX** | [![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat&logo=github)](https://github.com/)
+| 👨‍💻 | **[Member 3 Full Name]** | `[User ID / Roll No 3]` | **Backend Systems & API Design** | [![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat&logo=github)](https://github.com/) 
+| 👩‍💻 | **[Member 4 Full Name]** | `[User ID / Roll No 4]` | **QA, Testing & Research** | [![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat&logo=github)](https://github.com/) 
 
 ---
 
