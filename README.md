@@ -34,7 +34,7 @@
 | **3** | <img src="https://github.com/sreejitasaha149-oss.png" width="80" height="80"> | **Sreejita Saha** | **PPT & Presentation** | [GitHub Profile](https://github.com/sreejitasaha149-oss) |
 | **4** | <img src="https://github.com/Sura-07.png" width="80" height="80"> | **Surajit Das** | **Testing** | [GitHub Profile](https://github.com/Sura-07) |
 | **5** | <img src="https://github.com/d65072116-hub.png" width="80" height="80"> | **Debajyoti Bhattacharjee** | **Testing & Support** | [GitHub Profile](https://github.com/d65072116-hub) |
-| **6** | <img src="https://github.com/tirtha2005saha-pixel.png" width="80" height="80">👤 | **Tirtha Saha** | **Support** |[GitHub Profile](https://github.com/tirtha2005saha-pixel) |
+| **6** | <img src="https://github.com/tirtha2005saha-pixel.png" width="80" height="80"> | **Tirtha Saha** | **Support** |[GitHub Profile](https://github.com/tirtha2005saha-pixel) |
 ---
 
 ## 📌 The Problem Statement
