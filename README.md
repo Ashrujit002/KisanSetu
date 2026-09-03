@@ -15,25 +15,26 @@
 
 | Resource | Link |
 | :--- | :--- |
-| **🚀 Live Production Website** | [https://your-live-website-link.here](https://your-live-website-link.here) *(👈 Insert your deployed live URL here)* |
+| **🚀 Live Production Website** | [Open KisanSetu](https://kisansetu-msgk.onrender.com/) |
 | **💻 Local Demo Host** | `http://127.0.0.1:5174` |
-| **🎥 Video Walkthrough / Presentation** | [Watch Demo Video](https://your-video-link-here) *(👈 Insert YouTube or Google Drive link)* |
-| **📄 Project Pitch Deck / Documentation** | [View Documentation](https://your-docs-link-here) |
+| **🎥 Video Walkthrough / Presentation** | [Watch Demo Video](https://your-video-link-here) |
+| **📄 Project Pitch Deck / Documentation** | [View Documentation]() |
 
 ---
 
 ## 👥 Project Team & Contributors
 
-> **Team Name / Batch**: `[Insert Team Name Here, e.g., Team Agrotech Innovators]`  
+> **Team Name / Batch**: `[Insert Team Name Here]`  
 > **Institution / Organization**: `[Insert College / University / Organization Name Here]`
 
-| Avatar / Photo | Member Name | User ID / Student ID | Role / Specialization | Contact / Social Profiles |
-| :---: | :--- | :--- | :--- | :--- |
-| 👨‍💻 | **[Member 1 Full Name]** | `[User ID / Roll No 1]` | **Full-Stack Architect & Lead** | [![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat&logo=github)](https://github.com/) 
-| 👩‍💻 | **[Member 2 Full Name]** | `[User ID / Roll No 2]` | **Frontend Engineer & UI/UX** | [![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat&logo=github)](https://github.com/)
-| 👨‍💻 | **[Member 3 Full Name]** | `[User ID / Roll No 3]` | **Backend Systems & API Design** | [![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat&logo=github)](https://github.com/) 
-| 👩‍💻 | **[Member 4 Full Name]** | `[User ID / Roll No 4]` | **QA, Testing & Research** | [![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat&logo=github)](https://github.com/) 
-
+| # | Photo | Name | Role | GitHub |
+| :---: | :---: | :--- | :--- | :---: |
+| **1** | <img src="https://github.com/Ashrujit002.png" width="80" height="80"> | **Ashrujit Basu**  | **Full-Stack Developer & Design( **Team Leader** ) ** | [GitHub Profile](https://github.com/Ashrujit002) |
+| **2** | <img src="https://github.com/SandipSarkar01.png" width="80" height="80"> | **Sandip Sarkar** | **Full-Stack Developer & PPT** | [GitHub Profile](https://github.com/SandipSarkar01) |
+| **3** | <img src="https://github.com/sreejitasaha149-oss.png" width="80" height="80"> | **Sreejita Saha** | **PPT & Presentation** | [GitHub Profile](https://github.com/sreejitasaha149-oss) |
+| **4** | <img src="https://github.com/Sura-07.png" width="80" height="80"> | **Surajit Das** | **Testing** | [GitHub Profile](https://github.com/Sura-07) |
+| **5** | <img src="https://github.com/d65072116-hub.png" width="80" height="80"> | **Debajyoti Bhattacharjee** | **Testing & Support** | [GitHub Profile](https://github.com/d65072116-hub) |
+| **6** | <img src="https://github.com/" width="80" height="80">👤 | **Tirtha Saha** | **Support** |[GitHub Profile](https://github.com/) |
 ---
 
 ## 📌 The Problem Statement
@@ -85,14 +86,18 @@ Government portals that are English-only and desktop-centric alienate smallholde
 
 ### Key Pillars of the Platform:
 1. **Dynamic Slot & Capacity Allocation**: Real-time capacity computation per centre. Prevents overbooking, limits visits to open days, and forbids booking in the past.
+<br><br>
 2. **Zero-Wait Token Queuing System**: Real-time live queue monitor showing **"Now Serving"** and upcoming tokens, allowing farmers to arrive just in time.
-3. **Guaranteed MSP Direct Rate**: Direct procurement calculation based on official government MSP rates (e.g. Wheat at ₹2,425/Qtl, Paddy at ₹2,369/Qtl) with zero middlemen cuts.
+<br><br>
+3. **Guaranteed MSP Direct Rate**: Direct procurement calculation based on official government MSP rates (e.g. Wheat at ₹2,425/Qtl, Paddy at ₹2,369/Qtl) with zero middlemen cuts.<br>
+<br>
 4. **Direct Benefit Transfer (DBT)**: Automatic payment calculation upon weighbridge certification, disbursed directly to the farmer's Aadhaar-linked account within 24 hours.
-5. **Multilingual Inclusivity**: Instant real-time language toggling between **English**, **हिन्दी (Hindi)**, and **বাংলা (Bengali)**.
-6. **Role-Based Workspaces**:
+<br><br>
+5. **Multilingual Inclusivity**: Instant real-time language toggling between **English**, **हिन्दी (Hindi)**, and **বাংলা (Bengali)**.<br><br>
+6. **Role-Based Workspaces**:<br>
    - 👨‍🌾 **Seller / Farmer**: Register crops, book procurement appointments, download digital tokens, and track DBT settlements.
    - 🏢 **Buyer / Centre Operator**: Manage centre queues, call tokens, inspect crop quality, log weighments, and approve transactions.
-   - 🔐 **Protected Administrator**: Secure password-protected oversight console for centre verification, user management, and transaction logs.
+   - 🔐 **Protected Administrator**: Secure password-protected oversight console for centre verification, user management, and transaction logs.<br><br>
 
 ---
 
@@ -130,33 +135,33 @@ The application comes pre-loaded with comprehensive demo datasets for instant ev
  5. Monitor Live Queue Display                          5. Authorize 24-Hr DBT Payment
 ```
 
-#### Phase 1: Farmer Slot Booking & Token Generation
-1. Launch the platform at `http://127.0.0.1:5174`.
-2. Click **"Sign in as Seller / Farmer"** and enter `farmer@demo.local` / `demo123` (or register a new farmer account).
-3. Navigate to **"Book Slot"**.
-4. Filter centres by district (e.g., *North 24 Parganas*).
-5. Pick an active procurement date (calendar bounds strictly enforce `Today` or future dates).
-6. Choose an open time window (e.g., `10:00 AM – 12:00 PM`). Available slot quotas update dynamically.
-7. Confirm booking to instantly generate your **Digital Token**.
+#### Phase 1: Farmer Slot Booking & Token Generation <br>
+1. Launch the platform at `http://127.0.0.1:5174`.<br>
+2. Click **"Sign in as Seller / Farmer"** and enter `farmer@demo.local` / `demo123` (or register a new farmer account).<br>
+3. Navigate to **"Book Slot"**.<br>
+4. Filter centres by district (e.g., *North 24 Parganas*).<br>
+5. Pick an active procurement date (calendar bounds strictly enforce `Today` or future dates).<br>
+6. Choose an open time window (e.g., `10:00 AM – 12:00 PM`). Available slot quotas update dynamically.<br>
+7. Confirm booking to instantly generate your **Digital Token**.<br>
 
 #### Phase 2: Live Queue Tracking
-1. Open the **"Live Queue"** board.
-2. Observe the animated queue status:
+1. Open the **"Live Queue"** board.<br>
+2. Observe the animated queue status:<br>
    - **Now Serving**: Large high-visibility badge displaying the active token being weighed at the counter.
-   - **Next in Line**: Tokens scheduled for upcoming inspection.
+   - **Next in Line**: Tokens scheduled for upcoming inspection.<br>
 3. The farmer can relax at home or near the mandi until their token approaches the "Serving" stage.
 
 #### Phase 3: Centre Quality Verification & Weighment
-1. Log out and sign in as **Buyer / Centre Operator** using `buyer@demo.local` / `demo123`.
-2. View the centre dashboard for **Barasat Grain Procurement Centre**.
-3. Select an arriving token and click **"Call Token"**.
-4. Enter inspected crop quality metrics (Moisture % under 12%, Purity grade A).
-5. Input gross truck weight and tare weight to determine net crop weight.
-6. Click **"Complete Weighment & Generate Payout"**.
+1. Log out and sign in as **Buyer / Centre Operator** using `buyer@demo.local` / `demo123`.<br>
+2. View the centre dashboard for **Barasat Grain Procurement Centre**.<br>
+3. Select an arriving token and click **"Call Token"**.<br>
+4. Enter inspected crop quality metrics (Moisture % under 12%, Purity grade A).<br>
+5. Input gross truck weight and tare weight to determine net crop weight.<br>
+6. Click **"Complete Weighment & Generate Payout"**.<br>
 
 #### Phase 4: Instant DBT Payout & Administrative Oversight
-1. Log in as **Platform Administrator** (`admin@demo.local` / `demo123`).
-2. Review aggregated KPIs across all centres:
+1. Log in as **Platform Administrator** (`admin@demo.local` / `demo123`).<br>
+2. Review aggregated KPIs across all centres:<br>
    - Total Farmers Registered
    - Certified Weighment Volume
    - Total DBT Payments Disbursed
@@ -164,10 +169,10 @@ The application comes pre-loaded with comprehensive demo datasets for instant ev
 
 #### Phase 5: Scroll-Revealed Ministry Affiliations & Farmer Support
 1. On the login screen, scroll down (or click **"Explore Government Affiliations & Farmer Services ↓"**).
-2. Explore the blended agritech footer bar:
-   - **KisanSetu Brand Card**: Identity badge with vector logo.
+2. Explore the blended agritech footer bar:<br>
+   - **KisanSetu Brand Card**: Identity badge with vector logo.<br>
    - **Connect With Us**: Quick channel circles (WhatsApp Kisan Sahayak, Kisan Call Centre `1800-180-1551`, e-NAM Portal, Advisories).
-   - **Interactive Action Pills**:
+   - **Interactive Action Pills**:<br>
      - Click **Help** → 4-step procurement guide modal.
      - Click **Contact us** → Toll-Free helpline and Krishi Bhawan address modal.
      - Click **Support** → Weighment dispute and grievance resolution details.
@@ -263,34 +268,6 @@ Phase 1 (Current)        Phase 2 (Near-Term)          Phase 3 (Long-Term)
 - Python 3.9 or higher installed
 - Web browser (Chrome, Edge, Firefox, Safari)
 
-### Installation Steps
-
-1. **Clone or Navigate to the Repository**:
-   ```powershell
-   cd C:\Users\devas\Downloads\proj
-   ```
-
-2. **(Optional) Create and Activate a Virtual Environment**:
-   ```powershell
-   python -m venv .venv
-   .\.venv\Scripts\Activate.ps1
-   ```
-
-3. **Install Dependencies**:
-   ```powershell
-   pip install -r requirements.txt
-   ```
-
-4. **Launch the Server**:
-   ```powershell
-   python app.py
-   ```
-
-5. **Open in Browser**:
-   Open your browser and visit:
-   ```
-   http://127.0.0.1:5174
-   ```
 
 ---
 
@@ -299,4 +276,4 @@ Phase 1 (Current)        Phase 2 (Near-Term)          Phase 3 (Long-Term)
 This project is licensed under the **MIT License**.  
 Developed for agricultural empowerment, fair pricing transparency, and modern public food grain distribution.
 
-*KisanSetu — Empowering Farmers. Eliminating Queues. Securing Guaranteed MSP.*
+**KisanSetu** — Empowering Farmers. Eliminating Queues. Securing Guaranteed MSP.*
