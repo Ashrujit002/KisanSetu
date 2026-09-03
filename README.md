@@ -89,14 +89,24 @@ Government portals that are English-only and desktop-centric alienate smallholde
 <br><br>
 2. **Zero-Wait Token Queuing System**: Real-time live queue monitor showing **"Now Serving"** and upcoming tokens, allowing farmers to arrive just in time.
 <br><br>
-3. **Guaranteed MSP Direct Rate**: Direct procurement calculation based on official government MSP rates (e.g. Wheat at ₹2,425/Qtl, Paddy at ₹2,369/Qtl) with zero middlemen cuts.<br>
-<br>
-4. **Direct Benefit Transfer (DBT)**: Automatic payment calculation upon weighbridge certification, disbursed directly to the farmer's Aadhaar-linked account within 24 hours.
+3. **Flexible Price Discovery & Money Set System**:
+   - **Seller (Farmer)** sets their custom **Asking Price (₹/kg or ₹/Qtl)** during slot booking, guided by official Government MSP benchmarks.
+   - **Buyer (Procurement Centre)** reviews crop quality and negotiates/sets the **Final Agreed Price**, which directly computes the final payout (`Measured Weight × Agreed Price`).
 <br><br>
-5. **Multilingual Inclusivity**: Instant real-time language toggling between **English**, **हिन्दी (Hindi)**, and **বাংলা (Bengali)**.<br><br>
-6. **Role-Based Workspaces**:<br>
-   - 👨‍🌾 **Seller / Farmer**: Register crops, book procurement appointments, download digital tokens, and track DBT settlements.
-   - 🏢 **Buyer / Centre Operator**: Manage centre queues, call tokens, inspect crop quality, log weighments, and approve transactions.
+4. **Seller Cancellation & Strict Calling Lock Rule**:
+   - Farmers can cancel their booking while in `BOOKED` or `WAITING` status.
+   - **Critical Lock**: As soon as the procurement centre clicks **"Call"** to summon the farmer to the counter, cancellation is strictly locked in both frontend and backend to protect operations.
+<br><br>
+5. **Buyer Rejection System**:
+   - Buyers can reject crop lots that fail quality standards (e.g. high moisture >14%, admixtures, damaged kernels, or price disagreements) with instant real-time notification to the farmer.
+<br><br>
+6. **Direct Benefit Transfer (DBT)**: Automatic payment calculation upon weighbridge certification, disbursed directly to the farmer's Aadhaar-linked account within 24 hours.
+<br><br>
+7. **Multilingual Inclusivity**: Instant real-time language toggling between **English**, **हिन्दी (Hindi)**, and **বাংলা (Bengali)**.
+<br><br>
+8. **Role-Based Workspaces**:
+   - 👨‍🌾 **Seller / Farmer**: Register crops, set asking prices, book appointments, track live queue, or cancel before called.
+   - 🏢 **Buyer / Centre Operator**: Manage centre queues, call tokens, reject lots, set agreed prices, and record certified weighments.
    - 🔐 **Protected Administrator**: Secure password-protected oversight console for centre verification, user management, and transaction logs.<br><br>
 
 ---

@@ -31,6 +31,15 @@ const labels = {
 
 const languageLocales = { en: "en-IN", bn: "bn-IN", hi: "hi-IN" };
 
+const CROP_MSP_RATES = {
+  Paddy: 23.69,
+  Wheat: 24.25,
+  Maize: 20.90,
+  Mustard: 59.50,
+  Potato: 15.80,
+  Pulses: 72.40,
+};
+
 const translations = {
   bn: {
     // Roles & Portal
@@ -52,6 +61,7 @@ const translations = {
     Payments: "পেমেন্ট",
     "Live Queue": "সরাসরি সারি",
     Bookings: "বুকিং তালিকা",
+    "My Bookings": "আমার বুকিং",
     "Verification requests": "যাচাই অনুরোধ",
     Centres: "কেন্দ্রসমূহ",
     "Centre map": "কেন্দ্র মানচিত্র",
@@ -208,6 +218,7 @@ const translations = {
     Payments: "भुगतान",
     "Live Queue": "लाइव कतार",
     Bookings: "बुकिंग सूची",
+    "My Bookings": "मेरी बुकिंग",
     "Verification requests": "सत्यापन अनुरोध",
     Centres: "केंद्र",
     "Centre map": "केंद्र मानचित्र",
@@ -366,12 +377,30 @@ function getTodayStr() {
 function displayDate(value, options = { day: "numeric", month: "short", year: "numeric" }) {
   if (!value) return "—";
   try {
+    const d = new Date(value.includes("T") ? value : `${value}T12:00:00Z`);
     return new Intl.DateTimeFormat(languageLocales[state.language] || "en-IN", {
       ...options,
       timeZone: "Asia/Kolkata",
-    }).format(new Date(`${value}T12:00:00Z`));
+    }).format(d);
   } catch (e) {
     return value;
+  }
+}
+
+function displayDateTime(value) {
+  if (!value) return "—";
+  try {
+    const d = new Date(value.includes("T") ? value : `${value}T12:00:00Z`);
+    return new Intl.DateTimeFormat(languageLocales[state.language] || "en-IN", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      timeZone: "Asia/Kolkata",
+    }).format(d);
+  } catch (e) {
+    return displayDate(value);
   }
 }
 
@@ -1193,6 +1222,7 @@ const navigation = {
     ["dashboard", "Overview"],
     ["centres", "Find Centre"],
     ["booking", "Book a Slot"],
+    ["bookings", "My Bookings"],
     ["queue", "Track Queue"],
     ["crops", "My Crops"],
     ["payments", "Payments"],
@@ -1347,14 +1377,50 @@ async function farmerDashboard() {
             </div>
           </div>
           <div class="queue-details">
+            <div class="queue-detail"><span>${t("Crop & Variety")}</span><strong>${t(booking.crop)} (${esc(booking.variety || "Std")})</strong></div>
+            <div class="queue-detail"><span>${t("Quantity")}</span><strong>${booking.quantity} ${booking.unit}</strong></div>
             <div class="queue-detail"><span>${t("People ahead")}</span><strong>${queue?.peopleAhead ?? 0}</strong></div>
             <div class="queue-detail"><span>${t("Est. wait")}</span><strong>${queue?.estimatedMinutes ?? 0} min</strong></div>
+            <div class="queue-detail"><span>${t("Your Asking Price")}</span><strong style="color:var(--green)">₹${Number(booking.farmerPrice || 23.69).toFixed(2)}/${booking.unit}</strong></div>
+            <div class="queue-detail"><span>${t("Buyer Price")}</span><strong>${booking.buyerPrice ? `₹${Number(booking.buyerPrice).toFixed(2)}/${booking.unit}` : "Pending Review"}</strong></div>
             <div class="queue-detail"><span>${t("Slot")}</span><strong>${esc(booking.time)}</strong></div>
             <div class="queue-detail"><span>${t("Date")}</span><strong>${displayDate(booking.date)}</strong></div>
           </div>
           <button class="primary-btn full" style="margin-top:14px" data-nav="queue">
             ${t("Track live queue")} →
           </button>
+          
+          ${booking.status === "BOOKED" || (booking.status === "WAITING" && !booking.calledAt) ? `
+            <button class="danger-btn full" style="margin-top:10px" data-cancel-booking="${booking.id}">
+              ✕ ${t("Cancel Booking")}
+            </button>
+          ` : (booking.status === "PROCESSING" || booking.calledAt) && booking.status !== "COMPLETED" && booking.status !== "REJECTED" ? `
+            <div class="badge-locked" style="margin-top:10px;text-align:center;padding:8px 12px;background:#fef3c7;border:1px solid #fde047;border-radius:8px;font-size:12px;font-weight:700;color:#92400e">
+              🔒 Token Called to Counter — Cancellation Locked
+            </div>
+          ` : booking.status === "REJECTED" ? `
+            <div class="badge-rejected-callout" style="margin-top:10px;padding:8px 12px;background:#fee2e2;border:1px solid #fca5a5;border-radius:8px;font-size:12px;font-weight:700;color:#991b1b">
+              ⚠️ Lot Rejected: ${esc(booking.rejectionReason || "Quality did not meet specification")}
+            </div>
+          ` : ""}
+
+          ${booking.payment?.status === "PROCESSING" ? `
+            <div style="margin-top:10px;padding:12px 14px;background:#ecfdf5;border:1px solid #a7f3d0;border-radius:10px;text-align:center">
+              <div style="font-weight:800;color:#065f46;font-size:12px;margin-bottom:3px">
+                💰 Payout Ready: ${money(booking.payment.amount)}
+              </div>
+              <p style="font-size:11px;color:#047857;margin:0 0 8px">
+                Verify funds in your bank or cash, then confirm receipt below:
+              </p>
+              <button class="primary-btn full small" data-payment="${booking.id}" style="background:#15803d;font-weight:750">
+                ✓ Confirm Payment Received (${money(booking.payment.amount)})
+              </button>
+            </div>
+          ` : booking.payment?.status === "COMPLETED" ? `
+            <div style="margin-top:10px;padding:8px 12px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;text-align:center;font-size:11px;color:#15803d;font-weight:750">
+              ✓ Payment Completed (${money(booking.payment.amount)}) · ${booking.payment.transactionId}
+            </div>
+          ` : ""}
         ` : `
           <div class="empty">
             <p>${t("No active booking yet.")}</p>
@@ -1377,6 +1443,58 @@ async function farmerDashboard() {
         </div>
       </section>
     </div>
+
+    ${(data.bookings && data.bookings.length) ? `
+      <section class="card" style="margin-top:20px">
+        <div class="section-heading" style="margin-top:0">
+          <div>
+            <h2>${t("Recent Bookings History")}</h2>
+            <p>Your recent bookings with both booked date & scheduled slot appointment (recent on top)</p>
+          </div>
+          <button class="ghost-btn small" data-nav="bookings">${t("View all")} →</button>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Token / ID</th>
+                <th>Procurement Centre</th>
+                <th>Crop</th>
+                <th>Asking Price</th>
+                <th>Booked On (Created)</th>
+                <th>Scheduled Slot Date</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${data.bookings.map((item) => `
+                <tr>
+                  <td><strong>${item.token}</strong><br><small style="color:var(--muted)">${item.id}</small></td>
+                  <td>${esc(item.centre?.short || item.centre?.name || "Centre")}</td>
+                  <td>${t(item.crop)} (${item.quantity} ${item.unit})</td>
+                  <td><strong style="color:var(--green)">₹${Number(item.farmerPrice || 23.69).toFixed(2)}</strong>/${item.unit}</td>
+                  <td><span style="font-weight:600">${displayDateTime(item.createdAt || item.date)}</span></td>
+                  <td><strong>${displayDate(item.date)}</strong> · ${item.time}</td>
+                  <td>${statusBadge(item.status)}</td>
+                  <td>
+                    <div style="display:flex;gap:4px;flex-wrap:wrap">
+                      <button class="ghost-btn small" data-booking-view="${item.id}">👁 View</button>
+                      ${item.payment?.status === "PROCESSING" ? `
+                        <button class="primary-btn small" data-payment="${item.id}" style="background:#15803d;font-weight:750">✓ Confirm Payment</button>
+                      ` : ""}
+                      ${item.status === "BOOKED" || (item.status === "WAITING" && !item.calledAt) ? `
+                        <button class="danger-btn small" data-cancel-booking="${item.id}">✕ Cancel</button>
+                      ` : ""}
+                    </div>
+                  </td>
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    ` : ""}
 
     <div class="dashboard-grid" style="margin-top:20px">
       <section class="card">
@@ -1656,6 +1774,11 @@ async function bookingPage() {
             </select>
           </div>
           <div class="form-group">
+            <label>${t("Your Expected Price")} (₹ / kg)</label>
+            <input name="askingPrice" id="booking-asking-price" type="number" step="0.01" min="1" value="23.69" required />
+            <small class="form-hint" id="msp-reference-hint" style="color:var(--green);font-weight:700">Govt MSP: ₹23.69/kg (₹2,369/Qtl)</small>
+          </div>
+          <div class="form-group">
             <label>${t("Procurement centre")}</label>
             <select name="centreId" id="booking-centre">
               ${centres.map((item) => `<option value="${item.id}" ${item.id === centre.id ? "selected" : ""}>${esc(item.name)}</option>`).join("")}
@@ -1710,6 +1833,10 @@ function bookingSuccess(booking) {
           <span>${t("Time")}</span>
           <strong>${esc(booking.time)}</strong>
         </div>
+        <div class="highlight-item">
+          <span>${t("Your Expected Price")}</span>
+          <strong style="color:var(--green)">₹${Number(booking.farmerPrice || 23.69).toFixed(2)} / ${booking.unit || "kg"}</strong>
+        </div>
         <div class="highlight-item full-width">
           <span>${t("Procurement centre")}</span>
           <strong>${esc(booking.centre?.name || "")}</strong>
@@ -1737,13 +1864,33 @@ function bookingSuccess(booking) {
 
 async function queuePage() {
   const bookings = await api("/api/bookings");
-  const booking =
-    state.selectedBooking ||
-    bookings.find((item) => item.status !== "COMPLETED") ||
-    bookings[0];
+
+  if (state.user.role === "BUYER") {
+    return buyerQueuePage(bookings);
+  }
+
+  // Sort newest first by creation timestamp or date
+  bookings.sort(
+    (a, b) => new Date(b.createdAt || b.date).getTime() - new Date(a.createdAt || a.date).getTime()
+  );
+  state.cache.bookings = bookings;
+
+  const activeStatuses = ["BOOKED", "CHECKED_IN", "WAITING", "CALLED", "PROCESSING"];
+  // If state.selectedBooking is present, check that it still exists in user's bookings
+  const selected = state.selectedBooking ? bookings.find((b) => b.id === state.selectedBooking.id) : null;
+  const latestActive = bookings.find((item) => activeStatuses.includes(item.status));
+  const latestOverall = bookings[0];
+
+  // Default to latest one on refresh, reopen, or standard queue navigation!
+  const booking = selected || latestActive || latestOverall;
 
   if (!booking) {
     return `
+      <div style="margin-bottom:16px">
+        <button class="ghost-btn small" data-nav="dashboard" style="display:inline-flex;align-items:center;gap:6px;font-weight:750">
+          ← ${t("Back to Dashboard")}
+        </button>
+      </div>
       <section class="card empty">
         <h2>${t("No active booking yet.")}</h2>
         <p>Book a verified procurement centre to receive your digital token.</p>
@@ -1754,10 +1901,6 @@ async function queuePage() {
 
   state.selectedBooking = booking;
   const queue = await api(`/api/queue/${booking.id}`);
-
-  if (state.user.role === "BUYER") {
-    return buyerQueuePage(bookings, queue);
-  }
 
   const timeline = [
     [t("Booking confirmed"), true, `Booking ID: ${booking.id} · Token ${booking.token}`],
@@ -1792,6 +1935,25 @@ async function queuePage() {
   const isCompleted = booking.status === "COMPLETED" || queue.nowServingStatus === "Procurement Completed";
 
   return `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px">
+      <button class="ghost-btn small" data-nav="dashboard" style="display:inline-flex;align-items:center;gap:6px;font-weight:750">
+        ← ${t("Back to Dashboard")}
+      </button>
+      <div style="display:flex;align-items:center;gap:8px">
+        ${bookings.length > 1 ? `
+          <label style="font-size:12px;color:var(--muted);margin:0">Switch Booking:</label>
+          <select id="queue-switch-booking" style="padding:5px 10px;font-size:12px;border-radius:8px;border:1px solid var(--line);background:#fff;font-weight:600;cursor:pointer">
+            ${bookings.map((b) => `
+              <option value="${b.id}" ${b.id === booking.id ? "selected" : ""}>
+                ${b.token} (${t(b.crop)} · ${displayDate(b.date)})${b.id === latestOverall.id ? " ★ Latest" : ""}
+              </option>
+            `).join("")}
+          </select>
+        ` : ""}
+        <span class="demo-pill" style="font-size:11px">LIVE MONITOR</span>
+      </div>
+    </div>
+
     <div class="split-grid">
       <section class="card queue-board animate-card">
         <div class="now-serving-header">
@@ -1806,9 +1968,48 @@ async function queuePage() {
         <div class="queue-details" style="margin-top:21px">
           <div class="queue-detail" style="color:var(--ink)"><span>${t("Your token")}</span><strong>${queue.yourToken || booking.token}</strong></div>
           <div class="queue-detail" style="color:var(--ink)"><span>${t("People ahead")}</span><strong>${queue.peopleAhead ?? 0}</strong></div>
+          <div class="queue-detail" style="color:var(--ink)"><span>${t("Your Asking Price")}</span><strong style="color:var(--green)">₹${Number(booking.farmerPrice || 23.69).toFixed(2)}/${booking.unit || "kg"}</strong></div>
+          <div class="queue-detail" style="color:var(--ink)"><span>${t("Buyer Price")}</span><strong>${booking.buyerPrice ? `₹${Number(booking.buyerPrice).toFixed(2)}/${booking.unit || "kg"}` : "Pending Review"}</strong></div>
           <div class="queue-detail" style="color:var(--ink)"><span>${t("Estimated wait")}</span><strong>${queue.estimatedMinutes ?? 0} min</strong></div>
           <div class="queue-detail" style="color:var(--ink)"><span>Booking ID</span><strong style="font-size:12px">${booking.id}</strong></div>
         </div>
+
+        ${booking.status === "BOOKED" || (booking.status === "WAITING" && !booking.calledAt) ? `
+          <button class="danger-btn full" style="margin-top:16px" data-cancel-booking="${booking.id}">
+            ✕ ${t("Cancel Booking")}
+          </button>
+        ` : (booking.status === "PROCESSING" || booking.calledAt) && booking.status !== "COMPLETED" && booking.status !== "REJECTED" ? `
+          <div class="badge-locked" style="margin-top:16px;text-align:center;padding:10px 14px;background:#fef3c7;border:1px solid #fde047;border-radius:8px;font-size:12px;font-weight:700;color:#92400e">
+            🔒 Token Called to Counter — Cancellation Locked
+          </div>
+        ` : booking.status === "REJECTED" ? `
+          <div class="badge-rejected-callout" style="margin-top:16px;padding:10px 14px;background:#fee2e2;border:1px solid #fca5a5;border-radius:8px;font-size:12px;font-weight:700;color:#991b1b">
+            ⚠️ Lot Rejected: ${esc(booking.rejectionReason || "Quality did not meet specification")}
+          </div>
+        ` : ""}
+
+        ${booking.payment?.status === "PROCESSING" ? `
+          <div style="margin-top:16px;padding:14px;background:#ecfdf5;border:1px solid #a7f3d0;border-radius:12px;text-align:center">
+            <div style="font-weight:800;color:#065f46;font-size:13px;margin-bottom:4px">
+              💰 Payment Ready: ${money(booking.payment.amount)}
+            </div>
+            <p style="font-size:11px;color:#047857;margin:0 0 10px">
+              Buyer recorded procurement. Power is in your hands: verify funds in your account or cash and click below to confirm receipt.
+            </p>
+            <button class="primary-btn full" data-payment="${booking.id}" style="background:#15803d;font-weight:750">
+              ✓ Confirm Payment Received (${money(booking.payment.amount)})
+            </button>
+          </div>
+        ` : booking.payment?.status === "COMPLETED" ? `
+          <div style="margin-top:16px;padding:12px 14px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;text-align:center">
+            <div style="font-weight:800;color:#15803d;font-size:12px">
+              ✓ Payment Received &amp; Completed (${money(booking.payment.amount)})
+            </div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px">
+              Transaction: <code>${booking.payment.transactionId}</code>
+            </div>
+          </div>
+        ` : ""}
       </section>
 
       <section class="card animate-card">
@@ -1863,6 +2064,13 @@ function buyerQueuePage(bookings) {
   const processing = active.find((item) => item.status === "PROCESSING");
 
   return `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <button class="ghost-btn small" data-nav="dashboard" style="display:inline-flex;align-items:center;gap:6px;font-weight:750">
+        ← ${t("Back to Dashboard")}
+      </button>
+      <span class="demo-pill" style="font-size:11px">CENTRE OPERATIONS</span>
+    </div>
+
     <section class="welcome-banner animate-fade">
       <div>
         <div class="eyebrow" style="margin-bottom:6px">Centre Operator Operations</div>
@@ -1890,13 +2098,14 @@ function buyerQueuePage(bookings) {
               <span class="queue-token">${item.token}</span>
               <div class="queue-name">
                 <strong>${esc(item.farmer?.name || "Farmer")} · <small style="color:var(--green);font-weight:700">${item.id}</small></strong>
-                <span>${t(item.crop)} · ${item.quantity} ${item.unit} · ${item.time}</span>
+                <span>${t(item.crop)} · ${item.quantity} ${item.unit} · Asking: <b style="color:var(--green)">₹${Number(item.farmerPrice || 23.69).toFixed(2)}/${item.unit}</b>${item.buyerPrice ? ` · Agreed: <b style="color:#1e40af">₹${Number(item.buyerPrice).toFixed(2)}</b>` : ""} · ${item.time}</span>
               </div>
               ${statusBadge(item.status)}
-              <div style="display:flex;gap:6px">
+              <div style="display:flex;gap:6px;align-items:center">
                 ${item.status === "BOOKED" ? `<button class="secondary-btn small" data-queue-action="CHECK_IN" data-booking="${item.id}">${t("Check in")}</button>` : ""}
                 ${["WAITING", "CHECKED_IN"].includes(item.status) ? `<button class="primary-btn small pulse-button" data-queue-action="CALL" data-booking="${item.id}">📣 ${t("Call")}</button>` : ""}
                 ${item.status === "PROCESSING" ? `<button class="primary-btn small" data-queue-action="COMPLETE" data-booking="${item.id}">✓ ${t("Complete")}</button>` : ""}
+                <button class="danger-btn small" data-buyer-reject="${item.id}" title="${t("Reject Lot")}">✕ ${t("Reject")}</button>
               </div>
             </div>
           `).join("") : `<div class="empty">No active farmers in queue right now.</div>`}
@@ -1932,24 +2141,29 @@ function buyerQueuePage(bookings) {
 
 async function cropsPage() {
   const bookings = await api("/api/bookings");
+  const sorted = [...bookings].sort(
+    (a, b) => new Date(b.createdAt || b.date).getTime() - new Date(a.createdAt || a.date).getTime()
+  );
   return `
     <div class="section-heading" style="margin-top:0">
       <div>
         <h2>${t("Registered crops")}</h2>
-        <p>${t("Your crop declarations used for booking slots.")}</p>
+        <p>${t("Your crop declarations used for booking slots (recent on top).")}</p>
       </div>
       <button class="primary-btn small" data-nav="booking">${t("Add crop & book")}</button>
     </div>
 
     <div class="centre-grid">
-      ${bookings.length ? bookings.map((item) => `
+      ${sorted.length ? sorted.map((item) => `
         <article class="centre-card animate-card">
           <div style="font-size:26px">🌾</div>
           <h3>${t(item.crop)} <span style="font-size:12px;color:var(--muted)">(${esc(item.variety || "Standard")})</span></h3>
-          <p class="meta">Booking ID: <strong>${item.id}</strong></p>
+          <p class="meta">Booking ID: <strong>${item.id}</strong> · Token: <strong>${item.token}</strong></p>
           <div class="centre-facts">
             <div>Quantity<strong>${item.quantity} ${item.unit}</strong></div>
-            <div>Date<strong>${displayDate(item.date)}</strong></div>
+            <div>Asking Price<strong style="color:var(--green)">₹${Number(item.farmerPrice || 23.69).toFixed(2)}</strong></div>
+            <div>Booked On<strong>${displayDateTime(item.createdAt || item.date)}</strong></div>
+            <div>Slot Date<strong>${displayDate(item.date)}</strong></div>
           </div>
           <div class="card-actions">
             <button class="ghost-btn small" data-booking-view="${item.id}">View Live Queue</button>
@@ -1964,12 +2178,15 @@ async function cropsPage() {
 async function paymentsPage() {
   const bookings = await api("/api/bookings");
   const isBuyer = state.user.role === "BUYER";
+  const sorted = [...bookings].sort(
+    (a, b) => new Date(b.createdAt || b.date).getTime() - new Date(a.createdAt || a.date).getTime()
+  );
 
   return `
     <div class="section-heading" style="margin-top:0">
       <div>
         <h2>${t("Payments & Procurement")}</h2>
-        <p>Record of procurement transactions and payment confirmations.</p>
+        <p>Record of procurement transactions and payment confirmations (recent on top).</p>
       </div>
       <span class="demo-pill">PAYMENTS</span>
     </div>
@@ -1979,33 +2196,43 @@ async function paymentsPage() {
         <thead>
           <tr>
             <th>Booking ID / Token</th>
-            <th>Farmer</th>
+            <th>${isBuyer ? "Farmer" : "Procurement Centre"}</th>
             <th>Crop</th>
             <th>Accepted Quantity</th>
             <th>Rate</th>
             <th>Amount</th>
+            <th>Booked On (Created)</th>
+            <th>Scheduled Slot Date</th>
             <th>Status</th>
             <th>Action</th>
           </tr>
         </thead>
         <tbody>
-          ${bookings.map((item) => {
+          ${sorted.map((item) => {
             const p = item.payment;
             return `
               <tr>
                 <td><strong>${item.id}</strong><br><span style="font-size:11px;color:var(--green);font-weight:750">${item.token}</span></td>
-                <td>${esc(item.farmer?.name || "Farmer")}</td>
+                <td>${isBuyer ? esc(item.farmer?.name || "Farmer") : esc(item.centre?.short || item.centre?.name || "Centre")}</td>
                 <td>${t(item.crop)}</td>
                 <td>${item.procurement?.measuredQuantity || item.quantity} ${item.unit}</td>
-                <td>${p?.rate ? money(p.rate) + "/kg" : "—"}</td>
+                <td>${p?.rate ? money(p.rate) + "/kg" : (item.buyerPrice ? "₹" + Number(item.buyerPrice).toFixed(2) + "/kg" : "—")}</td>
                 <td>${p?.amount ? money(p.amount) : "—"}</td>
+                <td><span style="font-weight:600">${displayDateTime(item.createdAt || item.date)}</span></td>
+                <td><strong>${displayDate(item.date)}</strong><br><small style="color:var(--muted)">${item.time}</small></td>
                 <td>${statusBadge(p?.status || "PENDING")}</td>
                 <td>
-                  ${isBuyer && p?.status === "PROCESSING"
-                    ? `<button class="primary-btn small" data-payment="${item.id}">Complete Payment</button>`
+                  ${state.user.role === "FARMER" || state.user.role === "ADMIN"
+                    ? p?.status === "PROCESSING"
+                      ? `<button class="primary-btn small" data-payment="${item.id}" style="background:#15803d;font-weight:750">✓ Confirm Payment Received</button>`
+                      : p?.transactionId
+                      ? `<span style="font-size:11px;color:var(--green);font-weight:800">✓ Received: ${p.transactionId}</span>`
+                      : '<span style="color:var(--muted)">Pending Inspection</span>'
+                    : p?.status === "PROCESSING"
+                    ? `<span class="badge-locked" style="padding:4px 8px;font-size:11px;background:#fef3c7;border:1px solid #fde047;border-radius:6px;color:#92400e;font-weight:700" title="Payment initiated. Awaiting farmer to confirm receipt of funds">⏳ Awaiting Seller Confirmation</span>`
                     : p?.transactionId
-                    ? `<span style="font-size:11px;color:var(--green);font-weight:800">${p.transactionId}</span>`
-                    : "—"}
+                    ? `<span style="font-size:11px;color:var(--green);font-weight:800">✓ Confirmed by Seller (${p.transactionId})</span>`
+                    : '<span style="color:var(--muted)">Pending Inspection</span>'}
                 </td>
               </tr>
             `;
@@ -2062,8 +2289,8 @@ async function buyerDashboard() {
             <div class="queue-row">
               <span class="queue-token">${item.token}</span>
               <div class="queue-name">
-                <strong>${esc(item.farmer?.name || "")} · <small style="color:var(--green)">${item.id}</small></strong>
-                <span>${t(item.crop)} · ${item.quantity} kg</span>
+                <strong>${esc(item.farmer?.name || "Farmer")} · <small style="color:var(--green)">${item.id}</small></strong>
+                <span>${t(item.crop)} · ${item.quantity} ${item.unit || "kg"} · Asking: <b style="color:var(--green)">₹${Number(item.farmerPrice || 23.69).toFixed(2)}</b> · Booked: ${displayDateTime(item.createdAt || item.date)} · Slot: ${displayDate(item.date)}</span>
               </div>
               ${statusBadge(item.status)}
             </div>
@@ -2088,43 +2315,82 @@ async function buyerDashboard() {
 
 async function bookingsPage() {
   const bookings = await api("/api/bookings");
+  const isBuyer = state.user?.role === "BUYER";
+  const sorted = [...bookings].sort(
+    (a, b) => new Date(b.createdAt || b.date).getTime() - new Date(a.createdAt || a.date).getTime()
+  );
+
   return `
     <div class="section-heading" style="margin-top:0">
       <div>
-        <h2>${t("Farmer Bookings")}</h2>
-        <p>Bookings scheduled at this centre</p>
+        <h2>${isBuyer ? t("Centre Booking History") : t("My Bookings History")}</h2>
+        <p>${isBuyer ? "All farmer procurement bookings scheduled at this centre (recent bookings on top)" : "All your scheduled and historical procurement appointments (recent bookings on top)"}</p>
       </div>
-      <button class="ghost-btn small" data-nav="queue">${t("Live Queue")}</button>
+      <div style="display:flex;gap:8px">
+        ${!isBuyer ? `<button class="primary-btn small" data-nav="booking">＋ ${t("Book New Slot")}</button>` : ""}
+        <button class="ghost-btn small" data-nav="queue">${t("Live Queue")}</button>
+      </div>
     </div>
     <div class="table-wrap">
       <table class="data-table">
         <thead>
           <tr>
             <th>Token / Booking ID</th>
-            <th>Farmer</th>
-            <th>Crop</th>
+            <th>${isBuyer ? "Farmer" : "Procurement Centre"}</th>
+            <th>Crop & Variety</th>
+            <th>Asking Price</th>
+            <th>Agreed Price</th>
             <th>Quantity</th>
-            <th>Date & Time</th>
+            <th>Booked On (Created)</th>
+            <th>Scheduled Slot Date</th>
             <th>Status</th>
             <th>Action</th>
           </tr>
         </thead>
         <tbody>
-          ${bookings.map((item) => `
+          ${sorted.length ? sorted.map((item) => `
             <tr>
               <td><strong>${item.token}</strong><br><span style="font-size:11px;color:var(--muted)">${item.id}</span></td>
-              <td>${esc(item.farmer?.name || "Farmer")}</td>
-              <td>${t(item.crop)}</td>
+              <td>${isBuyer ? esc(item.farmer?.name || "Farmer") : esc(item.centre?.short || item.centre?.name || "Centre")}</td>
+              <td>${t(item.crop)} <small style="color:var(--muted)">(${esc(item.variety || "Std")})</small></td>
+              <td><strong style="color:var(--green)">₹${Number(item.farmerPrice || 23.69).toFixed(2)}</strong>/${item.unit}</td>
+              <td>${item.buyerPrice ? `<strong style="color:#1e40af">₹${Number(item.buyerPrice).toFixed(2)}</strong>/${item.unit}` : '<span style="color:var(--muted)">—</span>'}</td>
               <td>${item.quantity} ${item.unit}</td>
-              <td>${displayDate(item.date)} · ${item.time}</td>
-              <td>${statusBadge(item.status)}</td>
+              <td><span style="font-weight:600">${displayDateTime(item.createdAt || item.date)}</span></td>
+              <td><strong>${displayDate(item.date)}</strong><br><small style="color:var(--muted)">${item.time}</small></td>
               <td>
-                ${item.status === "PROCESSING"
-                  ? `<button class="primary-btn small" data-queue-action="COMPLETE" data-booking="${item.id}">Verify & Complete</button>`
-                  : `<button class="ghost-btn small" data-booking-view="${item.id}">View</button>`}
+                ${statusBadge(item.status)}
+                ${item.rejectionReason ? `<br><small style="color:#b91c1c;font-size:10px;font-weight:600">${esc(item.rejectionReason)}</small>` : ""}
+              </td>
+              <td>
+                <div style="display:flex;gap:4px;flex-wrap:wrap">
+                  ${state.user?.role === "FARMER" ? `
+                    <button class="ghost-btn small" data-booking-view="${item.id}">👁 ${t("View")}</button>
+                    ${item.payment?.status === "PROCESSING" ? `
+                      <button class="primary-btn small" data-payment="${item.id}" style="background:#15803d;font-weight:750">✓ Confirm Payment</button>
+                    ` : ""}
+                    ${item.status === "BOOKED" || (item.status === "WAITING" && !item.calledAt) ? `
+                      <button class="danger-btn small" data-cancel-booking="${item.id}">✕ ${t("Cancel")}</button>
+                    ` : (item.status === "PROCESSING" || item.calledAt) && item.status !== "COMPLETED" && item.status !== "REJECTED" ? `
+                      <span class="badge-locked" style="padding:4px 8px;font-size:11px;background:#fef3c7;border:1px solid #fde047;border-radius:6px;color:#92400e;font-weight:700" title="Token called to counter">🔒 Locked</span>
+                    ` : ""}
+                  ` : `
+                    <button class="ghost-btn small" data-booking-view="${item.id}">👁 View</button>
+                    ${item.payment?.status === "PROCESSING" ? `
+                      <span class="badge-locked" style="padding:4px 8px;font-size:11px;background:#fef3c7;border:1px solid #fde047;border-radius:6px;color:#92400e;font-weight:700">⏳ Awaiting Seller Confirmation</span>
+                    ` : ""}
+                    ${item.status === "PROCESSING" ? `
+                      <button class="primary-btn small" data-queue-action="COMPLETE" data-booking="${item.id}">Verify & Complete</button>
+                      <button class="danger-btn small" data-buyer-reject="${item.id}">✕ Reject</button>
+                    ` : ["BOOKED", "WAITING", "CHECKED_IN"].includes(item.status) ? `
+                      <button class="secondary-btn small" data-queue-action="CALL" data-booking="${item.id}">Call</button>
+                      <button class="danger-btn small" data-buyer-reject="${item.id}">✕ Reject</button>
+                    ` : ""}
+                  `}
+                </div>
               </td>
             </tr>
-          `).join("")}
+          `).join("") : `<tr><td colspan="10" style="text-align:center;padding:32px;color:var(--muted)">No bookings recorded yet.</td></tr>`}
         </tbody>
       </table>
     </div>
@@ -2253,6 +2519,180 @@ async function mapPage() {
   `;
 }
 
+function bookingDetailsModal(booking) {
+  const isCancellable =
+    state.user?.role === "FARMER" &&
+    (booking.status === "BOOKED" || (booking.status === "WAITING" && !booking.calledAt));
+  const isLocked =
+    (booking.status === "PROCESSING" || booking.calledAt) &&
+    booking.status !== "COMPLETED" &&
+    booking.status !== "REJECTED";
+
+  return `
+    <div class="modal-backdrop animate-fade" id="modal">
+      <section class="modal animate-pop" style="max-width:540px">
+        <div class="modal-head">
+          <div style="display:flex;align-items:center;gap:10px">
+            <span style="font-size:24px">🎫</span>
+            <div>
+              <h2 style="margin:0">${t("Booking Details & Token")}</h2>
+              <p class="form-help" style="margin:2px 0 0">Digital Procurement Appointment Pass</p>
+            </div>
+          </div>
+          <button class="modal-close" data-close-modal>×</button>
+        </div>
+
+        <div style="text-align:center;padding:16px 0;background:linear-gradient(180deg,rgba(21,115,71,0.06) 0%,rgba(21,115,71,0) 100%);border-radius:14px;margin-bottom:16px">
+          <div style="font-size:11px;font-weight:800;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase">Procurement Token</div>
+          <div style="font-size:36px;font-weight:900;color:var(--green);letter-spacing:-0.03em;margin:4px 0">${booking.token}</div>
+          <div>${statusBadge(booking.status)}</div>
+        </div>
+
+        <div class="booking-id-highlight" style="margin-bottom:16px">
+          <div class="highlight-item">
+            <span>Booking ID</span>
+            <strong class="highlight-id">${esc(booking.id)}</strong>
+          </div>
+          <div class="highlight-item">
+            <span>Crop & Variety</span>
+            <strong>${t(booking.crop)} <small style="color:var(--muted)">(${esc(booking.variety || "Std")})</small></strong>
+          </div>
+          <div class="highlight-item">
+            <span>Quantity</span>
+            <strong>${booking.quantity} ${booking.unit}</strong>
+          </div>
+          <div class="highlight-item">
+            <span>Scheduled Date</span>
+            <strong>${displayDate(booking.date)}</strong>
+          </div>
+          <div class="highlight-item">
+            <span>Time Window</span>
+            <strong>${esc(booking.time)}</strong>
+          </div>
+          <div class="highlight-item">
+            <span>Booked On (Created)</span>
+            <strong>${displayDateTime(booking.createdAt || booking.date)}</strong>
+          </div>
+          <div class="highlight-item">
+            <span>Farmer Asking Price</span>
+            <strong style="color:var(--green)">₹${Number(booking.farmerPrice || 23.69).toFixed(2)}/${booking.unit}</strong>
+          </div>
+          <div class="highlight-item">
+            <span>Buyer Agreed Price</span>
+            <strong>${booking.buyerPrice ? `₹${Number(booking.buyerPrice).toFixed(2)}/${booking.unit}` : "Pending Review"}</strong>
+          </div>
+          <div class="highlight-item full-width">
+            <span>Procurement Centre</span>
+            <strong>${esc(booking.centre?.name || "Procurement Centre")}</strong>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px">📍 ${esc(booking.centre?.address || "")}, ${esc(booking.centre?.district || "")}</div>
+          </div>
+        </div>
+
+        ${booking.rejectionReason ? `
+          <div class="badge-rejected-callout" style="padding:10px 14px;background:#fee2e2;border:1px solid #fca5a5;border-radius:8px;font-size:12px;font-weight:700;color:#991b1b;margin-bottom:16px">
+            ⚠️ Lot Rejection Reason: ${esc(booking.rejectionReason)}
+          </div>
+        ` : ""}
+
+        ${booking.payment?.status === "PROCESSING" ? `
+          ${state.user?.role === "FARMER" || state.user?.role === "ADMIN" ? `
+            <div style="padding:12px 14px;background:#ecfdf5;border:1px solid #a7f3d0;border-radius:10px;margin-bottom:16px">
+              <div style="font-size:13px;font-weight:700;color:#065f46;margin-bottom:4px">
+                💰 Payout Ready: ${money(booking.payment.amount)}
+              </div>
+              <p style="font-size:11px;color:#047857;margin:0 0 10px">
+                Procurement is accepted. Power is in your hands: please verify the funds are credited to your bank account or received in cash before confirming.
+              </p>
+              <button type="button" class="primary-btn small" id="modal-confirm-pay-btn" style="background:#15803d;width:100%;font-weight:750">
+                ✓ Confirm Payment Received (${money(booking.payment.amount)})
+              </button>
+            </div>
+          ` : `
+            <div style="padding:12px 14px;background:#fef3c7;border:1px solid #fde047;border-radius:10px;margin-bottom:16px">
+              <div style="font-size:13px;font-weight:700;color:#92400e;margin-bottom:4px">
+                ⏳ Awaiting Seller Confirmation
+              </div>
+              <p style="font-size:11px;color:#b45309;margin:0">
+                Payment of ${money(booking.payment.amount)} initiated. Status will complete when the seller confirms receipt.
+              </p>
+            </div>
+          `}
+        ` : booking.payment?.status === "COMPLETED" ? `
+          <div style="padding:10px 14px;background:#ecfdf5;border:1px solid #a7f3d0;border-radius:8px;font-size:12px;color:#065f46;margin-bottom:16px">
+            ✓ Payout Disbursed &amp; Received: <strong>${money(booking.payment.amount)}</strong> · Transaction: <code>${booking.payment.transactionId}</code>
+          </div>
+        ` : ""}
+
+        <div class="qr-box" style="margin:12px 0 16px">
+          <div class="qr" aria-label="QR Code">${[
+            "██  ████  ██",
+            "  ██  ██  █ ",
+            "████  ██ ███",
+            "██  ███  ██ ",
+            " ███  ███   ",
+          ].join("<br>")}</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:6px">Present this digital token slip at the procurement gate</div>
+        </div>
+
+        <div style="display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;margin-top:16px">
+          <button type="button" class="ghost-btn" data-close-modal>Close</button>
+          <button type="button" class="secondary-btn" id="modal-track-queue-btn">
+            ◉ Track Live Queue
+          </button>
+          ${isCancellable ? `
+            <button type="button" class="danger-btn" id="modal-cancel-btn">
+              ✕ Cancel Booking
+            </button>
+          ` : isLocked ? `
+            <span class="badge-locked" style="padding:8px 12px;background:#fef3c7;border:1px solid #fde047;border-radius:8px;font-size:12px;font-weight:700;color:#92400e">
+              🔒 Called to Counter
+            </span>
+          ` : ""}
+        </div>
+      </section>
+    </div>
+  `;
+}
+
+async function openBookingDetails(bookingId) {
+  try {
+    const items = state.cache.bookings || (await api("/api/bookings"));
+    state.cache.bookings = items;
+    const booking = items.find((b) => b.id === bookingId);
+    if (!booking) {
+      toast("Booking details could not be loaded.", "warn");
+      return;
+    }
+    document.querySelector("#modal")?.remove();
+    document.body.insertAdjacentHTML("beforeend", bookingDetailsModal(booking));
+    bindModal();
+
+    document.querySelector("#modal-track-queue-btn")?.addEventListener("click", () => {
+      document.querySelector("#modal")?.remove();
+      state.selectedBooking = booking;
+      setView("queue");
+    });
+
+    document.querySelector("#modal-cancel-btn")?.addEventListener("click", () => {
+      document.querySelector("#modal")?.remove();
+      cancelFarmerBooking(booking.id);
+    });
+
+    document.querySelector("#modal-confirm-pay-btn")?.addEventListener("click", async () => {
+      try {
+        await api(`/api/payments/${booking.id}/complete`, { method: "POST", body: "{}" });
+        document.querySelector("#modal")?.remove();
+        toast("Payment receipt confirmed! Transaction marked completed.");
+        render();
+      } catch (err) {
+        toast(err.message, "danger");
+      }
+    });
+  } catch (err) {
+    toast(err.message, "danger");
+  }
+}
+
 function notificationModal() {
   const notifications = state.cache.notifications || [];
   return `
@@ -2280,6 +2720,7 @@ async function renderView() {
     else if (state.view === "centres") content = await centresPage();
     else if (state.view === "centre-detail") content = await centreDetailPage();
     else if (state.view === "booking") content = await bookingPage();
+    else if (state.view === "bookings") content = await bookingsPage();
     else if (state.view === "queue") content = await queuePage();
     else if (state.view === "crops") content = await cropsPage();
     else if (state.view === "payments") content = await paymentsPage();
@@ -2453,9 +2894,19 @@ function bindApp() {
   document.querySelectorAll("[data-nav]").forEach((button) =>
     button.addEventListener("click", () => {
       closeSidebar();
+      if (button.dataset.nav === "queue") {
+        state.selectedBooking = null;
+      }
       setView(button.dataset.nav);
     })
   );
+
+  document.querySelector("#queue-switch-booking")?.addEventListener("change", (e) => {
+    const targetId = e.target.value;
+    const items = state.cache.bookings || [];
+    state.selectedBooking = items.find((b) => b.id === targetId) || { id: targetId };
+    render();
+  });
 
   document.querySelectorAll("[data-centre]").forEach((button) =>
     button.addEventListener("click", () => {
@@ -2554,11 +3005,30 @@ function bindApp() {
     }
   });
 
+  // Dynamic crop asking price & MSP hint updater on booking form
+  document.querySelector('#booking-form [name="crop"]')?.addEventListener("change", (e) => {
+    const crop = e.target.value;
+    const msp = CROP_MSP_RATES[crop] || 23.69;
+    const priceInput = document.querySelector("#booking-asking-price");
+    const hint = document.querySelector("#msp-reference-hint");
+    if (priceInput) priceInput.value = msp.toFixed(2);
+    if (hint) hint.textContent = `Govt MSP: ₹${msp.toFixed(2)}/kg (₹${(msp * 100).toFixed(0)}/Qtl)`;
+  });
+
+  // Farmer cancel booking
+  document.querySelectorAll("[data-cancel-booking]").forEach((button) =>
+    button.addEventListener("click", () => cancelFarmerBooking(button.dataset.cancelBooking))
+  );
+
+  // Buyer reject lot
+  document.querySelectorAll("[data-buyer-reject]").forEach((button) =>
+    button.addEventListener("click", () => openRejectModal(button.dataset.buyerReject))
+  );
+
   document.querySelectorAll("[data-booking-view]").forEach((button) =>
-    button.addEventListener("click", async () => {
-      const items = await api("/api/bookings");
-      state.selectedBooking = items.find((item) => item.id === button.dataset.bookingView);
-      setView("queue");
+    button.addEventListener("click", (e) => {
+      e.preventDefault();
+      openBookingDetails(button.dataset.bookingView);
     })
   );
 
@@ -2617,7 +3087,7 @@ function bindApp() {
           method: "POST",
           body: "{}",
         });
-        toast("Payment successfully completed!");
+        toast("Payment receipt confirmed! Transaction marked completed.");
         render();
       } catch (error) {
         toast(error.message, "danger");
@@ -2741,8 +3211,10 @@ function bindFilteredCentreCards(container) {
 }
 
 function bindModal() {
-  document.querySelector("[data-close-modal]")?.addEventListener("click", () => {
-    document.querySelector("#modal")?.remove();
+  document.querySelectorAll("#modal [data-close-modal]").forEach((button) => {
+    button.addEventListener("click", () => {
+      document.querySelector("#modal")?.remove();
+    });
   });
   document.querySelector("#modal")?.addEventListener("click", (event) => {
     if (event.target.id === "modal") event.currentTarget.remove();
@@ -2798,25 +3270,59 @@ function reviewModal(request) {
   `;
 }
 
-function openCompleteModal(bookingId) {
+async function openCompleteModal(bookingId) {
+  let booking = (state.cache.dashboard?.bookings || []).find((b) => b.id === bookingId);
+  if (!booking) {
+    try {
+      const all = await api("/api/bookings");
+      booking = all.find((b) => b.id === bookingId);
+    } catch (e) {}
+  }
+  const crop = booking?.crop || "Paddy";
+  const msp = CROP_MSP_RATES[crop] || 23.69;
+  const farmerPrice = Number(booking?.farmerPrice || msp);
+  const initialQty = Number(booking?.quantity || 800);
+  const initialTotal = (initialQty * farmerPrice).toFixed(2);
+
   document.body.insertAdjacentHTML(
     "beforeend",
     `
     <div class="modal-backdrop animate-fade" id="modal">
-      <section class="modal animate-pop">
+      <section class="modal animate-pop" style="max-width:540px">
         <div class="modal-head">
           <div>
-            <h2>Record Crop Measurement</h2>
-            <p class="form-help">Enter inspected weight and grade to finalize procurement.</p>
+            <h2>Record Crop Measurement & Agreed Price</h2>
+            <p class="form-help">Enter inspected weight, quality grade, and final purchase price.</p>
           </div>
           <button class="modal-close" data-close-modal>×</button>
         </div>
+
+        <div style="margin-bottom:16px;padding:12px 14px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <div style="font-size:11px;color:#166534;font-weight:700">FARMER'S ASKING PRICE</div>
+            <strong style="font-size:16px;color:#15803d">₹${farmerPrice.toFixed(2)} / kg</strong>
+            <span style="font-size:11px;color:#166534"> (₹${(farmerPrice * 100).toFixed(0)}/Qtl)</span>
+          </div>
+          <div style="text-align:right">
+            <div style="font-size:11px;color:#854d0e;font-weight:700">GOVT MSP BENCHMARK</div>
+            <strong style="font-size:14px;color:#a16207">₹${msp.toFixed(2)} / kg</strong>
+          </div>
+        </div>
+
         <form id="complete-form" class="form-grid">
           <input type="hidden" name="bookingId" value="${bookingId}">
+          
           <div class="form-group">
             <label>Measured Quantity (kg)</label>
-            <input name="measuredQuantity" type="number" value="800" required min="1">
+            <input name="measuredQuantity" id="complete-qty" type="number" value="${initialQty}" required min="1">
           </div>
+
+          <div class="form-group">
+            <label>Final Agreed Price (₹ / kg)</label>
+            <input name="agreedRate" id="complete-rate" type="number" step="0.01" min="1" value="${farmerPrice.toFixed(2)}" required>
+            <small class="form-help">Buyer can adjust price according to crop quality</small>
+          </div>
+
           <div class="form-group">
             <label>Quality Grade</label>
             <select name="quality">
@@ -2825,23 +3331,123 @@ function openCompleteModal(bookingId) {
               <option value="Grade B">Grade B (Standard)</option>
             </select>
           </div>
+
           <div class="form-group">
             <label>Moisture Content</label>
             <input name="moisture" value="13.2%">
           </div>
-          <div class="form-group">
-            <label>Verification Result</label>
-            <input value="Accepted" disabled>
+
+          <div class="form-group full-span" style="background:#f8faf9;padding:12px;border-radius:10px;border:1px solid var(--line)">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <span>Total Calculated Payout:</span>
+              <strong id="complete-total-display" style="font-size:18px;color:var(--green)">₹${Number(initialTotal).toLocaleString("en-IN", { maximumFractionDigits: 2 })}</strong>
+            </div>
           </div>
+
           <div class="form-group full-span">
-            <button class="primary-btn full" type="submit">✓ Accept Crop & Start Payment</button>
+            <button class="primary-btn full" type="submit">✓ Accept Crop & Disburse ₹<span id="btn-total-amount">${Number(initialTotal).toLocaleString("en-IN", { maximumFractionDigits: 2 })}</span></button>
           </div>
         </form>
       </section>
     </div>
     `
   );
+
+  const qtyInput = document.querySelector("#complete-qty");
+  const rateInput = document.querySelector("#complete-rate");
+  const totalDisplay = document.querySelector("#complete-total-display");
+  const btnTotal = document.querySelector("#btn-total-amount");
+
+  function recalc() {
+    const q = parseFloat(qtyInput?.value || 0);
+    const r = parseFloat(rateInput?.value || 0);
+    const tot = (q * r).toFixed(2);
+    const formatted = Number(tot).toLocaleString("en-IN", { maximumFractionDigits: 2 });
+    if (totalDisplay) totalDisplay.textContent = `₹${formatted}`;
+    if (btnTotal) btnTotal.textContent = formatted;
+  }
+
+  qtyInput?.addEventListener("input", recalc);
+  rateInput?.addEventListener("input", recalc);
+
   bindModal();
+}
+
+function openRejectModal(bookingId) {
+  document.body.insertAdjacentHTML(
+    "beforeend",
+    `
+    <div class="modal-backdrop animate-fade" id="modal">
+      <section class="modal animate-pop" style="max-width:480px">
+        <div class="modal-head">
+          <div>
+            <h2 style="color:#dc2626">✕ Reject Crop Lot</h2>
+            <p class="form-help">Specify why this lot is being rejected. The farmer will be notified.</p>
+          </div>
+          <button class="modal-close" data-close-modal>×</button>
+        </div>
+        <form id="reject-form" class="form-grid">
+          <input type="hidden" name="bookingId" value="${bookingId}">
+          <div class="form-group full-span">
+            <label>Rejection Reason</label>
+            <select name="reason" required>
+              <option value="High Moisture Content (>14%)">High Moisture Content (>14%)</option>
+              <option value="Excess Foreign Matter / Admixtures">Excess Foreign Matter / Admixtures</option>
+              <option value="Damaged / Discolored Kernels">Damaged / Discolored Kernels</option>
+              <option value="Price Negotiation Disagreement">Price Negotiation Disagreement</option>
+              <option value="Documentation / Land Record Mismatch">Documentation / Land Record Mismatch</option>
+              <option value="Other Quality Defect">Other Quality Defect</option>
+            </select>
+          </div>
+          <div class="form-group full-span">
+            <label>Additional Inspector Notes</label>
+            <input name="notes" placeholder="Optional notes for farmer...">
+          </div>
+          <div class="form-group full-span" style="display:flex;gap:10px;justify-content:flex-end">
+            <button type="button" class="ghost-btn" data-close-modal>Cancel</button>
+            <button class="danger-btn" type="submit">✕ Confirm Rejection</button>
+          </div>
+        </form>
+      </section>
+    </div>
+    `
+  );
+
+  document.querySelector("#reject-form")?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const values = Object.fromEntries(new FormData(event.currentTarget));
+    try {
+      await api(`/api/buyer/bookings/${values.bookingId}/action`, {
+        method: "POST",
+        body: JSON.stringify({ ...values, action: "REJECT" }),
+      });
+      document.querySelector("#modal")?.remove();
+      toast("Crop lot marked rejected. Notification dispatched to farmer.", "warn");
+      render();
+    } catch (err) {
+      toast(err.message, "danger");
+    }
+  });
+
+  bindModal();
+}
+
+async function cancelFarmerBooking(bookingId) {
+  if (!confirm("Are you sure you want to cancel this booking? Your scheduled appointment slot will be released.")) {
+    return;
+  }
+  try {
+    const res = await api(`/api/bookings/${bookingId}/cancel`, {
+      method: "POST",
+    });
+    if (state.selectedBooking?.id === bookingId) {
+      state.selectedBooking = null;
+    }
+    toast(res.message || "Booking cancelled successfully.");
+    render();
+  } catch (err) {
+    toast(err.message, "danger");
+  }
 }
 
 async function completeBooking(event) {

@@ -147,7 +147,12 @@ def centre_view(db, centre, target_date=None):
     """Return a centre with a live daily availability summary."""
     target_date = target_date or today_local()
     slots = slots_for_date(db, centre, target_date)
-    booked = sum(slot["booked"] for slot in slots if not slot["isPast"])
+    booked = sum(
+        booking.get("centreId") == centre["id"]
+        and booking.get("date") == target_date.isoformat()
+        and booking.get("status") not in ("CANCELLED", "REJECTED")
+        for booking in db.get("bookings", [])
+    )
     available = sum(slot["available"] for slot in slots)
     queue_statuses = {"CHECKED_IN", "WAITING", "CALLED", "PROCESSING"}
     queue = sum(
@@ -250,6 +255,14 @@ def booking_view(db, booking):
     result = dict(booking)
     result["farmer"] = safe_user(farmer) if farmer else None
     result["centre"] = centre_view(db, centre) if centre else None
+    result.setdefault("farmerPrice", CROP_RATES.get(booking.get("crop"), 23.69))
+    result.setdefault("buyerPrice", None)
+    result.setdefault("agreedRate", None)
+    result.setdefault("calledAt", None)
+    result.setdefault("cancelledAt", None)
+    result.setdefault("cancelledBy", None)
+    result.setdefault("rejectionReason", None)
+    result.setdefault("createdAt", None)
     return result
 
 
@@ -283,6 +296,12 @@ def queue_info(db, booking):
     elif booking.get("status") == "COMPLETED":
         now_serving_token = booking.get("token")
         now_serving_status = "Procurement Completed"
+    elif booking.get("status") == "CANCELLED":
+        now_serving_token = booking.get("token")
+        now_serving_status = "Booking Cancelled"
+    elif booking.get("status") == "REJECTED":
+        now_serving_token = booking.get("token")
+        now_serving_status = "Crop Lot Rejected"
     elif completed_queue:
         now_serving_token = completed_queue[-1].get("token")
         now_serving_status = "Completed"
@@ -296,7 +315,7 @@ def queue_info(db, booking):
         position = -1
 
     position = max(0, position)
-    people_ahead = 0 if booking.get("status") == "COMPLETED" else position
+    people_ahead = 0 if booking.get("status") in ("COMPLETED", "CANCELLED", "REJECTED") else position
     average = (centre or {}).get("processingTime") or db.get("settings", {}).get("averageProcessingTime", 7)
 
     display_queue = all_bookings if all_bookings else [booking]
@@ -492,14 +511,15 @@ def dashboard(user):
 
     if role == "FARMER":
         farmer_bookings = [b for b in db.get("bookings", []) if b["farmerId"] == user["id"]]
-        farmer_bookings.sort(key=lambda b: b["createdAt"], reverse=True)
-        # Active booking is the latest non-completed or latest overall
-        booking = next((b for b in farmer_bookings if b["status"] != "COMPLETED"), None) or (farmer_bookings[0] if farmer_bookings else None)
+        farmer_bookings.sort(key=lambda b: (b.get("createdAt") or b.get("date") or ""), reverse=True)
+        active_statuses = {"BOOKED", "CHECKED_IN", "WAITING", "CALLED", "PROCESSING"}
+        booking = next((b for b in farmer_bookings if b["status"] in active_statuses), None) or (farmer_bookings[0] if farmer_bookings else None)
 
         return jsonify({
             "user": user,
             "booking": booking_view(db, booking) if booking else None,
             "queue": queue_info(db, booking) if booking else None,
+            "bookings": [booking_view(db, b) for b in farmer_bookings[:6]],
             "crops": [
                 {"crop": b["crop"], "quantity": b["quantity"], "unit": b["unit"]}
                 for b in farmer_bookings
@@ -519,6 +539,7 @@ def dashboard(user):
             return error("Your procurement centre could not be found.", 404)
         centre = centre_view(db, raw_centre)
         bookings = [b for b in db.get("bookings", []) if b["centreId"] == user.get("centreId")]
+        bookings.sort(key=lambda b: (b.get("createdAt") or b.get("date") or ""), reverse=True)
         checked_in_statuses = {"CHECKED_IN", "WAITING", "CALLED", "PROCESSING", "COMPLETED"}
         waiting_statuses = {"WAITING", "CHECKED_IN"}
         today = today_local().isoformat()
@@ -636,6 +657,9 @@ def bookings(user):
     else:
         items = db.get("bookings", [])
 
+    # Sort recent bookings on top (newest first)
+    items.sort(key=lambda b: (b.get("createdAt") or b.get("date") or ""), reverse=True)
+
     return jsonify([
         {**booking_view(db, b), "queue": queue_info(db, b)}
         for b in items
@@ -696,16 +720,33 @@ def create_booking(user):
     unique_id = new_booking_id(target_date, {item["id"] for item in db.get("bookings", [])})
     token_str = f"A-{str(serial).zfill(3)}"
 
+    crop_name = values.get("crop") or "Paddy"
+    msp_rate = CROP_RATES.get(crop_name, 23.69)
+    try:
+        asking_price = float(values.get("askingPrice") or msp_rate)
+        if asking_price <= 0:
+            asking_price = msp_rate
+    except (TypeError, ValueError):
+        asking_price = msp_rate
+    asking_price = round(asking_price, 2)
+
     booking = {
         "id": unique_id,
         "token": token_str,
         "farmerId": user["id"],
         "centreId": centre["id"],
         "slotId": slot["id"],
-        "crop": values.get("crop") or "Paddy",
+        "crop": crop_name,
         "variety": values.get("variety") or "Standard",
         "quantity": int(quantity) if quantity.is_integer() else quantity,
         "unit": values.get("unit") or "kg",
+        "farmerPrice": asking_price,
+        "buyerPrice": None,
+        "agreedRate": None,
+        "calledAt": None,
+        "cancelledAt": None,
+        "cancelledBy": None,
+        "rejectionReason": None,
         "date": target_date.isoformat(),
         "time": slot["time"],
         "status": "BOOKED",
@@ -721,7 +762,7 @@ def create_booking(user):
         user["id"],
         "BOOKING",
         "Booking confirmed",
-        f"Booking {booking['id']} is confirmed! Your token is {booking['token']} at {centre['short']} on {booking['date']}.",
+        f"Booking {booking['id']} is confirmed! Your token is {booking['token']} at {centre['short']} on {booking['date']}. Asking Price: ₹{asking_price:,.2f}/{booking['unit']}.",
     )
     write_db(db)
 
@@ -730,6 +771,48 @@ def create_booking(user):
         "booking": booking_view(db, booking),
         "queue": queue_info(db, booking),
     }), 201
+
+
+@app.post("/api/bookings/<booking_id>/cancel")
+@auth_required()
+def cancel_booking(user, booking_id):
+    if user["role"] != "FARMER":
+        return error("Only the booking farmer can cancel this booking.", 403)
+
+    db = read_db()
+    booking = find_booking(db, booking_id)
+    if not booking:
+        return error("Booking not found.", 404)
+
+    if booking["farmerId"] != user["id"]:
+        return error("You can only cancel your own bookings.", 403)
+
+    # CRITICAL RULE: If the buyer has called the token, the seller CANNOT cancel it
+    if booking.get("status") in ("PROCESSING", "CALLED", "COMPLETED", "REJECTED") or booking.get("calledAt"):
+        return error("Cannot cancel booking. The buyer has already called your token to the procurement counter.", 400)
+
+    if booking.get("status") == "CANCELLED":
+        return error("This booking has already been cancelled.", 400)
+
+    centre = next((c for c in db.get("centres", []) if c["id"] == booking["centreId"]), {"short": "Procurement Centre"})
+
+    booking["status"] = "CANCELLED"
+    booking["cancelledBy"] = "FARMER"
+    booking["cancelledAt"] = now()
+
+    notify(
+        db,
+        user["id"],
+        "BOOKING",
+        "Booking cancelled",
+        f"Your booking {booking['id']} (Token {booking['token']}) at {centre.get('short', 'Centre')} has been cancelled successfully.",
+    )
+    write_db(db)
+
+    return jsonify({
+        "message": "Booking cancelled successfully",
+        "booking": booking_view(db, booking),
+    })
 
 
 @app.get("/api/queue/<booking_id>")
@@ -793,8 +876,8 @@ def buyer_action(user, booking_id):
         )
 
     elif action == "CALL":
-        if booking["status"] not in {"WAITING", "CHECKED_IN"}:
-            return error("Only a checked-in farmer can be called.")
+        if booking["status"] not in {"WAITING", "CHECKED_IN", "BOOKED"}:
+            return error("Only a waiting farmer can be called.")
         current = next(
             (
                 item for item in db.get("bookings", [])
@@ -808,6 +891,7 @@ def buyer_action(user, booking_id):
         if current:
             return error(f"Token {current['token']} is still being processed. Complete that procurement before calling the next farmer.")
         booking["status"] = "PROCESSING"
+        booking["calledAt"] = now()
         # High priority seller call notification
         notify(
             db, booking["farmerId"], "CALL", "📣 Your Token Has Been Called!",
@@ -821,39 +905,72 @@ def buyer_action(user, booking_id):
         measured = float(values.get("measuredQuantity") or booking["quantity"])
         if measured.is_integer():
             measured = int(measured)
+        
+        # Money set system: buyer can confirm or adjust agreed rate
+        default_rate = booking.get("farmerPrice") or CROP_RATES.get(booking["crop"], 23.69)
+        try:
+            agreed_rate = float(values.get("agreedRate") or values.get("buyerPrice") or default_rate)
+            if agreed_rate <= 0:
+                agreed_rate = default_rate
+        except (TypeError, ValueError):
+            agreed_rate = default_rate
+        agreed_rate = round(agreed_rate, 2)
+        
+        booking["buyerPrice"] = agreed_rate
+        booking["agreedRate"] = agreed_rate
+
         booking["procurement"] = {
             "status": "COMPLETED",
             "declaredQuantity": booking["quantity"],
             "measuredQuantity": measured,
             "quality": values.get("quality") or "FAQ",
             "moisture": values.get("moisture") or "13.5%",
+            "agreedRate": agreed_rate,
             "accepted": True,
         }
-        rate = CROP_RATES.get(booking["crop"], 23.69)
-        amount = measured * rate
+        amount = measured * agreed_rate
         booking["payment"] = {
             "status": "PROCESSING",
-            "rate": rate,
+            "rate": agreed_rate,
             "amount": round(amount, 2),
             "transactionId": None,
         }
         notify(
-            db, booking["farmerId"], "PROCUREMENT", "Procurement completed",
-            f"{booking['crop']} ({measured} {booking['unit']}) has been accepted. Payment processing of ₹{amount:,.2f} has started."
+            db, booking["farmerId"], "PROCUREMENT", "Procurement Accepted — Payment Initiated",
+            f"{booking['crop']} ({measured} {booking['unit']}) accepted at ₹{agreed_rate:,.2f}/{booking['unit']}. Payout of ₹{amount:,.2f} initiated. Please confirm receipt once funds arrive."
         )
 
     elif action == "REJECT":
-        booking["status"] = "CANCELLED"
+        booking["status"] = "REJECTED"
         reason = values.get("reason") or "Quality does not meet the standard specification."
+        notes = values.get("notes") or ""
+        full_reason = f"{reason} - {notes}" if notes else reason
+        booking["rejectionReason"] = full_reason
         booking["procurement"] = {
             "status": "REJECTED",
-            "reason": reason,
+            "reason": full_reason,
             "accepted": False,
         }
         notify(
             db, booking["farmerId"], "PROCUREMENT",
-            "Crop verification rejected", reason
+            "Crop verification rejected",
+            f"Your crop lot for token {booking['token']} was rejected by {centre.get('short', 'Centre')}. Reason: {full_reason}"
         )
+
+    elif action == "SET_PRICE":
+        try:
+            offered_price = float(values.get("buyerPrice") or values.get("agreedRate") or 0)
+            if offered_price <= 0:
+                return error("Enter a valid price.")
+            offered_price = round(offered_price, 2)
+            booking["buyerPrice"] = offered_price
+            booking["agreedRate"] = offered_price
+            notify(
+                db, booking["farmerId"], "PRICE", "Buyer Price Offer",
+                f"The centre at {centre.get('short', 'Centre')} has set an offered price of ₹{offered_price:,.2f}/{booking['unit']} for token {booking['token']}."
+            )
+        except (TypeError, ValueError):
+            return error("Enter a valid price.")
 
     else:
         return error("Invalid queue action.")
@@ -869,31 +986,46 @@ def buyer_action(user, booking_id):
 @app.post("/api/payments/<booking_id>/complete")
 @auth_required()
 def payment_complete(user, booking_id):
-    if user["role"] not in ("BUYER", "ADMIN"):
-        return error("Only an authorized centre or admin can update payments.", 403)
+    # Power is strictly in the seller's (farmer's) hands to confirm payment receipt!
+    if user["role"] not in ("FARMER", "ADMIN"):
+        return error(
+            "Only the seller (farmer) can confirm payment receipt to protect against false buyer claims.",
+            403,
+        )
 
     db = read_db()
     booking = find_booking(db, booking_id)
     if not booking or not booking.get("payment"):
         return error("No payment record is available for this booking.", 404)
-    if user["role"] == "BUYER" and booking["centreId"] != user.get("centreId"):
-        return error("This payment belongs to another centre.", 403)
+    if user["role"] == "FARMER" and booking["farmerId"] != user["id"]:
+        return error("You can only confirm payment for your own crop sales.", 403)
 
     booking["payment"]["status"] = "COMPLETED"
     booking["payment"]["transactionId"] = (
-        f"TXN-DEMO-{booking['date'].replace('-', '')}-{booking['token'].replace('A-', '')}"
+        f"TXN-RCVD-{booking['date'].replace('-', '')}-{booking['token'].replace('A-', '')}"
     )
+    booking["payment"]["confirmedAt"] = now()
+    booking["payment"]["confirmedBy"] = "FARMER"
 
     amount = booking["payment"]["amount"]
     formatted = f"{amount:,.0f}" if float(amount).is_integer() else f"{amount:,.2f}"
+    farmer_name = booking.get("farmer", {}).get("name", "Seller")
+
+    # Notify Seller (Farmer)
     notify(
         db, booking["farmerId"], "PAYMENT",
-        "Payment processed successfully",
-        f"₹{formatted} has been transferred and marked completed.",
+        "Payment Receipt Confirmed",
+        f"You confirmed receipt of ₹{formatted} for Token {booking['token']}.",
+    )
+    # Notify Buyer / Centre
+    notify(
+        db, booking["centreId"], "PAYMENT",
+        "Seller Confirmed Payment",
+        f"Farmer {farmer_name} confirmed receipt of ₹{formatted} for Token {booking['token']}.",
     )
     write_db(db)
     return jsonify({
-        "message": "Demo payment marked completed.",
+        "message": "Payment receipt successfully confirmed by seller.",
         "booking": booking_view(db, booking),
     })
 
@@ -976,10 +1108,11 @@ def search(user):
     })
 
 
-@app.errorhandler(404)
-def not_found(_):
-    return error("Route not found.", 404)
+from werkzeug.exceptions import HTTPException
 
+@app.errorhandler(HTTPException)
+def handle_http_exception(e):
+    return jsonify({"error": e.description}), e.code
 
 @app.errorhandler(Exception)
 def handle_exception(exc):

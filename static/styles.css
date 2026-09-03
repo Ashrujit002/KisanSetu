@@ -264,6 +264,7 @@ a {
   font-size: 11px;
   font-weight: 800;
   letter-spacing: 0.04em;
+  -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
 }
 
@@ -451,7 +452,7 @@ a {
 .scenic-canvas-wrap {
   position: relative;
   width: 100%;
-  min-height: 260px;
+  min-height: 315px;
   margin: 22px 0 16px;
   border-radius: 22px;
   overflow: hidden;
@@ -464,10 +465,10 @@ a {
 /* Golden Sun Radiance & Rotating Rays */
 .sun-radiance {
   position: absolute;
-  top: -22px;
-  right: 17%;
-  width: 140px;
-  height: 140px;
+  top: -12px;
+  right: 16%;
+  width: 148px;
+  height: 148px;
   pointer-events: none;
 }
 
@@ -545,7 +546,7 @@ a {
 .landscape-svg {
   display: block;
   width: 100%;
-  height: 200px;
+  height: 245px;
   margin-top: 15px;
 }
 
@@ -591,11 +592,11 @@ a {
 /* Floating Glass Badges */
 .floating-badge-deck {
   position: absolute;
-  top: 14px;
-  left: 16px;
+  top: 16px;
+  left: 18px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
   z-index: 3;
   pointer-events: none;
 }
@@ -1005,6 +1006,7 @@ a {
   border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 18px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  -webkit-backdrop-filter: blur(14px);
   backdrop-filter: blur(14px);
   min-width: 230px;
   transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
@@ -2364,7 +2366,31 @@ a {
 .badge.processing, .badge.called { background: #dbeafe; color: #1e40af; }
 .badge.completed, .badge.verified { background: #dcfce7; color: #15803d; }
 .badge.booked, .badge.pending { background: #f1f5f9; color: #475569; }
-.badge.cancelled, .badge.rejected, .badge.danger { background: #fee2e2; color: #b91c1c; }
+.badge.rejected, .badge.danger { background: #fee2e2; color: #b91c1c; font-weight: 800; }
+.badge.cancelled { background: #f1f5f9; color: #64748b; border: 1px dashed #cbd5e1; }
+
+.badge-locked {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #fef3c7;
+  border: 1px solid #fde047;
+  border-radius: 8px;
+  color: #92400e;
+  font-size: 11px;
+  font-weight: 750;
+  padding: 6px 10px;
+}
+
+.badge-rejected-callout {
+  background: #fee2e2;
+  border: 1px solid #fca5a5;
+  border-radius: 8px;
+  color: #991b1b;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 8px 12px;
+}
 
 .verification {
   display: inline-flex;
@@ -2738,11 +2764,11 @@ a {
     min-height: auto;
   }
   .scenic-canvas-wrap {
-    min-height: 210px;
+    min-height: 250px;
     margin: 16px 0;
   }
   .landscape-svg {
-    height: 160px;
+    height: 195px;
   }
   .hero-stats {
     display: none;
