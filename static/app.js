@@ -224,7 +224,7 @@ const translations = {
     "Log out": "लॉग आउट",
 
     // Dashboard & Stats
-    "Good morning": "सुप्रभात",
+    "Hello": "नमस्ते",
     "Your produce journey, in one place.": "आपकी फसल खरीद प्रक्रिया का संपूर्ण विवरण।",
     "Active booking": "सक्रिय बुकिंग",
     "Queue position": "कतार में स्थान",
