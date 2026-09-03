@@ -29,7 +29,7 @@
 
 | # | Photo | Name | Role | GitHub |
 | :---: | :---: | :--- | :--- | :---: |
-| **1** | <img src="https://github.com/Ashrujit002.png" width="80" height="80"> | **Ashrujit Basu**  | **Full-Stack Developer & Design( **Team Leader** )** | [GitHub Profile](https://github.com/Ashrujit002) |
+| **1** | <img src="https://github.com/Ashrujit002.png" width="80" height="80"> | **Ashrujit Basu**  | **Full-Stack Developer & Design(Team Leader)** | [GitHub Profile](https://github.com/Ashrujit002) |
 | **2** | <img src="https://github.com/SandipSarkar01.png" width="80" height="80"> | **Sandip Sarkar** | **Full-Stack Developer & PPT** | [GitHub Profile](https://github.com/SandipSarkar01) |
 | **3** | <img src="https://github.com/sreejitasaha149-oss.png" width="80" height="80"> | **Sreejita Saha** | **PPT & Presentation** | [GitHub Profile](https://github.com/sreejitasaha149-oss) |
 | **4** | <img src="https://github.com/Sura-07.png" width="80" height="80"> | **Surajit Das** | **Testing** | [GitHub Profile](https://github.com/Sura-07) |
