@@ -564,14 +564,14 @@ function openInfoModal(type) {
             <span class="contact-icon">🏢</span>
             <div>
               <strong>Headquarters</strong>
-              <p style="margin:2px 0 0;font-size:12px;color:var(--muted)">Department of Agriculture &amp; Farmers Welfare, Krishi Bhawan, Dr. Rajendra Prasad Road, New Delhi - 110001</p>
+              <p style="margin:2px 0 0;font-size:12px;color:var(--muted)">Department of Agriculture &amp; Farmers Welfare, Barasat, near Krishi Bhawan, </p>
             </div>
           </div>
         </div>
       `
     },
     support: {
-      title: "🛡️ Farmer Grievance & Technical Support",
+      title: " Farmer Grievance & Technical Support",
       desc: "Resolution for slot booking, token queueing, and bank transfers.",
       html: `
         <div class="support-info-box">
@@ -1004,11 +1004,7 @@ function loginPage() {
           <p>${t("Book your visit, receive a digital token and follow every step from crop verification to a clearly marked demo payment.")}</p>
         </div>
 
-        <div class="hero-stats">
-          <div><strong>186+</strong><span>${t("Centres")}</span></div>
-          <div><strong>12,450+</strong><span>${t("Seller / Farmer")}</span></div>
-          <div><strong>7 min</strong><span>${t("Average time")}</span></div>
-        </div>
+       
       </section>
 
       <!-- Clean Login Panel on Right -->
@@ -1224,7 +1220,6 @@ const navigation = {
     ["booking", "Book a Slot"],
     ["bookings", "My Bookings"],
     ["queue", "Track Queue"],
-    ["crops", "My Crops"],
     ["payments", "Payments"],
   ],
   BUYER: [
@@ -1257,9 +1252,8 @@ function appShell(content, subtitle = "") {
     centres: role === "FARMER" ? "Find Procurement Centre" : "Centres",
     booking: "Book Procurement Slot",
     queue: role === "BUYER" ? "Live Queue Management" : "Track Your Queue",
-    crops: "My Crops",
     payments: "Payments & Procurement",
-    bookings: "Farmer Bookings",
+    bookings: role === "FARMER" ? "My Bookings" : "Farmer Bookings",
     verifications: "Verification Requests",
     map: "Procurement Centre Map",
   }[state.view] || "KisanSetu";
@@ -1437,7 +1431,7 @@ async function farmerDashboard() {
           <button class="quick-action" data-nav="booking"><span>＋</span>${t("Book a Slot")}</button>
           <button class="quick-action" data-nav="centres"><span>⌖</span>${t("Find Centre")}</button>
           <button class="quick-action" data-nav="queue"><span>◉</span>${t("Track Queue")}</button>
-          <button class="quick-action" data-nav="crops"><span>🌾</span>${t("My Crops")}</button>
+          <button class="quick-action" data-nav="bookings"><span>▤</span>${t("My Bookings")}</button>
           <button class="quick-action" data-nav="payments"><span>₹</span>${t("Payments")}</button>
           <button class="quick-action" data-action="open-notifications"><span>🔔</span>${t("Notifications")}</button>
         </div>
@@ -1733,7 +1727,7 @@ async function bookingPage() {
         </div>
         <div class="booking-tip">
           <strong>📅 Date Validation</strong>
-          <p>You can book appointments from <strong>${displayDate(detail.minBookingDate)}</strong> to <strong>${displayDate(detail.maxBookingDate)}</strong>. Previous days are disabled.</p>
+          <p>You can book appointments from <strong>${displayDate(detail.minBookingDate)}</strong> to <strong>${displayDate(detail.maxBookingDate)}</strong>.</p>
         </div>
       </aside>
 
@@ -2135,42 +2129,6 @@ function buyerQueuePage(bookings) {
           </div>
         </div>
       </section>
-    </div>
-  `;
-}
-
-async function cropsPage() {
-  const bookings = await api("/api/bookings");
-  const sorted = [...bookings].sort(
-    (a, b) => new Date(b.createdAt || b.date).getTime() - new Date(a.createdAt || a.date).getTime()
-  );
-  return `
-    <div class="section-heading" style="margin-top:0">
-      <div>
-        <h2>${t("Registered crops")}</h2>
-        <p>${t("Your crop declarations used for booking slots (recent on top).")}</p>
-      </div>
-      <button class="primary-btn small" data-nav="booking">${t("Add crop & book")}</button>
-    </div>
-
-    <div class="centre-grid">
-      ${sorted.length ? sorted.map((item) => `
-        <article class="centre-card animate-card">
-          <div style="font-size:26px">🌾</div>
-          <h3>${t(item.crop)} <span style="font-size:12px;color:var(--muted)">(${esc(item.variety || "Standard")})</span></h3>
-          <p class="meta">Booking ID: <strong>${item.id}</strong> · Token: <strong>${item.token}</strong></p>
-          <div class="centre-facts">
-            <div>Quantity<strong>${item.quantity} ${item.unit}</strong></div>
-            <div>Asking Price<strong style="color:var(--green)">₹${Number(item.farmerPrice || 23.69).toFixed(2)}</strong></div>
-            <div>Booked On<strong>${displayDateTime(item.createdAt || item.date)}</strong></div>
-            <div>Slot Date<strong>${displayDate(item.date)}</strong></div>
-          </div>
-          <div class="card-actions">
-            <button class="ghost-btn small" data-booking-view="${item.id}">View Live Queue</button>
-            ${statusBadge(item.status)}
-          </div>
-        </article>
-      `).join("") : `<div class="empty">No crops added yet.</div>`}
     </div>
   `;
 }
@@ -2722,7 +2680,6 @@ async function renderView() {
     else if (state.view === "booking") content = await bookingPage();
     else if (state.view === "bookings") content = await bookingsPage();
     else if (state.view === "queue") content = await queuePage();
-    else if (state.view === "crops") content = await cropsPage();
     else if (state.view === "payments") content = await paymentsPage();
   } else if (state.user.role === "BUYER") {
     if (state.view === "dashboard") content = await buyerDashboard();

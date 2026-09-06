@@ -1765,9 +1765,142 @@
         "confirmedAt": "2026-09-03T20:37:07.220Z",
         "confirmedBy": "FARMER"
       }
+    },
+    {
+      "id": "AGRI-261003-0B39",
+      "token": "A-001",
+      "farmerId": "farmer-demo",
+      "centreId": "CTR-001",
+      "slotId": "SL-CTR-001-20261003-1",
+      "crop": "Moong",
+      "variety": "IPM 205-7",
+      "quantity": 350,
+      "unit": "kg",
+      "farmerPrice": 85.5,
+      "buyerPrice": null,
+      "agreedRate": null,
+      "calledAt": null,
+      "cancelledAt": null,
+      "cancelledBy": null,
+      "rejectionReason": null,
+      "date": "2026-10-03",
+      "time": "09:00 – 10:00",
+      "status": "BOOKED",
+      "createdAt": "2026-09-06T18:49:10.748Z",
+      "procurement": null,
+      "payment": null
+    },
+    {
+      "id": "AGRI-261005-37C3",
+      "token": "A-001",
+      "farmerId": "farmer-demo",
+      "centreId": "CTR-001",
+      "slotId": "SL-CTR-001-20261005-1",
+      "crop": "Wheat",
+      "variety": "Sharbati",
+      "quantity": 1500,
+      "unit": "kg",
+      "farmerPrice": 28.5,
+      "buyerPrice": 29.0,
+      "agreedRate": 29.0,
+      "calledAt": "2026-09-06T18:49:16.535Z",
+      "cancelledAt": null,
+      "cancelledBy": null,
+      "rejectionReason": null,
+      "date": "2026-10-05",
+      "time": "09:00 – 10:00",
+      "status": "COMPLETED",
+      "createdAt": "2026-09-06T18:49:16.485Z",
+      "procurement": {
+        "status": "COMPLETED",
+        "declaredQuantity": 1500,
+        "measuredQuantity": 1480,
+        "quality": "Grade A",
+        "moisture": "12.8%",
+        "agreedRate": 29.0,
+        "accepted": true
+      },
+      "payment": {
+        "status": "COMPLETED",
+        "rate": 29.0,
+        "amount": 42920.0,
+        "transactionId": "TXN-RCVD-20261005-001",
+        "confirmedAt": "2026-09-06T18:49:16.596Z",
+        "confirmedBy": "FARMER"
+      }
     }
   ],
   "notifications": [
+    {
+      "id": "NT-BC7C66",
+      "userId": "CTR-001",
+      "type": "PAYMENT",
+      "title": "Seller Confirmed Payment",
+      "message": "Farmer Seller confirmed receipt of ₹42,920 for Token A-001.",
+      "read": false,
+      "time": "Just now",
+      "createdAt": "2026-09-06T18:49:16.596Z"
+    },
+    {
+      "id": "NT-6DC495",
+      "userId": "farmer-demo",
+      "type": "PAYMENT",
+      "title": "Payment Receipt Confirmed",
+      "message": "You confirmed receipt of ₹42,920 for Token A-001.",
+      "read": false,
+      "time": "Just now",
+      "createdAt": "2026-09-06T18:49:16.596Z"
+    },
+    {
+      "id": "NT-58E5B5",
+      "userId": "farmer-demo",
+      "type": "PROCUREMENT",
+      "title": "Procurement Accepted — Payment Initiated",
+      "message": "Wheat (1480 kg) accepted at ₹29.00/kg. Payout of ₹42,920.00 initiated. Please confirm receipt once funds arrive.",
+      "read": false,
+      "time": "Just now",
+      "createdAt": "2026-09-06T18:49:16.559Z"
+    },
+    {
+      "id": "NT-819EDE",
+      "userId": "farmer-demo",
+      "type": "CALL",
+      "title": "📣 Your Token Has Been Called!",
+      "message": "The procurement counter at Barasat Centre has called your token A-001 (Booking: AGRI-261005-37C3). Please proceed to the counter immediately!",
+      "read": false,
+      "time": "Just now",
+      "createdAt": "2026-09-06T18:49:16.535Z"
+    },
+    {
+      "id": "NT-106917",
+      "userId": "farmer-demo",
+      "type": "QUEUE",
+      "title": "Check-in successful",
+      "message": "You are checked in with token A-001 (Booking ID: AGRI-261005-37C3).",
+      "read": false,
+      "time": "Just now",
+      "createdAt": "2026-09-06T18:49:16.511Z"
+    },
+    {
+      "id": "NT-7429F9",
+      "userId": "farmer-demo",
+      "type": "BOOKING",
+      "title": "Booking confirmed",
+      "message": "Booking AGRI-261005-37C3 is confirmed! Your token is A-001 at Barasat Centre on 2026-10-05. Asking Price: ₹28.50/kg.",
+      "read": false,
+      "time": "Just now",
+      "createdAt": "2026-09-06T18:49:16.485Z"
+    },
+    {
+      "id": "NT-A6CCFB",
+      "userId": "farmer-demo",
+      "type": "BOOKING",
+      "title": "Booking confirmed",
+      "message": "Booking AGRI-261003-0B39 is confirmed! Your token is A-001 at Barasat Centre on 2026-10-03. Asking Price: ₹85.50/kg.",
+      "read": false,
+      "time": "Just now",
+      "createdAt": "2026-09-06T18:49:10.748Z"
+    },
     {
       "id": "NT-823504",
       "userId": "farmer-demo",
@@ -1794,7 +1927,7 @@
       "type": "PAYMENT",
       "title": "Payment Receipt Confirmed",
       "message": "You confirmed receipt of ₹18,952 for Token A-006.",
-      "read": false,
+      "read": true,
       "time": "Just now",
       "createdAt": "2026-09-03T20:37:07.220Z"
     },
@@ -1804,7 +1937,7 @@
       "type": "PROCUREMENT",
       "title": "Procurement Accepted — Payment Initiated",
       "message": "Paddy (800 kg) accepted at ₹23.69/kg. Payout of ₹18,952.00 initiated. Please confirm receipt once funds arrive.",
-      "read": false,
+      "read": true,
       "time": "Just now",
       "createdAt": "2026-09-03T20:36:17.251Z"
     },
@@ -1814,7 +1947,7 @@
       "type": "CALL",
       "title": "📣 Your Token Has Been Called!",
       "message": "The procurement counter at Barasat Centre has called your token A-006 (Booking: AGRI-260904-C332). Please proceed to the counter immediately!",
-      "read": false,
+      "read": true,
       "time": "Just now",
       "createdAt": "2026-09-03T20:36:13.667Z"
     },
@@ -1824,7 +1957,7 @@
       "type": "QUEUE",
       "title": "Check-in successful",
       "message": "You are checked in with token A-006 (Booking ID: AGRI-260904-C332).",
-      "read": false,
+      "read": true,
       "time": "Just now",
       "createdAt": "2026-09-03T20:36:12.855Z"
     },
@@ -1844,7 +1977,7 @@
       "type": "PAYMENT",
       "title": "Payment Receipt Confirmed",
       "message": "You confirmed receipt of ₹18,952 for Token A-002.",
-      "read": false,
+      "read": true,
       "time": "Just now",
       "createdAt": "2026-09-03T20:34:35.786Z"
     },
@@ -1854,7 +1987,7 @@
       "type": "BOOKING",
       "title": "Booking confirmed",
       "message": "Booking AGRI-260904-C332 is confirmed! Your token is A-006 at Barasat Centre on 2026-09-04. Asking Price: ₹23.69/kg.",
-      "read": false,
+      "read": true,
       "time": "Just now",
       "createdAt": "2026-09-03T20:34:20.746Z"
     },
@@ -2074,7 +2207,7 @@
       "type": "PAYMENT",
       "title": "Payment processed successfully",
       "message": "₹20,136 has been transferred and marked completed.",
-      "read": false,
+      "read": true,
       "time": "Just now",
       "createdAt": "2026-09-03T20:22:55.922Z"
     },
@@ -2084,7 +2217,7 @@
       "type": "BOOKING",
       "title": "Booking cancelled",
       "message": "Your booking AGRI-260903-7E45 (Token A-049) at Madhyamgram Centre has been cancelled successfully.",
-      "read": false,
+      "read": true,
       "time": "Just now",
       "createdAt": "2026-09-03T20:22:42.148Z"
     },
@@ -2094,7 +2227,7 @@
       "type": "PROCUREMENT",
       "title": "Procurement completed",
       "message": "Paddy (800 kg) has been accepted at agreed rate ₹25.17/kg. Payment processing of ₹20,136.00 has started.",
-      "read": false,
+      "read": true,
       "time": "Just now",
       "createdAt": "2026-09-03T20:22:06.552Z"
     },
@@ -2104,7 +2237,7 @@
       "type": "CALL",
       "title": "📣 Your Token Has Been Called!",
       "message": "The procurement counter at Barasat Centre has called your token A-005 (Booking: AGRI-260904-B88D). Please proceed to the counter immediately!",
-      "read": false,
+      "read": true,
       "time": "Just now",
       "createdAt": "2026-09-03T20:21:26.937Z"
     },
@@ -2114,7 +2247,7 @@
       "type": "QUEUE",
       "title": "Check-in successful",
       "message": "You are checked in with token A-005 (Booking ID: AGRI-260904-B88D).",
-      "read": false,
+      "read": true,
       "time": "Just now",
       "createdAt": "2026-09-03T20:21:25.647Z"
     },
@@ -2124,7 +2257,7 @@
       "type": "BOOKING",
       "title": "Booking confirmed",
       "message": "Booking AGRI-260904-B88D is confirmed! Your token is A-005 at Barasat Centre on 2026-09-04. Asking Price: ₹25.17/kg.",
-      "read": false,
+      "read": true,
       "time": "Just now",
       "createdAt": "2026-09-03T20:21:14.455Z"
     },
@@ -2284,7 +2417,7 @@
       "type": "PAYMENT",
       "title": "Payment processed successfully",
       "message": "₹18,952 has been transferred and marked completed.",
-      "read": false,
+      "read": true,
       "time": "Just now",
       "createdAt": "2026-09-03T19:56:03.534Z"
     },
@@ -2294,7 +2427,7 @@
       "type": "PROCUREMENT",
       "title": "Procurement completed",
       "message": "Paddy (800 kg) has been accepted at agreed rate ₹23.69/kg. Payment processing of ₹18,952.00 has started.",
-      "read": false,
+      "read": true,
       "time": "Just now",
       "createdAt": "2026-09-03T19:53:53.459Z"
     },
@@ -2304,7 +2437,7 @@
       "type": "CALL",
       "title": "📣 Your Token Has Been Called!",
       "message": "The procurement counter at Barasat Centre has called your token A-004 (Booking: AGRI-260904-7AB7). Please proceed to the counter immediately!",
-      "read": false,
+      "read": true,
       "time": "Just now",
       "createdAt": "2026-09-03T19:52:53.087Z"
     },
@@ -2314,7 +2447,7 @@
       "type": "QUEUE",
       "title": "Check-in successful",
       "message": "You are checked in with token A-004 (Booking ID: AGRI-260904-7AB7).",
-      "read": false,
+      "read": true,
       "time": "Just now",
       "createdAt": "2026-09-03T19:52:51.949Z"
     },
@@ -2324,7 +2457,7 @@
       "type": "BOOKING",
       "title": "Booking confirmed",
       "message": "Booking AGRI-260904-7AB7 is confirmed! Your token is A-004 at Barasat Centre on 2026-09-04. Asking Price: ₹23.69/kg.",
-      "read": false,
+      "read": true,
       "time": "Just now",
       "createdAt": "2026-09-03T19:52:38.241Z"
     },
